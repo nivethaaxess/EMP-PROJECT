@@ -1,8 +1,10 @@
+import Admin_Dash from "./Admin Dashboard/Admin_Dash";
+
 
 function App() {
   return (
     <div className="App">
-         <h2> Employee project</h2>
+        <Admin_Dash/>
     </div>
   );
 }
