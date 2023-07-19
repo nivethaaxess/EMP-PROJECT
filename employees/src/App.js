@@ -1,14 +1,15 @@
 import Admin_Dash from "./Admin Dashboard/Admin_Dash";
-import MenuBar from "./Header/Menu";
-import NavBar from "./Header/Nav";
+import MenuBar from "./Header/MenuBar";
+import NavBar from "./Header/NavBar";
+
 
 
 function App() {
   return (
     <div className="App">
-      <MenuBar />
+     <MenuBar/>
       <Admin_Dash />
-      <NavBar />
+     <NavBar/>
     </div>
   );
 }

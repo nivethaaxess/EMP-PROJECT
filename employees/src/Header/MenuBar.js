@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Badge, MenuItem, Menu, Typography, useMediaQuery, useTheme, Box } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Badge, Typography, useMediaQuery, useTheme, Box } from '@mui/material';
+import Input from '@mui/material/Input';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import { AccountCircle, Notifications } from '@mui/icons-material';
-import NavBar from './Nav';
+import NavBar from './NavBar';
 import logo from './react.png';
 
 
