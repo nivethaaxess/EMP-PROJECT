@@ -1,8 +1,10 @@
 const router = require('express').Router();
 
+console.log('CHECK')
+
 const Dashboard = require('../Dashboard Data/Dashboard');
 
-router.post('/api/Dashboard',Dashboard.DashboardData);
+router.get('/api/Dashboard',Dashboard.DashboardData);
 
 
 
