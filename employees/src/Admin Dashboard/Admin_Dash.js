@@ -1,34 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import Box from '@mui/material/Box';
 import './Admin_Dash.css'
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import axios from 'axios';
 
 
 
 
 function Admin_Dash() {
- 
+
   const checkFunction = (event) => {
     console.log('EVENT', event)
   }
   const [data, setData] = useState(['HTML', '  CSS', 'JAVA SCRIPT', 'REACT JS', 'NODE JS', 'SQL', 'WEB CONCEPTS']);
   const [chartData, setChartData] = useState({
-    series: [
-      {
-        name: 'BASIC',
-        data: [19, 17, 15, 15, 21, 14, 15],
-      },
-      {
-        name: 'INTERMEDIATE',
-        data: [9, 17, 15, 15, 21, 14, 15],
-      },
-      {
-        name: 'ADVANCE',
-        data: [13, 17, 15, 15, 21, 14, 15],
-      },
-    ],
+    series: [],
     options: {
       chart: {
         toolbar: {
@@ -79,7 +67,7 @@ function Admin_Dash() {
         },
       ],
       xaxis: {
-        categories: ['HTML', 'CSS', 'JAVA SCRIPT', 'REACT JS', 'NODE JS', 'SQL', 'WEB CONCEPTS'],
+        categories: [],
         labels: {
           style: {
             fontWeight: '700',
@@ -105,12 +93,12 @@ function Admin_Dash() {
 
       yaxis: {
         chart: {
-         toolbar:{
-           tools:{
-            download: String,
-            selection: true,
-           }
-         },
+          toolbar: {
+            tools: {
+              download: String,
+              selection: true,
+            }
+          },
         },
         show: false,
         labels: {
@@ -147,6 +135,126 @@ function Admin_Dash() {
   });
 
 
+  useEffect(() => {
+    const name = {
+      val: 'done'
+    }
+    axios.get('http://localhost:3007/api/Dashboard')
+      .then(val => {
+        const { categories, seriesData } = val.data;
+        console.log('VALUE==>>>', val.data)
+
+        const skills = val.data.skills;
+        const sortedSkills = skills.map(skill => skill.toUpperCase()).sort();
+        const basicData = val.data.levels.find(item => item.level === 'basic');
+        console.log('basicData==>>>', basicData.level)
+
+        const intermediateData = val.data.levels.find(item => item.level === 'intermediate');
+        const advanceData = val.data.levels.find(item => item.level === 'advance');
+
+        const Basiccount = val.data.counts
+        console.log('Basiccount==>>>', Basiccount);
+
+
+        const getBasicCounts = (data) => {
+          // Initialize an array to store the basic counts
+          const basicCounts = [];
+
+          // Loop through the array and extract the counts for 'basic' level by skill
+          data.forEach((item) => {
+            if (item.level === 'basic') {
+              basicCounts.push(item.count);
+            }
+          });
+
+          return basicCounts;
+        };
+
+        // Call the function to get the basic counts
+        const basicCounts = getBasicCounts(Basiccount);
+
+        console.log('Basic Counts:', basicCounts);
+
+
+
+
+        const getIntermediateCounts = (data) => {
+          // Initialize an array to store the basic counts
+          const intermediateCounts = [];
+
+          // Loop through the array and extract the counts for 'basic' level by skill
+          data.forEach((item) => {
+            if (item.level === 'intermediate') {
+              intermediateCounts.push(item.count);
+            }
+          });
+
+          return intermediateCounts;
+        };
+
+        // Call the function to get the basic counts
+        const intermediateCounts = getIntermediateCounts(Basiccount);
+
+        console.log('intermediateCounts Counts:', intermediateCounts);
+
+
+        const getAdvanceCounts = (data) => {
+          // Initialize an array to store the basic counts
+          const advanceCounts = [];
+
+          // Loop through the array and extract the counts for 'basic' level by skill
+          data.forEach((item) => {
+            if (item.level === "advance") {
+              advanceCounts.push(item.count);
+            }
+          });
+
+          return advanceCounts;
+        };
+
+        // Call the function to get the basic counts
+        const advanceCounts = getAdvanceCounts(Basiccount);
+
+        console.log('advanceCounts Counts:', advanceCounts);
+
+
+
+
+        setChartData({
+          ...chartData,
+          series: [
+            {
+              name: basicData.level,
+              data: basicCounts,
+            },
+            {
+              name: intermediateData.level,
+              data: intermediateCounts,
+            },
+            {
+              name: advanceData.level,
+              data: advanceCounts,
+            },
+          ],
+          options: {
+            ...chartData.options,
+            xaxis: {
+              ...chartData.options.xaxis,
+              categories: sortedSkills
+            }
+          }
+
+        })
+
+
+      })
+      .catch(err => console.log('err=>>>', err))
+  }, []);
+
+
+
+
+
 
   const chartContainerStyle = {
     marginTop: '20px',
@@ -162,15 +270,17 @@ function Admin_Dash() {
             series={chartData.series}
             type="bar"
             height={300}
+          // width={900}
           />
-          <Box sx={{ display: 'flex' , marginTop:'-15px' }}>
-            <Button size="small"  sx={{ marginLeft: '65px',padding:'-10px'}}>VIEW</Button>
-            <Button size="small" sx={{ marginLeft: '115px' }}>VIEW</Button>
-            <Button size="small"  sx={{ marginLeft: '110px' }}>VIEW</Button>
-            <Button size="small"  sx={{ marginLeft: '116px' }}>VIEW</Button>
-            <Button size="small"  sx={{ marginLeft: '115px' }}>VIEW</Button>
-            <Button size="small"  sx={{ marginLeft: '117px' }}>VIEW</Button>
-            <Button size="small"  sx={{ marginLeft: '110px' }}>VIEW</Button>
+          <Box sx={{ display: 'flex', marginTop: '-15px' }}>
+            <Button size="small" sx={{ marginLeft: '65px', padding: '-10px' }}>VIEW</Button>
+            <Button size="small" sx={{ marginLeft: '85px' }}>VIEW</Button>
+            <Button size="small" sx={{ marginLeft: '85px' }}>VIEW</Button>
+            <Button size="small" sx={{ marginLeft: '100px' }}>VIEW</Button>
+            <Button size="small" sx={{ marginLeft: '89px' }}>VIEW</Button>
+            <Button size="small" sx={{ marginLeft: '90px' }}>VIEW</Button>
+            <Button size="small" sx={{ marginLeft: '90px' }}>VIEW</Button>
+            <Button size="small" sx={{ marginLeft: '90px' }}>VIEW</Button>
           </Box>
         </Box>
       </Box>
