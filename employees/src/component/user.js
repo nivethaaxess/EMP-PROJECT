@@ -6,7 +6,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Checkbox, Collapse, FormControlLabel, FormGroup } from "@mui/material";
-import { FaHtml5 } from "react-icons/fa";
+import { FaHtml5,FaEye } from "react-icons/fa";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -208,15 +208,18 @@ const User = ({}) => {
                                           control={
                                             <Checkbox color="secondary" size="small"
                                             icon={<RadioButtonUncheckedIcon />}
+                                              
                                             checkedIcon={<CheckCircleIcon />}
+                                            label = {<FaEye/>}
                                               checked={item.status}
                                               onChange={() =>
                                                 handleChange(index)
                                               }
-                                      
+                                      s
                                             />
                                           }
                                           label={item.topic}
+
                                         />
                                       )
                                     );
