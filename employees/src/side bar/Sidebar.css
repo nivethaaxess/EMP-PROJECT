@@ -1,0 +1,133 @@
+.menu-with-sidebar {
+    display: flex;
+    width: 100%;
+  }
+  
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 30px; /* Initial width of the sidebar */
+    background-color: #5e1acc;
+    padding: 20px;
+    transition: width 0.3s ease;
+    z-index: 1;
+  }
+  
+  .expanded {
+    width: 150px; /* Expanded width of the sidebar */
+  }
+  
+  .sidebar-content {
+    margin-bottom: 20px;
+  }
+  
+  .sidebar button {
+    cursor: pointer;
+  }
+  
+  .top-menu {
+    /* width: 100%;
+    display: flex;
+    justify-content: space-between; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    transition: padding-left 0.3s ease;
+  }
+  
+  .top-menu.sidebar-expanded {
+    padding-left: 150px; /* Adjust padding when the sidebar is expanded */
+  }
+  
+  .top-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  .top-menu li {
+    margin-right: 20px;
+    cursor: pointer;
+  }
+  
+  .menu-icon {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 10px;
+    color: #fff;
+    font-weight: 500;
+    /* border: 1px solid #ccc; */
+    border-radius: 4px;
+    margin-left: 100px;
+  }
+  
+  .menu-icon span {
+    display: inline-block;
+    margin-left: 5px;
+  }
+  
+  .main-content {
+    /* width: 80% ; */
+    margin-top: 60px; 
+    margin-left: 100px; 
+    padding: 20px;
+    /* transition: margin-left 0.3s ease; */
+  }
+  
+  .sidebar-expanded1 {
+    margin-left: 200px;
+    /* width: 90% ; */
+    margin-top: 60px; 
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+    
+  }
+
+  .sidebar-expanded {
+    top: 0;
+    left: 0;
+    right: 0; /* Adjust margin when the sidebar is expanded */
+  }
+
+  .icon-and-name {
+    display: flex;
+    align-items: center;
+    margin-top: 30px;
+  }
+  
+  .icon {
+    font-size: 20px;
+    margin-right: 10px;
+  }
+  
+  .name {
+    font-size: 16px;
+  }
+
+  .icon-content{
+    margin-left: 30px;
+    color: #fff;
+    font-weight: 500;
+  }
+
+  .check{
+    margin-left: 130px;
+    color: #fff;
+    width: 100px;
+  }
+  .icon-color{
+    color: #fff;
+    cursor: pointer;
+  }
+  

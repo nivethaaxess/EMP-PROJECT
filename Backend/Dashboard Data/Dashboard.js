@@ -2,6 +2,7 @@ const connection = require('../Mysql connect/Mysql');
 
 const DashboardData = async (req, res) => {
   try {
+    console.log('DONE')
     // Find a Skill
     const skillQuery = 'SELECT DISTINCT skill FROM skills';
     // Find a Level
@@ -29,7 +30,7 @@ const DashboardData = async (req, res) => {
           }
 
 
-          
+
 
           const skillsArray = skillResults.map((item) => item.skill);
           const sortedSkills = skillsArray.sort();
@@ -52,6 +53,35 @@ const DashboardData = async (req, res) => {
   }
 };
 
+
+
+   const tableData = async(req,res) =>{
+    console.log('CHECK=>>>>>>>>')
+      try{
+         const {skill,level} = req.body;
+         console.log('req.body===>>>>',req.body)
+
+          const sql = 'SELECT * from skills s WHERE s.skill = ? and s.level = ?'
+           const value = [skill,level]
+
+           connection.query(sql,value ,(error,result)=>{
+            if (error) {
+              console.error('Error patching user:', error.message);
+              res.status(500).json({ error: 'Failed to patch user' });
+            } else {
+              console.log('User updated successfully');
+              res.json({ message: 'User patched successfully', val : result });
+            }
+           })
+      }
+      catch(err){
+        console.error('Error comparing passwords:', err);
+        res.status(500).json({ error: 'Login failed' });
+      }
+   }
+
+
 module.exports = {
-  DashboardData
+  DashboardData,
+  tableData
 };

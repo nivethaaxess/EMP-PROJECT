@@ -15,5 +15,5 @@ app.use('/', routes);
 console.log('DINESH    99999  sdcas  xcascsa')
 
 app.listen(3007, () => {
-    console.log('Server started on port 6000...');
+    console.log('Server started on port 3007...');
   });
