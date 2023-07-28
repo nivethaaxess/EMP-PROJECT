@@ -10,6 +10,8 @@ const Dashboard = require('../Dashboard Data/Dashboard');
  router.get('/api/Dashboard',Dashboard.DashboardData);
 
 
+router.post('/api/table/data',Dashboard.tableData);
+
 
  // nivetha starts -----------
 const nivetha = require("../nivethaData/niviData")
