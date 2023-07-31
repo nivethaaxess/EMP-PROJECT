@@ -314,13 +314,14 @@ const statusTable = async (req, res) => {
 
 
 
-const InsertStatus = async (req, res) => {
+const updatestatus = async (req, res) => {
   try {
-    let { subTopicName, userId } = req.body;
+    // let { subTopicName, userId } = req.body;
+   let  { subtopic_name, status,userId} = req.body
 
-    let query1 = `select subTopic_id from SUBTOPICS where subTopic_name = (?)`;
-    let query2 = `select TOPIC_ID from SUBTOPICS where subTopic_id = (?)`;
-    let query3 = `select DOMAIN_ID from TOPICS where Topic_id = (?)`;
+    let query1 = `select subTopic_id from sub_topics where subTopic_name = (?)`;
+    let query2 = `select TOPIC_ID from sub_topics where subTopic_id = (?)`;
+    let query3 = `select domain_id from topics where topic_id = (?)`;
 
     function runQuery(query, values) {
       return new Promise((resolve, reject) => {
@@ -331,7 +332,7 @@ const InsertStatus = async (req, res) => {
       });
     }
 
-    let subTopicIdResult = await runQuery(query1, subTopicName);
+    let subTopicIdResult = await runQuery(query1, subtopic_name);
     let subTopicId = subTopicIdResult[0].subTopic_id;
 
     let topicIdResult = await runQuery(query2, subTopicId);
@@ -340,15 +341,28 @@ const InsertStatus = async (req, res) => {
     let domainIdResult = await runQuery(query3, topicId);
     let domainId = domainIdResult[0].DOMAIN_ID;
 
-    let query = `INSERT INTO STATUS (status, subTopic_id, topic_id, domain_id, user_id) VALUES (?)`;
-    let values = ["Notcompleted", subTopicId, topicId, domainId, userId];
+    let query,values;
+if(status == "completed"){
 
-    console.log("values", values);
 
-    let insertResult = await runQuery(query, [values]);
+   query = `INSERT INTO status (status, subTopic_id, topic_id, domain_id, user_id) VALUES (?)`;
+   values = ["completed", subTopicId, topicId, domainId, userId];
+   let insertResult = await runQuery(query, [values]);
 
-    console.log("status inserted successfully");
-    return res.send("status inserted successfully");
+   console.log("status inserted successfully");
+   return res.send("status inserted successfully");
+
+}else{
+
+  query = `DELETE from status where subTopic_id = ? AND user_id = ? ;`;
+  values = [subTopicId,userId];
+  let insertResult = await runQuery(query, [values]);
+
+  console.log("deleted successfully");
+  return res.send("deleted successfully");
+}
+
+
   } catch (err) {
     console.log("catch err", err);
     res.status(500).send("Server error");
@@ -365,5 +379,5 @@ module.exports = {
   subTopicsTable,
   InsertSubTopics,
   statusTable,
-  InsertStatus
+  updatestatus
 };

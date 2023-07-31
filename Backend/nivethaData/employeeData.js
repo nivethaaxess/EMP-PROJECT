@@ -7,10 +7,10 @@ const userCourseList = (req, res) => {
   let userId = req.params.id;
 
   try {
-    let query = `SELECT topic_name FROM TOPICS WHERE domain_id = (SELECT domain_id FROM USERS WHERE User_id = ${userId});`;
+    let query = `SELECT topic_name FROM topics WHERE domain_id = (SELECT domain_id FROM user WHERE User_id = ${userId});`;
 
     connection.query(query, (err, result) => {
-      if (err) res.send("db connection error");
+      if (err) return res.send(err);
 
       res.send(result);
     });
@@ -58,6 +58,7 @@ const userCourseList = (req, res) => {
 //   }  
 // };
 const subTopicCount = async (req, res) => {
+
     console.log("subtopic called");
     
     let { userId, course } = req.query;
@@ -71,13 +72,13 @@ const subTopicCount = async (req, res) => {
         console.log("course", course, "a", a);
   
         // Execute the first query
-        const query1 = `SELECT COUNT(subTopic_id) AS total FROM SUBTOPICS WHERE  LEVEL = '${a}' AND TOPIC_ID = (SELECT topic_id from TOPICS where topic_name = '${course}')`;
+        const query1 = `SELECT COUNT(subTopic_id) AS total FROM sub_topics WHERE  LEVEL = '${a}' AND TOPIC_ID = (SELECT topic_id from topics where topic_name = '${course}')`;
         const totalResult = await executeQuery(query1);
   
         finalCount[a] = { total: totalResult[0].total };
   
         // Execute the second query
-        const query2 = `SELECT COUNT(subTopic_id) AS completed FROM STATUS WHERE user_id = '${userId}' AND subTopic_id IN (SELECT subTopic_id FROM SUBTOPICS WHERE LEVEL = '${a}' AND topic_id = (SELECT topic_id FROM TOPICS WHERE topic_name = '${course}'))`;
+        const query2 = `SELECT COUNT(subTopic_id) AS completed FROM status WHERE user_id = '${userId}' AND subTopic_id IN (SELECT subTopic_id FROM sub_topics WHERE LEVEL = '${a}' AND TOPIC_ID = (SELECT topic_id FROM topics WHERE topic_name = '${course}'))`;
         const completedResult = await executeQuery(query2);
   
         finalCount[a].completed = completedResult[0].completed;

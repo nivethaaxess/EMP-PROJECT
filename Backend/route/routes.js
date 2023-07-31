@@ -29,7 +29,7 @@ router.post('/InsertDomain',nivetha.InsertDomain)
 router.post('/insertusers',nivetha.InsertUser)
 router.post('/insertTopics',nivetha.InsertTopics)
 router.post('/insertSubTopics',nivetha.InsertSubTopics)
-router.post('/InsertStatus',nivetha.InsertStatus)
+router.post('/updatestatus',nivetha.updatestatus)
 
 
 router.get('/courseList/:id',employeeData.userCourseList)
@@ -44,12 +44,11 @@ router.get('/completedCount',employeeData.completedCount)
 
  //sai starts---
 
-
-
-
  const backend = require("../nivethaData/sai")
  router.get('/api/getdata',backend.getdata);
- router.post('/api/post',backend.postdata);
+ 
+//  router.post('/api/updatestatus',backend.updatestatus);
+//  router.post('/api/post',backend.NotcompletedPostdata);
 
  // sai ends------------
 
