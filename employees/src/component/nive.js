@@ -59,87 +59,30 @@ const User = () => {
   const [userId, setUserID] = useState(1);
   const [openStates, setOpenStates] = useState({});
   const [courseList, setCourseList] = useState([]);
-  const [Htmltopics, setHtmltopics] = useState([]);
 
 
-  // sai starts-------------------------
-  const [getstatusapi, setStatusApi] = useState([])
-  const [notCompletedSubtopics, setNotCompletedSubtopics] = useState([]);
-const [completedSubtopics, setCompletedSubtopics] = useState([]);
+const [statusList,setStatusList] = useState({})
 
-useEffect(() => {
 
-  console.log("sai use effect")
 
-  // Fetch the data from the API when the component mounts
-  axios.get('http://localhost:3007/api/getdata')
+const handleUpdate = (subtopic_name,status) => {
+  axios.post('http://localhost:3007/updatestatus', { subtopic_name,status,userId })
     .then(response => {
-
-      console.log("sai use effect",response.data)
-      setStatusApi(response.data);
-
-      const updatedData = response.data;
-
-      // Filter out the subtopics with status "completed" and set the state
-      const completedSubtopics = updatedData.filter(item => item.status === 'completed');
-         console.log('completed',completedSubtopics)
-      setCompletedSubtopics(completedSubtopics);
-
-      // Filter out the subtopics with status "Notcompleted" and set the state
-      const notCompletedSubtopics = updatedData.filter(item => item.status === 'Notcompleted');
-          console.log('notcompleted',notCompletedSubtopics)
-      setNotCompletedSubtopics(notCompletedSubtopics);
+      console.log('Subtopic status updated to COMPLETED:', response.data);
+      
     })
     .catch(err => {
-      console.log('errr==>', err);
-    })
-}, []);
-
-const handleChange = (subtopics_name) => {
-        
-         
-            
-  console.log('subtopics_name', subtopics_name)
-const data = 
-{
-   subtopics_name:subtopics_name,
-  
-}
-console.log('data',data);
-
-axios.post(`http://localhost:3007/api/post`,data)
-.then(response => {
-   console.log('response78585',response.data)
-    
-})
-.catch(err => {
- console.log('errr==>', err);
-})
-
-}
+      console.log('Error updating subtopic status to COMPLETED:', err);
+    });
+};
 
 // sai ends----------------------
 
-  // const [Htmltopics, setHtmltopics] = useState([
-  //   { topic: "Htmlelement", status: false },
-  //   { topic: "inline", status: false },
-  //   { topic: "block", status: false },
-  //   { topic: "element", status: false },
-  //   { topic: "test", status: false },
-  //   { topic: "psuedo", status: false },
-  //   { topic: "color", status: false },
-  //   { topic: "forms", status: false },
-  //   { topic: "responsive", status: false },
-  // ]);
   const [accordionStates, setAccordionStates] = useState([]);
   const [tabValues, setTabValues] = useState({});
   const [courseCount, setCourseCount] = useState({});
 
   const courseCountRender = Object.keys(courseCount).length > 0;
-  console.log("accordion state", accordionStates);
-  console.log("course", courseList);
-  console.log("course count", courseCount);
-  console.log("tabvalues",tabValues)
 
   const handleAccordionChange = (course, isExpanded) => {
 
@@ -161,7 +104,6 @@ axios.post(`http://localhost:3007/api/post`,data)
         `http://localhost:3007/subTopicCount/?userId=${userId}&course=${course}`
       )
       .then((res) => {
-        console.log("res", res.data);
         setCourseCount((pre) => ({ ...pre, [course]: res.data }));
       })
       .catch((err) => {
@@ -169,20 +111,60 @@ axios.post(`http://localhost:3007/api/post`,data)
       });
   };
 
-  const handleEventChange = (event, newValue, type, course) => {
-    console.log("event tabValues",tabValues)
+  const handleEventChange = (event, newValue, level, course) => {
+
+    console.log("handleEventChange called",course,level)
     setTabValues((prevTabValues) => ({
       ...prevTabValues,
-      [course]: { ...prevTabValues[course], [type]: newValue },
-    }));
+      [course]: { ...prevTabValues[course], [level]: newValue },
+    } ));
+
+
+     getStatus(course,level)
   };
 
-  const handleOpenstatus = (course, index) => {
+
+  const getStatus = async(course,level)=>{
+
+    console.log("getsatus called",course,level)
+    await axios.get(`http://localhost:3007/api/getdata/?userId=${userId}&course=${course}&level=${level}`)
+    .then(response => {
+
+      console.log("respo",response.data)
+       
+      
+        setStatusList((prevOpenStates) => {
+
+          return {
+          ...prevOpenStates,
+          [course]: {
+            ...prevOpenStates[course],
+            [level]: response.data,
+          },
+        }});
+
+    })
+    .catch(err => {
+      console.log('errr==>', err);
+    })
+
+  }
+
+
+  console.log("tabvalus",tabValues)
+
+
+  const handleOpenstatus = (course, level) => {
+
+    console.log("handleOpenstatus",course,level)
+
+    getStatus(course,level)
+
     setOpenStates((prevOpenStates) => ({
       ...prevOpenStates,
       [course]: {
         ...prevOpenStates[course],
-        [index]: !prevOpenStates[course]?.[index],
+        [level]: !prevOpenStates[course]?.[level],
       },
     }));
   };
@@ -191,14 +173,6 @@ axios.post(`http://localhost:3007/api/post`,data)
     color: "#c55c16",
     fontSize: "30px",
   };
-
-  // const handleChange = (index) => {
-  //   setHtmltopics((prevCheckedItems) => {
-  //     const updatedCheckedItems = [...prevCheckedItems];
-  //     updatedCheckedItems[index].status = !updatedCheckedItems[index].status;
-  //     return updatedCheckedItems;
-  //   });
-  // };
 
   useEffect(() => {
     axios
@@ -224,18 +198,18 @@ axios.post(`http://localhost:3007/api/post`,data)
   useEffect(() => {
     // Initialize tabValues when courseList changes
     if (courseList.length > 0) {
+      console.log("coarselist",courseList)
+      console.log("len",courseList.length > 0)
       const initialTabValues = {};
       courseList.forEach((course) => {
-        initialTabValues[course] = {
+        initialTabValues[course.topic_name] = {
           basic: 0,
           intermediate: 0,
           advanced: 0,
         };
       });
-      console.log("initialTabValues",initialTabValues)
-      console.log(" tabValues",tabValues)
       setTabValues((prevTabValues) => ({
-        ...prevTabValues,
+         ...prevTabValues,
         ...initialTabValues,
       }));
     }
@@ -306,7 +280,7 @@ axios.post(`http://localhost:3007/api/post`,data)
                                 }}
                               >
                                 <ListItem
-                                  onClick={() => handleOpenstatus(course, 0)}
+                                  onClick={() => handleOpenstatus(course.topic_name,"basic")}
                                   sx={{
                                     padding: 0,
                                     display: "flex",
@@ -336,12 +310,6 @@ axios.post(`http://localhost:3007/api/post`,data)
                                   >
 
                                     {courseCountRender &&
-                                      console.log(
-                                        "aaa",
-                                        course.topic_name,
-                                        courseCount[course.topic_name]
-                                      )}
-                                    {courseCountRender &&
                                       courseCount[course.topic_name] &&
                                       courseCount[course.topic_name]["basic"] &&
                                       courseCount[course.topic_name]["basic"]
@@ -349,7 +317,7 @@ axios.post(`http://localhost:3007/api/post`,data)
                                         courseCount[course.topic_name]["basic"]
                                           .total}
                                   </Typography>
-                                  {openStates[course]?.[0] ? (
+                                  {openStates[course.topic_name]?.["basic"] ? (
                                     <ExpandLess />
                                   ) : (
                                     <ExpandMore />
@@ -357,7 +325,7 @@ axios.post(`http://localhost:3007/api/post`,data)
                                 </ListItem>
                               </Box>
                               <Collapse
-                                in={openStates[course]?.[0]}
+                                in={openStates[course.topic_name]?.["basic"]}
                                 timeout="auto"
                                 unmountOnExit
                                 sx={{ backgroundColor: "#f7f9fb" }}
@@ -372,13 +340,13 @@ axios.post(`http://localhost:3007/api/post`,data)
                                         }}
                                       >
                                         <Tabs
-                                          value={tabValues[course]?.basic || 0}
+                                          value={tabValues[course.topic_name]?.basic || 0}
                                           onChange={(e, value) =>
                                             handleEventChange(
                                               e,
                                               value,
                                               "basic",
-                                              course
+                                              course.topic_name
                                             )
                                           }
                                           aria-label="basic tabs example"
@@ -415,54 +383,13 @@ axios.post(`http://localhost:3007/api/post`,data)
                                           }}
                                         >
                                            <FormGroup sx={{}}>
-                                            {/* {Htmltopics.map((item, index) => {
-                                              return (
-                                                item.status === false && (
-                                                  <div
-                                                    className="status"
-                                                    style={{
-                                                      display: "flex",
-                                                      justifyContent:
-                                                        "space-between",
-                                                      alignItems: "center",
-                                                    }}
-                                                  >
-                                                    <FormControlLabel
-                                                      sx={{ marginRight: 0 }}
-                                                      key={index}
-                                                      control={
-                                                        <Checkbox
-                                                          color="secondary"
-                                                          size="small"
-                                                          icon={
-                                                            <RadioButtonUncheckedIcon />
-                                                          }
-                                                          checkedIcon={
-                                                            <CheckCircleIcon />
-                                                          }
-                                                          label={<FaEye />}
-                                                          checked={item.status}
-                                                          onChange={() =>
-                                                            handleChange(index)
-                                                          }
-                                                          s
-                                                        />
-                                                      }
-                                                      label={item.topic}
-                                                    />
-                                                    <i
-                                                      class="ri-eye-fill"
-                                                      style={{
-                                                        fontSize: "12px",
-                                                        color: "#099be2",
-                                                        paddingRight: "10px",
-                                                      }}
-                                                    ></i>
-                                                  </div>
-                                                )
-                                              );
-                                            })} */}
-                                            {notCompletedSubtopics.map((item, index) => (
+                                            {/* {console.log(statusList,course.topic_name )} */}
+                                            {console.log(statusList?.[course.topic_name]?.["basic"]?.["inprogress"])}
+                                            {/* {console.log(statusList, course.topic_name, basic)} */}
+                                            {  statusList?.[course.topic_name]?.["basic"]?.["inprogress"]?.map((item, index) => {
+
+                                                console.log("ssslist",item.subTopic_name)
+                                                  return <>
                                             <FormControlLabel
                                               key={index}
                                               control={
@@ -473,12 +400,13 @@ axios.post(`http://localhost:3007/api/post`,data)
                                                   checkedIcon={<CheckCircleIcon />}
                                                   label={<FaEye />}
                                                   checked={false} // Since status is 'Notcompleted', we set checked to false
-                                                  onChange={() => handleChange(item.subtopics_name)}
+                                                  onChange={() => handleUpdate(item.subtopic_name,"completed")}
                                                 />
                                               }
-                                              label={item.subtopic_name}
+                                              label={item.subTopic_name}
                                             />
-                                          ))}
+                                            </>
+                                            })}
                                           </FormGroup>
                                         </Box>
                                       </CustomTabPanel>
@@ -493,37 +421,8 @@ axios.post(`http://localhost:3007/api/post`,data)
                                           }}
                                         >
                                           <FormGroup>
-                                            {/* {Htmltopics.map((item, index) => {
-                                              return (
-                                                item.status === true && (
-                                                  <FormControlLabel
-                                                    key={index}
-                                                    control={
-                                                      <Checkbox
-                                                        color="secondary"
-                                                        size="small"
-                                                        icon={
-                                                          <RadioButtonUncheckedIcon />
-                                                        }
-                                                        checkedIcon={
-                                                          <CheckCircleIcon />
-                                                        }
-                                                        label={<FaEye />}
-                                                        checked={item.status}
-                                                        onChange={() =>
-                                                          handleChange(index)
-                                                        }
-                                                        s
-                                                      />
-                                                    }
-                                                    label={item.topic}
-                                                  />
-                                                )
-                                              );
-                                            })} */}
-                                            
-                                            {completedSubtopics.map((item, index) => (<>
-                                              {console.log(completedSubtopics,item.subtopic_name)}
+                                          
+                                            {statusList?.course?.topic_name?.basic?.completed?.map((item, index) => (<>
                                           <FormControlLabel
                                             key={index}
                                             control={
@@ -534,7 +433,8 @@ axios.post(`http://localhost:3007/api/post`,data)
                                                 checkedIcon={<CheckCircleIcon />}
                                                 label={<FaEye />}
                                                 checked={true} // Since status is 'completed', we set checked to true
-                                               
+                                                // onChange={() => handleChangeNotCompleted(item.subtopic_name,item.subTopic_id)}
+                                                onChange={() => handleUpdate(item.subtopic_name,"inprogress")}
                                               />
                                             }
                                             label={item.subtopic_name}
@@ -566,7 +466,7 @@ axios.post(`http://localhost:3007/api/post`,data)
                                 }}
                               >
                                 <ListItem
-                                  onClick={() => handleOpenstatus(course, 1)}
+                                  onClick={() => handleOpenstatus(course.topic_name, "intermediate")}
                                   sx={{ padding: 0 }}
                                 >
                                   <ListItemText sx={{ marginLeft: 3 }}>
@@ -583,12 +483,6 @@ axios.post(`http://localhost:3007/api/post`,data)
                                   >
 
                                     {courseCountRender &&
-                                      console.log(
-                                        "aaa",
-                                        course.topic_name,
-                                        courseCount[course.topic_name]
-                                      )}
-                                    {courseCountRender &&
                                       courseCount[course.topic_name] &&
                                       courseCount[course.topic_name]["intermediate"] &&
                                       courseCount[course.topic_name]["intermediate"]
@@ -596,7 +490,7 @@ axios.post(`http://localhost:3007/api/post`,data)
                                         courseCount[course.topic_name]["intermediate"]
                                           .total}
                                   </Typography>
-                                  {openStates[course]?.[1] ? (
+                                  {openStates[course.topic_name]?.["intermediate"] ? (
                                     <ExpandLess />
                                   ) : (
                                     <ExpandMore />
@@ -604,7 +498,7 @@ axios.post(`http://localhost:3007/api/post`,data)
                                 </ListItem>
                               </Box>
                               <Collapse
-                                in={openStates[course]?.[1]}
+                                in={openStates[course.topic_name]?.["intermediate"]}
                                 timeout="auto"
                                 unmountOnExit
                                 sx={{ backgroundColor: "#f7f9fb" }}
@@ -620,14 +514,14 @@ axios.post(`http://localhost:3007/api/post`,data)
                                       >
                                         <Tabs
                                           value={
-                                            tabValues[course]?.intermediate || 0
+                                            tabValues[course.topic_name]?.intermediate || 0
                                           }
                                           onChange={(e, value) =>
                                             handleEventChange(
                                               e,
                                               value,
                                               "intermediate",
-                                              course
+                                              course.topic_name
                                             )
                                           }
                                           aria-label="basic tabs example"
@@ -715,7 +609,7 @@ axios.post(`http://localhost:3007/api/post`,data)
                                 }}
                               >
                                 <ListItem
-                                  onClick={() => handleOpenstatus(course, 2)}
+                                  onClick={() => handleOpenstatus(course.topic_name, "advance")}
                                   sx={{ padding: 0 }}
                                 >
                                   <ListItemText sx={{ marginLeft: 3 }}>
@@ -730,13 +624,6 @@ axios.post(`http://localhost:3007/api/post`,data)
                                       fontSize: "12px",
                                     }}
                                   >
-
-                                    {courseCountRender &&
-                                      console.log(
-                                        "aaa",
-                                        course.topic_name,
-                                        courseCount[course.topic_name]
-                                      )}
                                     {courseCountRender &&
                                       courseCount[course.topic_name] &&
                                       courseCount[course.topic_name]["advance"] &&
@@ -745,7 +632,7 @@ axios.post(`http://localhost:3007/api/post`,data)
                                         courseCount[course.topic_name]["advance"]
                                           .total}
                                   </Typography>
-                                  {openStates[course]?.[2] ? (
+                                  {openStates[course.topic_name]?.["advance"] ? (
                                     <ExpandLess />
                                   ) : (
                                     <ExpandMore />
@@ -753,7 +640,7 @@ axios.post(`http://localhost:3007/api/post`,data)
                                 </ListItem>
                               </Box>
                               <Collapse
-                                in={openStates[course]?.[2]}
+                                in={openStates[course.topic_name]?.["advance"]}
                                 timeout="auto"
                                 unmountOnExit
                                 sx={{ backgroundColor: "#f7f9fb" }}
@@ -769,14 +656,14 @@ axios.post(`http://localhost:3007/api/post`,data)
                                       >
                                         <Tabs
                                           value={
-                                            tabValues[course]?.advanced || 0
+                                            tabValues[course.topic_name]?.advanced || 0
                                           }
                                           onChange={(e, value) =>
                                             handleEventChange(
                                               e,
                                               value,
                                               "advanced",
-                                              course
+                                              course.topic_name
                                             )
                                           }
                                           aria-label="basic tabs example"
@@ -861,13 +748,13 @@ axios.post(`http://localhost:3007/api/post`,data)
                                 }}
                               >
                                 <ListItem
-                                  onClick={() => handleOpenstatus(course, 3)}
+                                  onClick={() => handleOpenstatus(course.topic_name, "project")}
                                   sx={{ padding: 0 }}
                                 >
                                   <ListItemText sx={{ marginLeft: 3 }}>
                                     Project
                                   </ListItemText>
-                                  {openStates[course]?.[3] ? (
+                                  {openStates[course.topic_name]?.["project"] ? (
                                     <ExpandLess />
                                   ) : (
                                     <ExpandMore />
@@ -875,7 +762,7 @@ axios.post(`http://localhost:3007/api/post`,data)
                                 </ListItem>
                               </Box>
                               <Collapse
-                                in={openStates[course]?.[3]}
+                                in={openStates[course.topic_name]?.["project"]}
                                 timeout="auto"
                                 unmountOnExit
                                 sx={{ backgroundColor: "#f7f9fb" }}
@@ -912,7 +799,7 @@ axios.post(`http://localhost:3007/api/post`,data)
                                 }}
                               >
                                 <ListItem
-                                  onClick={() => handleOpenstatus(course, 4)}
+                                  onClick={() => handleOpenstatus(course.topic_name, "other")}
                                   sx={{ padding: 0 }}
                                 >
                                   <ListItemText
@@ -920,7 +807,7 @@ axios.post(`http://localhost:3007/api/post`,data)
                                   >
                                     Other
                                   </ListItemText>
-                                  {openStates[course]?.[4] ? (
+                                  {openStates[course.topic_name]?.["other"] ? (
                                     <ExpandLess />
                                   ) : (
                                     <ExpandMore />
@@ -928,7 +815,7 @@ axios.post(`http://localhost:3007/api/post`,data)
                                 </ListItem>
                               </Box>
                               <Collapse
-                                in={openStates[course]?.[4]}
+                                in={openStates[course.topic_name]?.["other"]}
                                 timeout="auto"
                                 unmountOnExit
                                 sx={{ backgroundColor: "#f7f9fb" }}
