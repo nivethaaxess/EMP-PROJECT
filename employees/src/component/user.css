@@ -15,3 +15,28 @@ padding-bottom: 0px !important;
 {
    padding: 15px;
 }
+.status .viewTopics{
+    /* font-size: "8px" !important; */
+    color: rgb(10, 171, 240);
+}
+
+.status .MuiSvgIcon-root.MuiSvgIcon-fontSizeSmall.css-1btc011-MuiSvgIcon-root {
+    font-size: "4px" !important;
+}
+.status_box::-webkit-scrollbar {
+    width: 4px;
+    height:4px;
+  }
+  .status_box::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  .status_box::-webkit-scrollbar-thumb {
+    background: #79c6ed; 
+  }
+  
+  /* Handle on hover */
+  .status_box::-webkit-scrollbar-thumb:hover {
+    background: #42ccf2; 
+  }
