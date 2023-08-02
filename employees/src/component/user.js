@@ -138,7 +138,7 @@ const User = ({ toggleDrawer }) => {
       <Box
         sx={{
           flexGrow: 1,
-          width: "90%",
+          width: "82vw",
           margin: "0 auto",
         }}
       >

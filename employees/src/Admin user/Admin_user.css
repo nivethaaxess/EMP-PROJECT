@@ -1,0 +1,35 @@
+.css-h4y409-MuiList-root
+{
+padding-bottom: 0px !important;
+
+}
+.css-1x2jons-MuiFormControlLabel-asterisk
+{
+    display: none;
+}
+.FaHtml5{
+    width: 20px;
+    padding-right: 10px;
+}
+.MuiBox-root.css-19kzrtu
+{
+   padding: 15px;
+}
+.css-1elwnq4-MuiPaper-root-MuiAccordion-root.Mui-expanded{
+    margin: 0;
+}
+.css-15v22id-MuiAccordionDetails-root{
+    padding: 0px !important;
+}
+.css-1p823my-MuiListItem-root{
+    padding: 1px ;
+}
+/* .css-sh22l5-MuiButtonBase-root-MuiAccordionSummary-root{
+    margin-top: 30px !important;
+} */
+.css-o4b71y-MuiAccordionSummary-content{
+    margin: 0 !important;
+}
+.level-check .css-13foaey-MuiButtonBase-root-MuiAccordionSummary-root{
+    min-height: unset !important;
+}
