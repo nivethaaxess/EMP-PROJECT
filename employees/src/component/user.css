@@ -11,9 +11,17 @@ padding-bottom: 0px !important;
     width: 20px;
     padding-right: 10px;
 }
+.form-inprogress .css-j204z7-MuiFormControlLabel-root {
+  margin-left: 0;
+  margin-right: 0;
+}
+.form-completed .css-j204z7-MuiFormControlLabel-root {
+  margin-left: 0;
+  margin-right: 0;
+}
 .MuiBox-root.css-19kzrtu
 {
-   padding: 15px;
+   padding: 6px;
 }
 .status .viewTopics{
     /* font-size: "8px" !important; */
