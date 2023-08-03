@@ -80,8 +80,35 @@ const DashboardData = async (req, res) => {
       }
    }
 
+   const GetDashData = (req,res) =>{
+    try{
+      console.log('DINESH')
+         const topicName_query = 'select * from topics';
+
+         connection.query(topicName_query,(error,result)=>{
+          if (error) {
+            console.error('Error patching user:', error.message);
+            res.status(500).json({ error: 'Failed to patch user' });
+          } else {
+            const topic_name = result.map(val=>val.topic_name)
+            console.log('User updated successfully',result);
+            res.json({
+               message: 'User patched successfully',
+                val : result,
+                skills : topic_name
+              
+              });
+          }
+         })
+    }
+    catch(err){
+
+    }
+   }
+
 
 module.exports = {
   DashboardData,
-  tableData
+  tableData ,
+  GetDashData
 };

@@ -216,7 +216,7 @@ function a11yProps(index, topic_name, level) {
         sx={{
           flexGrow: 1,
            width: "95%",
-           margin: "0 auto"
+           margin: "0 auto",
         }}
       >
         {Array.isArray(courseList) &&
@@ -260,7 +260,6 @@ function a11yProps(index, topic_name, level) {
                       container
                       direction="row"
                       justifyContent="space-around"
-                      sx={{paddingBottom:"20px"}}
                     >
                       {JSON.parse(course.LEVEL).map((levelname,levelKey) => {
                         let level = levelname.toLowerCase();

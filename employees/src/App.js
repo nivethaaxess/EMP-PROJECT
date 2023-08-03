@@ -12,15 +12,11 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-
-
         <Routes>
           {/* s<Route path="/" element={<Login />} /> */}
           <Route path="/user" element={<Sidepanel />} />
           <Route path="/sidebar" element={<Sidebar />} />
         </Routes>
-
-
       </BrowserRouter>
     </div>
   );

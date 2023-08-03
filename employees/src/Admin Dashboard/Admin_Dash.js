@@ -80,7 +80,7 @@ function Admin_Dash() {
         labels: {
           style: {
             fontWeight: '700',
-            fontSize: '14px',
+            fontSize: '12px',
             
           }
         },
@@ -150,14 +150,18 @@ function Admin_Dash() {
       val: 'done'
     }
     axios.get('http://localhost:3007/api/Dashboard')
+    // axios.get('http://localhost:3007/api/Dashboard1')
       .then(val => {
         const { categories, seriesData } = val.data;
-        // console.log('VALUE==>>>', val.data)
-
+        console.log('VALUE==>>>', val.data)
+          
         const skills = val.data.skills;
+        // const sortedSkills = skills.map(skill => skill.toUpperCase()).sort();
+        // console.log('sortedSkills111111==>>>', sortedSkills)
         const sortedSkills = skills.map(skill => skill.toUpperCase()).sort();
+        console.log('sortedSkills2222222==>>>', sortedSkills)
         const basicData = val.data.levels.find(item => item.level === 'basic');
-        // console.log('basicData==>>>', basicData.level)
+        // console.log('basicData==>>>', basicData.level) 
 
         const intermediateData = val.data.levels.find(item => item.level === 'intermediate');
         const advanceData = val.data.levels.find(item => item.level === 'advance');
@@ -319,17 +323,17 @@ function Admin_Dash() {
             series={chartData.series}
             type="bar"
             height={250}
-          width={900}
+          width={720}
           />
-          <Box sx={{ display: 'flex', marginTop: '-15px' , width:'80%'}}>
-            <RemoveRedEyeIcon sx={{marginLeft:'52px'}}/>
-            <RemoveRedEyeIcon sx={{marginLeft:'90px'}}/>
-            <RemoveRedEyeIcon sx={{marginLeft:'85px'}}/>
-            <RemoveRedEyeIcon sx={{marginLeft:'85px'}}/>
-            <RemoveRedEyeIcon sx={{marginLeft:'84px'}}/>
-            <RemoveRedEyeIcon sx={{marginLeft:'84px'}}/>
-            <RemoveRedEyeIcon sx={{marginLeft:'86px'}}/>
-            <RemoveRedEyeIcon sx={{marginLeft:'86px'}}/>
+          <Box sx={{ display: 'flex', marginTop: '-15px'}}>
+            <RemoveRedEyeIcon sx={{marginLeft:'41px'}}/>
+            <RemoveRedEyeIcon sx={{marginLeft:'64px'}}/>
+            <RemoveRedEyeIcon sx={{marginLeft:'67px'}}/>
+            <RemoveRedEyeIcon sx={{marginLeft:'65px'}}/>
+            <RemoveRedEyeIcon sx={{marginLeft:'63px'}}/>
+            <RemoveRedEyeIcon sx={{marginLeft:'63px'}}/>
+            <RemoveRedEyeIcon sx={{marginLeft:'60px'}}/>
+            <RemoveRedEyeIcon sx={{marginLeft:'62px'}}/>
           </Box>
 
 
@@ -379,6 +383,10 @@ function Admin_Dash() {
          
         </Box>
         
+      </Box>
+
+      <Box className='rightGrid'>
+        vdkjf jsdvnsdklnvndvksandviodnvaso kasnvkjsduicjksabckj
       </Box>
      
     </Box>

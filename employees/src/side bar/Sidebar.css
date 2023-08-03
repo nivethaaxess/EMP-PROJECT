@@ -1,6 +1,7 @@
 .menu-with-sidebar {
     display: flex;
-    width: 100%;
+    /* width: 100%; */
+    /* background-color: #1acc64; */
   }
   
   .sidebar {
@@ -87,10 +88,12 @@
   
   .sidebar-expanded1 {
     margin-left: 200px;
-    /* width: 90% ; */
+    /* background-color: chocolate; */
+    width: 90% ;
     margin-top: 60px; 
     padding: 20px;
-    transition: margin-left 0.3s ease;
+    /* transition: margin-left 0.3s ease; */
+    /* background-color: cadetblue; */
     
   }
 
@@ -104,6 +107,8 @@
     display: flex;
     align-items: center;
     margin-top: 30px;
+    cursor: pointer;
+    /* background-color: aqua; */
   }
   
   .icon {
