@@ -4,11 +4,13 @@ const DashboardData = async (req, res) => {
   try {
     console.log('DONE')
     // Find a Skill
-    const skillQuery = 'SELECT DISTINCT skill FROM skills';
+    const skillQuery = 'SELECT DISTINCT topic_name FROM topics';
     // Find a Level
-    const levelQuery = 'SELECT DISTINCT level FROM skills';
+    const levelQuery = 'SELECT Level as level from level';   
     // Find a count and level
-    const countQuery = 'SELECT s.level, s.skill, COUNT(*) as count FROM skills s GROUP BY s.level, s.skill';
+    // const countQuery = 'SELECT s.level, s.skill, COUNT(*) as count FROM skills s GROUP BY s.level, s.skill';
+
+      const countQuery = 'SELECT  s.Level AS level, t.topic_name AS skills,      COUNT(DISTINCT s.subTopic_name) AS count FROM     sub_topics s  JOIN      topics t ON t.topic_id = s.TOPIC_ID  GROUP BY      t.topic_name, s.Level;'
 
     // Execute the queries
     connection.query(skillQuery, (error, skillResults) => {
@@ -32,8 +34,9 @@ const DashboardData = async (req, res) => {
 
 
 
-          const skillsArray = skillResults.map((item) => item.skill);
-          const sortedSkills = skillsArray.sort();
+          const skillsArray = skillResults.map((item) => item.topic_name);
+          console.log('skillResults===>>>>',skillResults)
+          const sortedSkills = skillsArray;
 
           // Combine the count data with the skills and levels data
           const result = {
@@ -41,6 +44,8 @@ const DashboardData = async (req, res) => {
             levels: levelResults,
             counts: countResults,
           };
+
+          console.log('result===>>>>',result)
 
           // If all queries are successful, send the results back as a response
           res.json(result);

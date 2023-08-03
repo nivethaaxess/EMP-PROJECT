@@ -1,7 +1,7 @@
 const connection = require('../Mysql connect/Mysql');
 
 const Domain = (req, res) => {
-  try {
+  try {        
     console.log('DOMAIN ')
     const getDomain = 'select * from domain';
     const levelList = ''
@@ -85,15 +85,15 @@ const domainInsert = (req, res) => {
     console.log('err==>>>', err)
   }
 }
-
+  
 const updateDomain = (req, res) => {
   try {
     const domainId = req.params.domainId;
     const domain_name = req.body.domain_name;
-
+ 
     console.log('domainId==>>>', domainId)
     console.log('domain_name==>>>', domain_name)
-
+   
     const updateQuery = 'UPDATE domain SET domain_name = ? WHERE domain_id = ?';
 
     connection.query(updateQuery, [domain_name, domainId], (err, result) => {
@@ -111,7 +111,7 @@ const updateDomain = (req, res) => {
   catch(err) {
 
     console.log('err', err);
-  }
+  }                 
 }
 
 
@@ -131,7 +131,7 @@ const levelList = (req, res) => {
       res.send(result)
       console.log('Inserted row ID:', result);
     });
-
+            
   }
 
   catch (err) {
@@ -192,11 +192,11 @@ const courseAdd = async (req, res) => {
     console.log('ERROR===>>>', err);
     return res.status(500).json({ error: 'Internal server error' });
   }
-};
+};                       
   
   
 
-
+   
 const GetDomain_Course = (req,res) =>{   
   try{
 
@@ -230,7 +230,7 @@ const updateCourse = (req,res) =>{
       console.log('course_name==>>>', course_name)
   
       const updateQuery = 'UPDATE topics SET topic_name = ? WHERE topic_id = ?';
-  
+    
       connection.query(updateQuery, [course_name, topicId], (err, result) => {
         if (err) {
           res.send(err)

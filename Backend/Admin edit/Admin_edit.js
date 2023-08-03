@@ -96,7 +96,7 @@ const courseLevel = (req, res) => {
  
         //    const topicInsertData = [addCourse, domainId, topicData] 
  
-        //    console.log('addCourse====>>>>>>>', addCourse);
+        //    console.log('addCourse====>>>>>>>', addCourse);    
            console.log('topicId====>>>>>>>', topicId);  
         //    console.log('checkBoxValues====>>>>>>>', checkBoxValues);
         //    const levelValue = JSON.stringify(checkBoxValues);

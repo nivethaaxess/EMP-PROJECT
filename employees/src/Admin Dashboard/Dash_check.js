@@ -1,65 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 
-const Dash_check = () => {
-  const [barChartsOptions, setBarChartsOptions] = useState({
-    chart: {
-      stacked: true,
-      toolbar: {
-        show: false, // Set show property to false to hide the toolbar/menu button
-      },
-    },
-    xaxis: {
-      categories: [
-        'AWS',
-        'BOOTSTRAP',
-        'CSS',
-        'GCB',
-        'HTML',
-        
-      ],
-      type: 'category',
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-      },
-    },
-    legend: {
-      show: true,
-    },
-    yaxis: {
-      show: false, // Set show property to false to hide the y-axis labels
-    },
-    colors: ['rgba(64,246,168,1)', 'rgb(37,30,145)', 'rgba(227,46,230,1)'],
-    dataLabels: {
-      position: 'top', // Display series values above the bars (upper chart)
-      style: {
-        colors: ['#333'], // Color of the series values
-      },
-    },
-  });
 
-  const [barChartsSeries, setBarChartsSeries] = useState([
-    { name: 'series x', data: [2, 5, 3, 4, 1] },
-    { name: 'series y', data: [10, 3, 1, 2, 10] },
-    { name: 'series z', data: [10, 3, 1, 2, 10] },
-    // { name: 'series x'},
-    // { name: 'series y'},
-    // { name: 'series z'},
-  ]);
+class Dash_check extends React.Component {
+  constructor(props) {
+    super(props);
 
-  return (
-    <div>
-      <ReactApexChart
-        options={barChartsOptions}
-        series={barChartsSeries}
-        type="bar"
-        height={200}
-        width={1000}
-      />
-    </div>
-  );
-};
+    this.state = {
+    
+      series: [{
+        name: 'PRODUCT A',
+        data: [44, 55, 41, ]
+      }, {
+        name: 'PRODUCT B',
+        data: [13, 23, 20, 8, 13, 27]
+      }, {
+        name: 'PRODUCT C',
+        data: [11, 17, 15, 15, 21, 14]
+      }, {
+        name: 'PRODUCT D',
+        data: [21, 7, 25,]
+      }],
+      options: {
+        chart: {
+          type: 'bar',
+          height: 350,
+          stacked: true,
+          toolbar: {
+            show: true
+          },
+          zoom: {
+            enabled: true
+          }
+        },
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            legend: {
+              position: 'bottom',
+              offsetX: -10,
+              offsetY: 0
+            }
+          }
+        }],
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            borderRadius: 10,
+            dataLabels: {
+              total: {
+                enabled: true,
+                style: {
+                  fontSize: '13px',
+                  fontWeight: 900
+                }
+              }
+            }
+          },
+        },
+        xaxis: {
+          type: 'datetime',
+          categories: ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT',
+            '01/05/2011 GMT', '01/06/2011 GMT'
+          ],
+        },
+        legend: {
+          position: 'right',
+          offsetY: 40
+        },
+        fill: {
+          opacity: 1
+        }
+      },
+    
+    
+    };
+  }
 
-export default Dash_check;
+
+
+  render() {
+    return (
+      
+
+<div id="chart">
+<ReactApexChart options={this.state.options} series={this.state.series} type="bar" height={350} width={720} />
+</div>
+
+
+    );
+  }
+}
+export default Dash_check
