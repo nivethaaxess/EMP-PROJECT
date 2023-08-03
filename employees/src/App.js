@@ -1,34 +1,27 @@
 import Admin_Dash from "./Admin Dashboard/Admin_Dash";
- // import User from "./component/user"
-  import User from "./component/nive"
+ import User from "./component/user"
 
 import MenuBar from "./Header/MenuBar";
 import NavBar from "./Header/NavBar";
 import Sidebar from "./side bar/Sidebar";
-// import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import { Route, Navigate, Routes } from 'react-router-dom';
-
+// import Login from "./Admin_Dashboard/Login";
+import Sidepanel from "./component/sidepanel";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div >
 
-      {/* <Sidebar/> */}
-     {/* <MenuBar/> */}
-      {/* <Admin_Dash /> */}
-     {/* <NavBar/> */}
-     {/* <User/> */}
-     <Routes>
-     <Route path="/" element={<Sidebar/>} />
-      {/* <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/" replace />} />
-      <Route path="/*" element={<Navigate to="/login" />} /> */}
-      </Routes>
-     
+    <div className="App">
+      <BrowserRouter>
+        <Routes>
+          s<Route path="/" element={<Login />} />
+          <Route path="/user" element={<Sidepanel />} />
+          <Route path="/sidebar" element={<Sidebar />} />
+        </Routes>
+      </BrowserRouter>
 
-       
     </div>
   );
 }
 
 export default App;
-

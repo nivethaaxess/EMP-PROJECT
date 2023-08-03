@@ -12,8 +12,6 @@ app.use(bodyParser.json());
 
 app.use('/', routes);
 
-console.log('DINESH    99999  sdcas  xcascsa')
-
 app.listen(3007, () => {
     console.log('Server started on port 3007...');
   });

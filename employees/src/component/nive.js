@@ -21,6 +21,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
 import axios from "axios";
+import { FaBook } from 'react-icons/fa';
+
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -48,132 +50,27 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-function a11yProps(index) {
+function a11yProps(index, topic_name, level) {
   return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    id: `simple-tab-${topic_name}-${level}-${index}`,
+    "aria-controls": `simple-tabpanel-${topic_name}-${level}-${index}`,
   };
 }
 
-const User = () => {
+  const User = () => {
   const [userId, setUserID] = useState(1);
   const [openStates, setOpenStates] = useState({});
   const [courseList, setCourseList] = useState([]);
-
-
-const [statusList,setStatusList] = useState({})
-
-
-
-const handleUpdate = (subtopic_name,status) => {
-  axios.post('http://localhost:3007/updatestatus', { subtopic_name,status,userId })
-    .then(response => {
-      console.log('Subtopic status updated to COMPLETED:', response.data);
-      
-    })
-    .catch(err => {
-      console.log('Error updating subtopic status to COMPLETED:', err);
-    });
-};
-
-// sai ends----------------------
-
+  const [statusList, setStatusList] = useState({});
   const [accordionStates, setAccordionStates] = useState([]);
   const [tabValues, setTabValues] = useState({});
   const [courseCount, setCourseCount] = useState({});
 
   const courseCountRender = Object.keys(courseCount).length > 0;
 
-  const handleAccordionChange = (course, isExpanded) => {
-
-    setAccordionStates((prevAccordionStates) =>
-      prevAccordionStates.map((accordionState) =>
-        accordionState.topic_name === course
-          ? { ...accordionState, isExpanded }
-          : accordionState
-      )
-    );
-    if (isExpanded) {
-       updateCount(course);
-    }
-  };
-
-  const updateCount = (course) => {
-    axios
-      .get(
-        `http://localhost:3007/subTopicCount/?userId=${userId}&course=${course}`
-      )
-      .then((res) => {
-        setCourseCount((pre) => ({ ...pre, [course]: res.data }));
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
-  };
-
-  const handleEventChange = (event, newValue, level, course) => {
-
-    console.log("handleEventChange called",course,level)
-    setTabValues((prevTabValues) => ({
-      ...prevTabValues,
-      [course]: { ...prevTabValues[course], [level]: newValue },
-    } ));
 
 
-     getStatus(course,level)
-  };
-
-
-  const getStatus = async(course,level)=>{
-
-    console.log("getsatus called",course,level)
-    await axios.get(`http://localhost:3007/api/getdata/?userId=${userId}&course=${course}&level=${level}`)
-    .then(response => {
-
-      console.log("respo",response.data)
-       
-      
-        setStatusList((prevOpenStates) => {
-
-          return {
-          ...prevOpenStates,
-          [course]: {
-            ...prevOpenStates[course],
-            [level]: response.data,
-          },
-        }});
-
-    })
-    .catch(err => {
-      console.log('errr==>', err);
-    })
-
-  }
-
-
-  console.log("tabvalus",tabValues)
-
-
-  const handleOpenstatus = (course, level) => {
-
-    console.log("handleOpenstatus",course,level)
-
-    getStatus(course,level)
-
-    setOpenStates((prevOpenStates) => ({
-      ...prevOpenStates,
-      [course]: {
-        ...prevOpenStates[course],
-        [level]: !prevOpenStates[course]?.[level],
-      },
-    }));
-  };
-
-  const icon = {
-    color: "#c55c16",
-    fontSize: "30px",
-  };
-
+  console.log("accordionStates",accordionStates)
   useEffect(() => {
     axios
       .get(`http://localhost:3007/courseList/${userId}`)
@@ -191,37 +88,135 @@ const handleUpdate = (subtopic_name,status) => {
       .catch((err) => {
         console.log("err", err);
       });
-
-    console.log("useeffect");
   }, []);
 
+  console.log("help")
   useEffect(() => {
     // Initialize tabValues when courseList changes
     if (courseList.length > 0) {
-      console.log("coarselist",courseList)
-      console.log("len",courseList.length > 0)
       const initialTabValues = {};
       courseList.forEach((course) => {
         initialTabValues[course.topic_name] = {
           basic: 0,
           intermediate: 0,
-          advanced: 0,
+          advance: 0,
         };
       });
       setTabValues((prevTabValues) => ({
-         ...prevTabValues,
+        ...prevTabValues,
         ...initialTabValues,
       }));
     }
   }, [courseList]);
+
+  const handleUpdate = async (course, subtopic_name, level, status) => {
+    await axios
+      .post("http://localhost:3007/updatestatus", {
+        subtopic_name,
+        status,
+        userId,
+      })
+      .then((response) => {})
+      .catch((err) => {
+        console.log("Error updating subtopic status to COMPLETED:", err);
+      });
+
+    getStatus(course, level);
+    updateCount(course);
+  };
+
+  const handleAccordionChange = (course, isExpanded) => {
+    setAccordionStates((prevAccordionStates) =>
+      prevAccordionStates.map((accordionState) =>
+        accordionState.topic_name === course
+          ? { ...accordionState, isExpanded }
+          : accordionState
+      )
+    );
+    if (isExpanded) {
+      updateCount(course);
+    }else{
+
+      setOpenStates((prevOpenStates) => ({
+        ...prevOpenStates,
+        [course]: prevOpenStates[course]
+          ? Object.keys(prevOpenStates[course]).reduce((acc, key) => {
+              acc[key] = false;
+              return acc;
+            }, {})
+          : {}, // Set an empty object if prevOpenStates[course] is undefined or null
+      }));
+      
+    }
+  };
+
+  const updateCount = (course) => {
+    axios
+      .get(
+        `http://localhost:3007/subTopicCount/?userId=${userId}&course=${course}`
+      )
+      .then((res) => {
+        setCourseCount((pre) => ({ ...pre, [course]: res.data }));
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
+  const handleEventChange = (event, newValue, level, course) => {
+    setTabValues((prevTabValues) => ({
+      ...prevTabValues,
+      [course]: { ...prevTabValues[course], [level]: newValue },
+    }));
+
+    getStatus(course, level);
+  };
+
+  const getStatus = async (course, level) => {
+    await axios
+      .get(
+        `http://localhost:3007/api/getdata/?userId=${userId}&course=${course}&level=${level}`
+      )
+      .then((response) => {
+        setStatusList((prevOpenStates) => {
+          return {
+            ...prevOpenStates,
+            [course]: {
+              ...prevOpenStates[course],
+              [level]: response.data,
+            },
+          };
+        });
+      })
+      .catch((err) => {
+        console.log("errr==>", err);
+      });
+  };
+
+  const handleOpenstatus = (course, level) => {
+
+    getStatus(course, level);
+    setOpenStates((prevOpenStates) => ({
+      ...prevOpenStates,
+      [course]: {
+        ...prevOpenStates[course],
+        [level]: !prevOpenStates[course]?.[level],
+      },
+    }));
+  };
+
+  const icon = {
+    color: "#c55c16",
+    fontSize: "30px",
+  };
 
   return (
     <>
       <Box
         sx={{
           flexGrow: 1,
-          width: "90%",
-          margin: "0 auto",
+           width: "95%",
+           margin: "0 auto",
         }}
       >
         {Array.isArray(courseList) &&
@@ -241,17 +236,23 @@ const handleUpdate = (subtopic_name,status) => {
                   }
                   key={i}
                   TransitionProps={{ unmountOnExit: true }}
+                  style={{backgroundColor:"#dfdfdf"}}
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
+                    style={{}}
+
                   >
                     <Typography
                       style={{ display: "flex", alignItems: "center" }}
                     >
-                      <FaHtml5 style={icon} className="FaHtml5" />
-                      {course.topic_name}
+                      <FaBook style={{color: "#3d7ef0",marginRight:"5px"}}/>
+                      {/* <FaHtml5 style={icon} className="FaHtml5" /> */}
+                      {/* <FontAwesomeIcon icon="fa-solid fa-book-open" style={{color: "#af8d12",}} /> */}
+                      {/* <FontAwesomeIcon icon="fa-duotone fa-book-open" style={{"--fa-primary-color": "#10449e", "--fa-secondary-color": "#3d7ef0",}} /> */}
+                      <p style={{margin:0,fontWeight:600,fontStyle:"italic"}}>{course.topic_name.toUpperCase()}</p>
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
@@ -260,578 +261,324 @@ const handleUpdate = (subtopic_name,status) => {
                       direction="row"
                       justifyContent="space-around"
                     >
-                      <Grid item xs={2}>
-                        <Item>
-                          <Box
-                            sx={{
-                              boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.5)",
-                              borderRadius: "4px",
-                            }}
-                          >
-                            <List>
-                              <Box
-                                sx={{
-                                  //   boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                                  borderRadius: "5px",
-                                  marginTop: -1,
-                                  padding: 0,
-                                  marginBottom: "5px",
-                                  borderBottom: "0.5px solid lightgray",
-                                }}
-                              >
-                                <ListItem
-                                  onClick={() => handleOpenstatus(course.topic_name,"basic")}
+                      {JSON.parse(course.LEVEL).map((levelname,levelKey) => {
+                        let level = levelname.toLowerCase();
+                          return (
+                            <Grid item xs={2} key={levelKey}>
+                              <Item>
+                                <Box
                                   sx={{
-                                    padding: 0,
-                                    display: "flex",
-                                    alignItems: "center",
+                                    boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.5)",
+                                    borderRadius: "4px",
+                                    // minHeight:"150px"
                                   }}
                                 >
-                                  <ListItemText
-                                    sx={{
-                                      marginLeft: 1,
-                                      marginRight: 7,
-                                      backgroundColor: "lightskyblue",
-                                      borderRadius: "5px",
-                                    }}
-                                  >
-                                    <Typography sx={{ paddingLeft: 1 }}>
-                                      Basic
-                                    </Typography>
-                                  </ListItemText>
-                                  <Typography
-                                    sx={{
-                                      marginLeft: "auto",
-                                      backgroundColor: "rgba(0,0,0,0.12)",
-                                      padding: "0 4px",
-                                      borderRadius: "5px",
-                                      fontSize: "12px",
-                                    }}
-                                  >
-
-                                    {courseCountRender &&
-                                      courseCount[course.topic_name] &&
-                                      courseCount[course.topic_name]["basic"] &&
-                                      courseCount[course.topic_name]["basic"]
-                                        .completed + "/" +
-                                        courseCount[course.topic_name]["basic"]
-                                          .total}
-                                  </Typography>
-                                  {openStates[course.topic_name]?.["basic"] ? (
-                                    <ExpandLess />
-                                  ) : (
-                                    <ExpandMore />
-                                  )}
-                                </ListItem>
-                              </Box>
-                              <Collapse
-                                in={openStates[course.topic_name]?.["basic"]}
-                                timeout="auto"
-                                unmountOnExit
-                                sx={{ backgroundColor: "#f7f9fb" }}
-                              >
-                                <Box sx={{ marginBottom: -1, boxShadow: 0 }}>
-                                  <List component="div" disablePadding>
-                                    <Box sx={{ width: "100%" }}>
-                                      <Box
-                                        sx={{
-                                          borderBottom: 1,
-                                          borderColor: "divider",
-                                        }}
-                                      >
-                                        <Tabs
-                                          value={tabValues[course.topic_name]?.basic || 0}
-                                          onChange={(e, value) =>
-                                            handleEventChange(
-                                              e,
-                                              value,
-                                              "basic",
-                                              course.topic_name
-                                            )
-                                          }
-                                          aria-label="basic tabs example"
-                                        >
-                                          <Tab
-                                            label="INPROGRESS"
-                                            {...a11yProps(0)}
-                                            sx={{
-                                              padding: "2px",
-                                              fontSize: "10px",
-                                            }}
-                                          />
-                                          <Tab
-                                            label="COMPLETED"
-                                            {...a11yProps(1)}
-                                            sx={{
-                                              padding: "2px",
-                                              fontSize: "10px",
-                                            }}
-                                          />
-                                        </Tabs>
-                                      </Box>
-
-                                      <CustomTabPanel
-                                        value={tabValues[course]?.basic}
-                                        index={0}
-                                      >
-                                        <Box
-                                          className="status_box"
-                                          sx={{
-                                            maxHeight: "250px", // Optional: Set a specific height for the container
-                                            overflow: "auto",
-                                            width: "100%",
-                                          }}
-                                        >
-                                           <FormGroup sx={{}}>
-                                            {/* {console.log(statusList,course.topic_name )} */}
-                                            {console.log(statusList?.[course.topic_name]?.["basic"]?.["inprogress"])}
-                                            {/* {console.log(statusList, course.topic_name, basic)} */}
-                                            {  statusList?.[course.topic_name]?.["basic"]?.["inprogress"]?.map((item, index) => {
-
-                                                console.log("ssslist",item.subTopic_name)
-                                                  return <>
-                                            <FormControlLabel
-                                              key={index}
-                                              control={
-                                                <Checkbox
-                                                  color="secondary"
-                                                  size="small"
-                                                  icon={<RadioButtonUncheckedIcon />}
-                                                  checkedIcon={<CheckCircleIcon />}
-                                                  label={<FaEye />}
-                                                  checked={false} // Since status is 'Notcompleted', we set checked to false
-                                                  onChange={() => handleUpdate(item.subtopic_name,"completed")}
-                                                />
-                                              }
-                                              label={item.subTopic_name}
-                                            />
-                                            </>
-                                            })}
-                                          </FormGroup>
-                                        </Box>
-                                      </CustomTabPanel>
-                                      <CustomTabPanel
-                                        value={tabValues[course]?.basic}
-                                        index={1}
-                                      >
-                                        <Box
-                                          sx={{
-                                            maxHeight: "150px", // Optional: Set a specific height for the container
-                                            overflowY: "auto",
-                                          }}
-                                        >
-                                          <FormGroup>
-                                          
-                                            {statusList?.course?.topic_name?.basic?.completed?.map((item, index) => (<>
-                                          <FormControlLabel
-                                            key={index}
-                                            control={
-                                              <Checkbox
-                                                color="secondary"
-                                                size="small"
-                                                icon={<RadioButtonUncheckedIcon />}
-                                                checkedIcon={<CheckCircleIcon />}
-                                                label={<FaEye />}
-                                                checked={true} // Since status is 'completed', we set checked to true
-                                                // onChange={() => handleChangeNotCompleted(item.subtopic_name,item.subTopic_id)}
-                                                onChange={() => handleUpdate(item.subtopic_name,"inprogress")}
-                                              />
-                                            }
-                                            label={item.subtopic_name}
-                                          />
-                                          </>
-                                        ))}
-                                          </FormGroup>
-                                        </Box>
-                                      </CustomTabPanel>
-                                    </Box>
-                                  </List>
-                                </Box>
-                              </Collapse>
-                            </List>
-                          </Box>
-                        </Item>
-                      </Grid>
-                      <Grid item xs={2}>
-                        <Item>
-                          <Box>
-                            <List>
-                              <Box
-                                sx={{
-                                  boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                                  borderRadius: "5px",
-                                  marginTop: -1,
-                                  padding: 0,
-                                  marginBottom: "5px",
-                                }}
-                              >
-                                <ListItem
-                                  onClick={() => handleOpenstatus(course.topic_name, "intermediate")}
-                                  sx={{ padding: 0 }}
-                                >
-                                  <ListItemText sx={{ marginLeft: 3 }}>
-                                    Intermediate
-                                  </ListItemText>
-                                  <Typography
-                                    sx={{
-                                      marginLeft: "auto",
-                                      backgroundColor: "rgba(0,0,0,0.12)",
-                                      padding: "0 4px",
-                                      borderRadius: "5px",
-                                      fontSize: "12px",
-                                    }}
-                                  >
-
-                                    {courseCountRender &&
-                                      courseCount[course.topic_name] &&
-                                      courseCount[course.topic_name]["intermediate"] &&
-                                      courseCount[course.topic_name]["intermediate"]
-                                        .completed + "/" +
-                                        courseCount[course.topic_name]["intermediate"]
-                                          .total}
-                                  </Typography>
-                                  {openStates[course.topic_name]?.["intermediate"] ? (
-                                    <ExpandLess />
-                                  ) : (
-                                    <ExpandMore />
-                                  )}
-                                </ListItem>
-                              </Box>
-                              <Collapse
-                                in={openStates[course.topic_name]?.["intermediate"]}
-                                timeout="auto"
-                                unmountOnExit
-                                sx={{ backgroundColor: "#f7f9fb" }}
-                              >
-                                <Box sx={{ marginBottom: -1, boxShadow: 0 }}>
-                                  <List component="div" disablePadding>
-                                    <Box sx={{ width: "100%" }}>
-                                      <Box
-                                        sx={{
-                                          borderBottom: 1,
-                                          borderColor: "divider",
-                                        }}
-                                      >
-                                        <Tabs
-                                          value={
-                                            tabValues[course.topic_name]?.intermediate || 0
-                                          }
-                                          onChange={(e, value) =>
-                                            handleEventChange(
-                                              e,
-                                              value,
-                                              "intermediate",
-                                              course.topic_name
-                                            )
-                                          }
-                                          aria-label="basic tabs example"
-                                        >
-                                          <Tab
-                                            label="INPROGRESS"
-                                            {...a11yProps(0)}
-                                            sx={{
-                                              padding: "2px",
-                                              fontSize: "10px",
-                                            }}
-                                          />
-                                          <Tab
-                                            label="COMPLETED"
-                                            {...a11yProps(1)}
-                                            sx={{
-                                              padding: "2px",
-                                              fontSize: "10px",
-                                            }}
-                                          />
-                                        </Tabs>
-                                      </Box>
-                                      <CustomTabPanel
-                                        value={tabValues[course]?.intermediate}
-                                        index={0}
-                                      >
-                                        {/* <FormGroup>
-                                  {Htmltopics.map((item, index) => (
-                                    <FormControlLabel
-                                      key={index}
-                                      control={
-                                        <Checkbox
-                                          checked={checkedItems[index] || false}
-                                          onChange={() => handleChange(index)}
-                                        />
-                                      }
-                                      label={item}
-                                      sx={{ padding: "2px", fontSize: "8px" }}
-                                    />
-                                  ))}
-                                </FormGroup> */}
-                                        {/* <button onClick={handleCompleted}>Mark Completed</button> */}
-                                      </CustomTabPanel>
-                                      <CustomTabPanel
-                                        value={tabValues[course]?.intermediate}
-                                        index={1}
-                                      >
-                                        {/* {completedItems.length > 0 ? (
-                                  <FormGroup>
-                                    {completedItems.map((item, index) => (
-                                      <FormControlLabel
-                                        key={index}
-                                        required
-                                        control={<Checkbox defaultChecked />}
-                                        label={item}
-                                      />
-                                    ))}
-                                  </FormGroup>
-                                ) : (
-                                  <p>No items completed yet.</p>
-                                )} */}
-                                      </CustomTabPanel>
-                                    </Box>
-                                  </List>
-                                </Box>
-                              </Collapse>
-                            </List>
-                          </Box>
-                        </Item>
-                      </Grid>
-                      <Grid item xs={2}>
-                        <Item>
-                          <Box
-
-                          //   flex={3}
-                          >
-                            <List>
-                              <Box
-                                sx={{
-                                  boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                                  borderRadius: "5px",
-                                  marginTop: -1,
-                                  padding: 0,
-                                  marginBottom: "5px",
-                                }}
-                              >
-                                <ListItem
-                                  onClick={() => handleOpenstatus(course.topic_name, "advance")}
-                                  sx={{ padding: 0 }}
-                                >
-                                  <ListItemText sx={{ marginLeft: 3 }}>
-                                    Advanced
-                                  </ListItemText>
-                                  <Typography
-                                    sx={{
-                                      marginLeft: "auto",
-                                      backgroundColor: "rgba(0,0,0,0.12)",
-                                      padding: "0 4px",
-                                      borderRadius: "5px",
-                                      fontSize: "12px",
-                                    }}
-                                  >
-                                    {courseCountRender &&
-                                      courseCount[course.topic_name] &&
-                                      courseCount[course.topic_name]["advance"] &&
-                                      courseCount[course.topic_name]["advance"]
-                                        .completed + "/" +
-                                        courseCount[course.topic_name]["advance"]
-                                          .total}
-                                  </Typography>
-                                  {openStates[course.topic_name]?.["advance"] ? (
-                                    <ExpandLess />
-                                  ) : (
-                                    <ExpandMore />
-                                  )}
-                                </ListItem>
-                              </Box>
-                              <Collapse
-                                in={openStates[course.topic_name]?.["advance"]}
-                                timeout="auto"
-                                unmountOnExit
-                                sx={{ backgroundColor: "#f7f9fb" }}
-                              >
-                                <Box sx={{ marginBottom: -1, boxShadow: 0 }}>
-                                  <List component="div" disablePadding>
-                                    <Box sx={{ width: "100%" }}>
-                                      <Box
-                                        sx={{
-                                          borderBottom: 1,
-                                          borderColor: "divider",
-                                        }}
-                                      >
-                                        <Tabs
-                                          value={
-                                            tabValues[course.topic_name]?.advanced || 0
-                                          }
-                                          onChange={(e, value) =>
-                                            handleEventChange(
-                                              e,
-                                              value,
-                                              "advanced",
-                                              course.topic_name
-                                            )
-                                          }
-                                          aria-label="basic tabs example"
-                                        >
-                                          <Tab
-                                            label="INPROGRESS"
-                                            {...a11yProps(0)}
-                                            sx={{
-                                              padding: "2px",
-                                              fontSize: "10px",
-                                            }}
-                                          />
-                                          <Tab
-                                            label="COMPLETED"
-                                            {...a11yProps(1)}
-                                            sx={{
-                                              padding: "2px",
-                                              fontSize: "10px",
-                                            }}
-                                          />
-                                        </Tabs>
-                                      </Box>
-                                      <CustomTabPanel
-                                        value={tabValues[course]?.advanced}
-                                        index={0}
-                                      >
-                                        {/* <FormGroup>
-                                  {Htmltopics.map((item, index) => (
-                                    <FormControlLabel
-                                      key={index}
-                                      control={
-                                        <Checkbox
-                                          checked={checkedItems[index] || false}
-                                          onChange={() => handleChange(index)}
-                                        />
-                                      }
-                                      label={item}
-                                      sx={{ padding: "2px", fontSize: "8px" }}
-                                    />
-                                  ))}
-                                </FormGroup> */}
-                                        {/* <button onClick={handleCompleted}>Mark Completed</button> */}
-                                      </CustomTabPanel>
-                                      <CustomTabPanel
-                                        value={tabValues[course]?.advanced}
-                                        index={1}
-                                      >
-                                        {/* {completedItems.length > 0 ? (
-                                  <FormGroup>
-                                    {completedItems.map((item, index) => (
-                                      <FormControlLabel
-                                        key={index}
-                                        required
-                                        control={<Checkbox defaultChecked />}
-                                        label={item}
-                                      />
-                                    ))}
-                                  </FormGroup>
-                                ) : (
-                                  <p>No items completed yet.</p>
-                                )} */}
-                                      </CustomTabPanel>
-                                    </Box>
-                                  </List>
-                                </Box>
-                              </Collapse>
-                            </List>
-                          </Box>
-                        </Item>
-                      </Grid>
-                      <Grid item xs={2}>
-                        <Item>
-                          <Box>
-                            <List>
-                              <Box
-                                sx={{
-                                  boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                                  borderRadius: "5px",
-                                  marginTop: -1,
-                                  padding: 0,
-                                  marginBottom: "5px",
-                                }}
-                              >
-                                <ListItem
-                                  onClick={() => handleOpenstatus(course.topic_name, "project")}
-                                  sx={{ padding: 0 }}
-                                >
-                                  <ListItemText sx={{ marginLeft: 3 }}>
-                                    Project
-                                  </ListItemText>
-                                  {openStates[course.topic_name]?.["project"] ? (
-                                    <ExpandLess />
-                                  ) : (
-                                    <ExpandMore />
-                                  )}
-                                </ListItem>
-                              </Box>
-                              <Collapse
-                                in={openStates[course.topic_name]?.["project"]}
-                                timeout="auto"
-                                unmountOnExit
-                                sx={{ backgroundColor: "#f7f9fb" }}
-                              >
-                                <Box sx={{ marginBottom: -1, boxShadow: 0 }}>
-                                  <List component="div" disablePadding>
+                                  <List>
                                     <Box
                                       sx={{
-                                        width: "100%",
-                                        textAlign: "center",
+                                        //   boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                                        borderRadius: "5px",
+                                        marginTop: -1,
+                                        padding: 0,
+                                        // marginBottom: "5px",
+                                        borderBottom: "0.5px solid lightgray",
                                       }}
                                     >
-                                      <h4>Title </h4>
-                                      <p>Describtion</p>
+                                      <ListItem
+                                        onClick={() =>
+                                          handleOpenstatus(
+                                            course.topic_name,
+                                            level
+                                          )
+                                        }
+                                        sx={{
+                                          padding: 0,
+                                          display: "flex",
+                                          alignItems: "center",
+                                          backgroundColor:"#c2e7ff"
+                                        }}
+                                      >
+                                        <ListItemText
+                                          sx={{
+                                            margin: 0.5,
+                                            fontSize: "10px",
+                                            // backgroundColor: "lightskyblue",
+                                            borderRadius: "5px",
+                                          }}
+                                        >
+                                          <Typography sx={{fontSize:"14px",textAlign:"center",fontWeight: 500 }}>
+                                            {level.toUpperCase()}
+                                          </Typography>
+                                        </ListItemText>
+                                        <Typography
+                                          sx={{
+                                            marginLeft: "auto",
+                                            backgroundColor: "rgba(0,0,0,0.12)",
+                                            padding: "0 4px",
+                                            borderRadius: "5px",
+                                            fontSize: "12px",
+                                          }}
+                                        >
+                                          {courseCountRender &&
+                                            courseCount[course.topic_name] &&
+                                            courseCount[course.topic_name][
+                                              level
+                                            ] &&
+                                            courseCount[course.topic_name][
+                                              level
+                                            ].completed +
+                                              "/" +
+                                              courseCount[course.topic_name][
+                                                level
+                                              ].total}
+                                        </Typography>
+                                        {openStates[course.topic_name]?.[
+                                          level
+                                        ] ? (
+                                          <ExpandLess />
+                                        ) : (
+                                          <ExpandMore />
+                                        )}
+                                      </ListItem>
                                     </Box>
+                                    <Collapse
+                                      in={
+                                        openStates[course.topic_name]?.[level]
+                                      }
+                                      timeout="auto"
+                                      unmountOnExit
+                                      
+                                      sx={{ backgroundColor:"white"}}
+                                      // sx={{ backgroundColor: "#f7f9fb" }}
+                                    >
+                                      <Box sx={{}}>
+                                        <List component="div" disablePadding>
+                                          {level == "others" ?(
+                                             
+                                              <p style={{textAlign:"center"}}>Others</p>
+                                            ):level == "project"? (<p style={{textAlign:"center"}}>Project</p>):(<Box sx={{ width: "100%" }}>
+                                            <Box
+                                              sx={{
+                                                borderBottom: 1,
+                                                borderColor: "divider",
+                                               
+                                              }}
+                                            >
+                                              <Tabs
+                                                value={
+                                                  tabValues[
+                                                    course.topic_name
+                                                  ]?.[level] || 0
+                                                }
+                                                onChange={(e, value) =>
+                                                  handleEventChange(
+                                                    e,
+                                                    value,
+                                                    level,
+                                                    course.topic_name
+                                                  )
+                                                }
+                                                aria-label="basic tabs example"
+                                              >
+                                                <Tab
+                                                  label="INPROGRESS"
+                                                  {...a11yProps(
+                                                    0,
+                                                    course.topic_name,
+                                                    level
+                                                  )}
+                                                  sx={{
+                                                    padding: "2px",
+                                                    fontSize: "10px",
+                                                    flexGrow:1,
+                                                    fontWeight:"bold"
+                                                  }}
+                                                />
+                                                <Tab
+                                                  label="COMPLETED"
+                                                  {...a11yProps(
+                                                    1,
+                                                    course.topic_name,
+                                                    level
+                                                  )}
+                                                  sx={{
+                                                    padding: "2px",
+                                                    fontSize: "10px",
+                                                    flexGrow:1,
+                                                    fontWeight:"bold"
+                                                  }}
+                                                />
+                                              </Tabs>
+                                            </Box>
+
+                                            <CustomTabPanel
+                                              value={
+                                                tabValues[course.topic_name]?.[
+                                                  level
+                                                ]
+                                              }
+                                              index={0}
+                                            >
+                                              <Box
+                                                className="status_box"
+                                                sx={{
+                                                  maxHeight: "250px", 
+                                                  // minHeight:"100px",
+                                                  overflow: "auto",
+                                                  width: "100%",
+                                                  
+                                                }}
+                                              >
+                                                <FormGroup sx={{}}>
+                                                  {statusList?.[
+                                                    course.topic_name
+                                                  ]?.[level]?.["inprogress"]
+                                                    ?.length > 0 ? (
+                                                    statusList[
+                                                      course.topic_name
+                                                    ][level]["inprogress"].map(
+                                                      (item, index) => (
+                                                        <div  className = "form-inprogress" style={{display:"flex",alignItems:"center",}}>
+                                                        <FormControlLabel
+                                                          key={index}
+                                                          control={
+                                                            <Checkbox
+                                                              color="secondary"
+                                                              size="small"
+                                                              icon={
+                                                                <RadioButtonUncheckedIcon />
+                                                              }
+                                                              checkedIcon={
+                                                                <CheckCircleIcon />
+                                                              }
+                                                              label={<FaEye />}
+                                                              checked={false} // Since status is 'Notcompleted', we set checked to false
+                                                              onChange={() =>
+                                                                handleUpdate(
+                                                                  course.topic_name,
+                                                                  item.subTopic_name,
+                                                                  level,
+                                                                  "completed"
+                                                                )
+                                                              }
+                                                            />
+                                                          }
+                                                          label={
+                                                            item.subTopic_name
+                                                              .charAt(0)
+                                                              .toUpperCase() +
+                                                            item.subTopic_name.slice(
+                                                              1
+                                                            )
+                                                          }
+                                                        />
+                                                        <a href={item.LINK} style={{textDecoration:"none",textAlign:"right",flexGrow:1}} target="_blank"><i class="ri-eye-fill"
+                                                      style={{
+                                                        fontSize: "14px",
+                                                        color: "#099be2",
+                                                        paddingRight: "10px",
+                                                      }}
+                                                    ></i></a>
+                                                        </div>
+                                                      )
+                                                    )
+                                                  ) : (
+                                                    <p style={{textAlign:"center"}}>No items in progress.</p>
+                                                  )}
+                                                </FormGroup>
+                                              </Box>
+                                            </CustomTabPanel>
+                                            <CustomTabPanel
+                                              value={
+                                                tabValues[course.topic_name]?.[
+                                                  level
+                                                ]
+                                              }
+                                              index={1}
+                                            >
+                                              <Box
+                                                sx={{
+                                                  maxHeight: "250px", 
+                                                  // minHeight:"100px",
+                                                  overflowY: "auto",
+                                                }}
+                                              >
+                                                <FormGroup>
+                                                  {statusList?.[
+                                                    course.topic_name
+                                                  ]?.[level]?.["completed"]
+                                                    ?.length > 0 ? (
+                                                    statusList[
+                                                      course.topic_name
+                                                    ][level]["completed"].map(
+                                                      (item, index) => (
+                                                        <div 
+                                                        className = "form-completed" 
+                                                        style={{display:"flex",alignItems:"center",}}>
+                                                        <FormControlLabel
+                                                          key={index}
+                                                          control={
+                                                            <Checkbox
+                                                              color="secondary"
+                                                              size="small"
+                                                              icon={
+                                                                <RadioButtonUncheckedIcon />
+                                                              }
+                                                              checkedIcon={
+                                                                <CheckCircleIcon />
+                                                              }
+                                                              label={<FaEye />}
+                                                              checked={true} // Since status is 'completed', we set checked to true
+                                                              onChange={() =>
+                                                                handleUpdate(
+                                                                  course.topic_name,
+                                                                  item.subTopic_name,
+                                                                  level,
+                                                                  "inprogress"
+                                                                )
+                                                              }
+                                                            />
+                                                            
+                                                          }
+                                                          label={
+                                                            item.subTopic_name
+                                                              .charAt(0)
+                                                              .toUpperCase() +
+                                                            item.subTopic_name.slice(
+                                                              1
+                                                            )
+                                                          }
+                                                        
+                                                        />
+                                                        <a href={item.LINK} style={{textDecoration:"none",textAlign:"right",flexGrow:1}} target="_blank"><i class="ri-eye-fill"
+                                                      style={{
+                                                        fontSize: "14px",
+                                                        color: "#099be2",
+                                                        paddingRight: "10px",
+                                                      }}
+                                                    ></i></a>
+                                                        </div>
+                                                      )
+                                                    )
+                                                  ) : (
+                                                    <p style={{textAlign:"center"}}>No items in completed.</p>
+                                                  )}
+                                                  
+                                                </FormGroup>
+                                              </Box>
+                                            </CustomTabPanel>
+                                          </Box>)
+                                         }
+                                          
+                                        </List>
+                                      </Box>
+                                    </Collapse>
                                   </List>
                                 </Box>
-                              </Collapse>
-                            </List>
-                          </Box>
-                        </Item>
-                      </Grid>
-                      <Grid item xs={2}>
-                        <Item>
-                          <Box>
-                            <List>
-                              <Box
-                                sx={{
-                                  boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                                  borderRadius: "5px",
-                                  marginTop: -1,
-                                  padding: 0,
-                                  marginBottom: "5px",
-                                }}
-                              >
-                                <ListItem
-                                  onClick={() => handleOpenstatus(course.topic_name, "other")}
-                                  sx={{ padding: 0 }}
-                                >
-                                  <ListItemText
-                                    sx={{ marginLeft: 3, fontSize: "8px" }}
-                                  >
-                                    Other
-                                  </ListItemText>
-                                  {openStates[course.topic_name]?.["other"] ? (
-                                    <ExpandLess />
-                                  ) : (
-                                    <ExpandMore />
-                                  )}
-                                </ListItem>
-                              </Box>
-                              <Collapse
-                                in={openStates[course.topic_name]?.["other"]}
-                                timeout="auto"
-                                unmountOnExit
-                                sx={{ backgroundColor: "#f7f9fb" }}
-                              >
-                                <Box sx={{ marginBottom: -1, boxShadow: 0 }}>
-                                  <List component="div" disablePadding>
-                                    <Box sx={{ width: "100%" }}>
-                                      <p>Other</p>
-                                    </Box>
-                                  </List>
-                                </Box>
-                              </Collapse>
-                            </List>
-                          </Box>
-                        </Item>
-                      </Grid>
+                              </Item>
+                            </Grid>
+                          );                        
+                      })}
                     </Grid>
                   </AccordionDetails>
                 </Accordion>
