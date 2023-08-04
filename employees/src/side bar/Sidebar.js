@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import './Sidebar.css';
+import React, { useState,useEffect } from 'react';
+ import './Sidebar.css';
 import Admin_Dash from '../Admin Dashboard/Admin_Dash';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ListIcon from '@mui/icons-material/List';
@@ -7,13 +7,34 @@ import Admin_user from '../Admin user/Admin_user';
 import Admin_User_check from '../Admin user/Admin_User_check';
 import User from '../component/user';
 import Dash_check from '../Admin Dashboard/Dash_check';
+import { useNavigate } from 'react-router-dom';
+
 
 const Sidebar = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [sideBarName , setSideBarName] = useState(['DASHBOARD','ADMIN','VALUE','METHOD','DASHBOARD','DASHBOARD'])
   const [isHovered, setIsHovered] = useState(false);
   const [selectedItem, setSelectedItem] = useState('DASHBOARD');
+  const [logout,setlogout] = useState(false);
 
+  const navigate = useNavigate();
+  useEffect(()=>{
+    if(!localStorage.getItem('admin'))
+       navigate('/');
+         
+       
+        
+ },[logout])
+
+
+
+
+  const logoutHandler =()=>
+  {
+     localStorage.removeItem('admin')
+     setlogout(true);
+     
+  }
 
 
   const toggleSidebarWidth = () => {
@@ -64,6 +85,7 @@ const Sidebar = () => {
           <li>Home</li>
           <li>About</li>
           <li>Contact</li>
+          <button onClick={logoutHandler}>Logout</button>
         </ul>
         </div>
 

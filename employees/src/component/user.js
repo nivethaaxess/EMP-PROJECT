@@ -58,7 +58,7 @@ function a11yProps(index, topic_name, level) {
 }
 
   const User = () => {
-  const [userId, setUserID] = useState(1);
+  const [userId, setUserID] = useState(localStorage.getItem("userId"));
   const [openStates, setOpenStates] = useState({});
   const [courseList, setCourseList] = useState([]);
   const [statusList, setStatusList] = useState({});
@@ -70,8 +70,11 @@ function a11yProps(index, topic_name, level) {
 
 
 
-  console.log("accordionStates",accordionStates)
+console.log("userId",userId)
+
+
   useEffect(() => {
+
     axios
       .get(`http://localhost:3007/courseList/${userId}`)
       .then((a) => {
@@ -89,19 +92,20 @@ function a11yProps(index, topic_name, level) {
         console.log("err", err);
       });
   }, []);
+console.log("courseLi",courseList)
+console.log("tab valyes",tabValues)
 
-  console.log("help")
   useEffect(() => {
     // Initialize tabValues when courseList changes
     if (courseList.length > 0) {
       const initialTabValues = {};
       courseList.forEach((course) => {
-        initialTabValues[course.topic_name] = {
-          basic: 0,
-          intermediate: 0,
-          advance: 0,
-        };
+        initialTabValues[course.topic_name] =  JSON.parse(course.LEVEL).reduce((acc, key) => {
+          acc[key] = 0;
+          return acc;
+        }, {})
       });
+
       setTabValues((prevTabValues) => ({
         ...prevTabValues,
         ...initialTabValues,
@@ -262,8 +266,8 @@ function a11yProps(index, topic_name, level) {
                       justifyContent="space-around"
                       sx={{paddingBottom:"20px"}}
                     >
-                      {JSON.parse(course.LEVEL).map((levelname,levelKey) => {
-                        let level = levelname.toLowerCase();
+                      {JSON.parse(course.LEVEL).map((level,levelKey) => {
+                        // let level = levelname.toLowerCase();
                           return (
                             <Grid item xs={2} key={levelKey}>
                               <Item>

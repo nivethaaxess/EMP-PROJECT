@@ -1,16 +1,34 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./sidepanel.css";
  import User from './user';
 // import Admin_Dash from '../Admin Dashboard/Admin_Dash';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ListIcon from "@mui/icons-material/List";
+import { useNavigate } from 'react-router-dom';
 
 const Sidepanel = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+  const navigate = useNavigate();
+
+  const [logout,setlogout] = useState(false);
 
   const toggleSidebarWidth = () => {
     setIsSidebarExpanded((prevState) => !prevState);
   };
+  useEffect(()=>{
+    if(!localStorage.getItem('auth'))
+       navigate('/');
+        
+ },[logout])
+
+
+  const logoutHandler =()=>
+  {
+     localStorage.removeItem('auth')
+     localStorage.removeItem('userId')
+     setlogout(true);
+  }
+
 
   return (
     <div 
@@ -73,6 +91,7 @@ const Sidepanel = () => {
             <li>Home</li>
             <li>About</li>
             <li>Contact</li>
+            <button onClick={logoutHandler}>Logout</button>
           </ul>
         </div>
       </div>
