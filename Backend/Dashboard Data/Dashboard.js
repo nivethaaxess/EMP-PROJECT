@@ -30,18 +30,18 @@ const DashboardData = async (req, res) => {
             console.error('Error executing count query:', error);
             return res.status(500).send('Error fetching count data');
           }
-
+ 
 
 
 
           const skillsArray = skillResults.map((item) => item.topic_name);
-          console.log('skillResults===>>>>',skillResults)
+          console.log('skillResults===>>>>',skillResults )
           const sortedSkills = skillsArray;
-
+ 
           // Combine the count data with the skills and levels data
           const result = {
             skills: sortedSkills,
-            levels: levelResults,
+            levels: levelResults, 
             counts: countResults,
           };
 

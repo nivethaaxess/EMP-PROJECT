@@ -39,15 +39,15 @@ router.post('/api/subTopics/edit',Admin_edit.editSubTopic);
 const employeeData = require("../EmployeeData/employeeData")
 
     router.get('/courseList/:id',employeeData.userCourseList)
-    router.get('/subTopicCount',employeeData.subTopicCount)
+    router.get('/subTopicCount',employeeData.subTopicCount) 
     router.get('/api/getdata',employeeData.getdata);
-    
-    router.post('/updatestatus',employeeData.updatestatus)
-    router.post('/insertusers',employeeData.InsertUser)   
-    router.post('/api/logindata',employeeData.logindata)
-    router.post('/api/domain',employeeData.domaingetdata)
 
- // employeeData ends -----------
+    router.post('/updatestatus',employeeData.updatestatus) 
+    router.post('/insertusers',employeeData.InsertUser)          
+    router.post('/api/logindata',employeeData.logindata)
+    router.post('/api/domain',employeeData.domaingetdata)     
+       
+ // employeeData ends ----------- 
 
 
 
