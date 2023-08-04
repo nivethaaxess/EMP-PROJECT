@@ -1,12 +1,12 @@
 import React, { useState,useEffect } from 'react';
  import './Sidebar.css';
-import Admin_Dash from '../Admin Dashboard/Admin_Dash';
+import Admin_Dash from '../Admin_Dashboard/Admin_Dash';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ListIcon from '@mui/icons-material/List';
 import Admin_user from '../Admin user/Admin_user';
 import Admin_User_check from '../Admin user/Admin_User_check';
 import User from '../component/user';
-import Dash_check from '../Admin Dashboard/Dash_check';
+import Dash_check from '../Admin_Dashboard/Dash_check';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -92,20 +92,17 @@ const Sidebar = () => {
        
        
       </div>
-      {/* <div className="check">
-            nsdkvn
-        </div> */}
+     
+      {console.log('selectedItem======>>>>>>>>>>>>',selectedItem)}
+
       <div className={` ${isSidebarExpanded ? 'sidebar-expanded1' : 'main-content'}`}>
       {
-        selectedItem == 'DASHBOARD' ? '<Admin_Dash/>' : selectedItem == 'ADMIN' ?  <Admin_User_check/> : selectedItem == 'VALUE' ? <User/> : null 
+        selectedItem == 'DASHBOARD' ? <Admin_Dash/> : selectedItem == 'ADMIN' ?  <Admin_User_check/> : selectedItem == 'VALUE' ? <Dash_check/> : null 
       }
       </div>
 
-      {/* <div className={` ${isSidebarExpanded ? 'sidebar-expanded1' : 'main-content'}`}>
-      {
-        selectedItem == 'DASHBOARD' ? <Admin_Dash/> : selectedItem == 'ADMIN' ?  <Admin_User_check/> : selectedItem == 'VALUE' ? <User/> : null 
-      }
-      </div> */}
+
+      
 
     </div>
   );

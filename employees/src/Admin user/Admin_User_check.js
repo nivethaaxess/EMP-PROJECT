@@ -162,7 +162,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
   const [addCourse1, setAddCourse] = useState('');
 
   const [checkBox_val, setCheckBox_Val] = useState([])
-  const [checkBox_val1, setCheckBox_Val1] = useState(['BASIC', 'ADVANCE', 'INTERMEDIATE','PROJECT','OTHERS'])
+  const [checkBox_val1, setCheckBox_Val1] = useState(['BASIC', 'ADVANCE', 'INTERMEDIATE', 'PROJECT', 'OTHERS'])
   const [domainAndCourse, setdomainAndCourse] = useState([]);
 
   const [editedItem, setEditedItem] = useState(null);
@@ -227,24 +227,24 @@ const Admin_User_check = ({ toggleDrawer }) => {
     // setsubCourse_edited(value);
   };
 
-  const handleSaveClick1 = (value,index,level) => {
+  const handleSaveClick1 = (value, index, level) => {
     const updatedSubTopics = [...getSubTopics];
     updatedSubTopics[index] = subCourse_edited;
     setgetSubTopics(updatedSubTopics);
     setEditedIndex(-1);
-    console.log('subCourse_edited===>>>>',subCourse_edited);
-    console.log('value===>>>>',value);
-    console.log('level===>>>>',level);
+    console.log('subCourse_edited===>>>>', subCourse_edited);
+    console.log('value===>>>>', value);
+    console.log('level===>>>>', level);
     const data = {
-        SubTopic : subCourse_edited ,
-        Id : value
+      SubTopic: subCourse_edited,
+      Id: value
     }
-    axios.post('http://localhost:3007/api/subTopics/edit',data)
-    .then(val=>{
-      console.log('VAL===>>>',val)
-      openStates(level)
-    })
-    .catch(err => console.log('err===>>>', err));
+    axios.post('http://localhost:3007/api/subTopics/edit', data)
+      .then(val => {
+        console.log('VAL===>>>', val)
+        openStates(level)
+      })
+      .catch(err => console.log('err===>>>', err));
     setsubCourse_edited('')
   };
 
@@ -284,8 +284,8 @@ const Admin_User_check = ({ toggleDrawer }) => {
       })
       .catch(err => console.log('err===>>>', err));
 
-   
-    
+
+
 
   }
 
@@ -622,7 +622,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
         const data = val.data;
         setdomainAndCourse(data)
         console.log('val===>>>', val);
-        console.log('DINESH===>>>>>') 
+        console.log('DINESH===>>>>>')
       })
       .catch(err => console.log('err', err))
 
@@ -731,13 +731,13 @@ const Admin_User_check = ({ toggleDrawer }) => {
 
   }
 
-  const add_SubTopics = (e) =>{
+  const add_SubTopics = (e) => {
     setAddSubTopic(e.target.value)
-  } 
+  }
 
-  const add_Link = (e) =>{
+  const add_Link = (e) => {
     setAddLink(e.target.value)
-  } 
+  }
 
 
 
@@ -783,7 +783,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                         id="outlined-adornment-weight"
                         placeholder="ADD DOMAIN"
                         value={addDomainTab}
-                        endAdornment={<InputAdornment position="end"><DoneIcon onClick={domainInsert} disabled={addDomainTab === ''} sx={{ cursor: 'pointer', color: addDomainTab == '' ? '' : 'green' }} /></InputAdornment>}
+                        endAdornment={<InputAdornment position="end"><DoneIcon  onClick={domainInsert} disabled={addDomainTab === ''} sx={{ cursor: 'pointer', color: addDomainTab == '' ? '' : '#40c463' }} /></InputAdornment>}
                         aria-describedby="outlined-weight-helper-text"
                         inputProps={{
                           'aria-label': 'weight',
@@ -801,7 +801,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                         <div key={domain.domain_id}>
                           {domain.editing ? (
                             <TextField
-                              sx={{ marginTop: '10px' , marginLeft: '70px'}}
+                              sx={{ marginTop: '10px', marginLeft: '70px' }}
                               value={domain.domain_name}
                               onChange={(event) => handleInputChange(event, domain.domain_id)}
                               variant="outlined"
@@ -821,13 +821,13 @@ const Admin_User_check = ({ toggleDrawer }) => {
                             // <Button onClick={() => handleSaveClick(domain.domain_id)} variant="contained" color="primary">
                             //   Save
                             // </Button>
-                            <DoneIcon sx={{ marginLeft: '20px', marginTop: '14px' }} onClick={() => handleSaveClick(domain.domain_id)} />
+                            <DoneIcon sx={{ marginLeft: '20px', marginTop: '14px', color: '#5e1acc', cursor:'pointer',color:'#40c463' }} onClick={() => handleSaveClick(domain.domain_id)} />
                           ) : (
                             // <Button onClick={() => handleEditClick(domain.domain_id)} variant="contained" color="secondary">
                             //   Edit
                             // </Button>
 
-                            <EditIcon sx={{ marginLeft: '20px', marginTop: '14px' }} onClick={() => handleEditClick(domain.domain_id)} />
+                            <EditIcon sx={{ marginLeft: '20px', marginTop: '14px', color: '#5e1acc' , cursor:'pointer' }} onClick={() => handleEditClick(domain.domain_id)} />
 
                           )}
                         </div>
@@ -870,7 +870,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                         placeholder="ADD COURSE"
                         onChange={addCourse}
                         value={addCourse1}
-                        endAdornment={<InputAdornment position="end"><DoneIcon onClick={InsertChoose} /></InputAdornment>}
+                        endAdornment={<InputAdornment position="end"><DoneIcon sx={{color:'#40c463'}} onClick={InsertChoose} /></InputAdornment>}
                         aria-describedby="outlined-weight-helper-text"
                         inputProps={{
                           'aria-label': 'weight',
@@ -926,7 +926,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                                           value={course_Change}
                                           onChange={changeCourse}
                                         />
-                                        <DoneIcon sx={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => handleSave(item.topic_id)} />
+                                        <DoneIcon sx={{ marginLeft: '10px', cursor: 'pointer',color:'#40c463' }} onClick={() => handleSave(item.topic_id)} />
                                       </Box>
                                     </td>
                                   </Box>
@@ -944,7 +944,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                                     </td>
                                     <td style={{ border: '1px solid #ccc', padding: '8px' }}>
                                       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <EditIcon sx={{ cursor: 'pointer' }} onClick={() => handleEdit(index)} />
+                                        <EditIcon sx={{ cursor: 'pointer', color: '#5e1acc' }} onClick={() => handleEdit(index)} />
                                       </Box>
                                     </td>
                                   </>
@@ -985,7 +985,13 @@ const Admin_User_check = ({ toggleDrawer }) => {
 
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box sx={{ marginLeft: '45%' }}>
-                <Button variant="outlined" onClick={handleClickOpen}>
+                <Button sx={{
+                  backgroundColor: '#5e1acc',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: '#5e1acc', // Set the hover background color to the same as the normal background color
+                  },
+                }} variant="outlined" onClick={handleClickOpen}>
                   OPEN POPUP
                 </Button>
               </Box>
@@ -1035,14 +1041,14 @@ const Admin_User_check = ({ toggleDrawer }) => {
               </DialogContentText>
               <DialogContentText sx={{ color: 'black', fontSize: '20px', display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
                 {/* <TextField onChange={(e) => setAddSubTopic(e.target.value)} size="small" fullWidth label="ADD SUB TOPICS" id="fullWidth" /> */}
-                <TextField  value={addSubTopic} onChange={add_SubTopics} size="small" fullWidth label="ADD SUB TOPICS" id="fullWidth" />
+                <TextField value={addSubTopic} onChange={add_SubTopics} size="small" fullWidth label="ADD SUB TOPICS" id="fullWidth" />
               </DialogContentText>
               <DialogContentText sx={{ color: 'black', fontSize: '20px', marginTop: '15px', display: 'flex', justifyContent: 'center' }}>
                 {/* <TextField onChange={(e) => setAddLink(e.target.value)} size="small" fullWidth label="ADD LINK" id="fullWidth" /> */}
                 <TextField value={addLink} onChange={add_Link} size="small" fullWidth label="ADD LINK" id="fullWidth" />
               </DialogContentText>
               <DialogContentText sx={{ color: 'black', fontSize: '20px', marginTop: '15px', display: 'flex', justifyContent: 'center' }}>
-                <Button onClick={subTopicsAdd} variant="contained" size="small">ADD1111</Button>
+                <Button onClick={subTopicsAdd} variant="contained" size="small">ADD</Button>
               </DialogContentText>
               {/* <input type="text" value={inputValue} onChange={handleInputChange} /> */}
             </DialogContent>
@@ -1053,115 +1059,115 @@ const Admin_User_check = ({ toggleDrawer }) => {
 
 
         </AccordionDetails>
-        <Box sx={{marginTop:'30px'}}>
-        {DomainList.map((course, i) => {
-          return (
-            <Box >
-              <Accordion >
-                <Accordion
-                 
-                  expanded={expanded === course}
-                  onChange={handleAccordionChange(course)}
-                  key={i}
-                >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography  className = "level-check" style={{ display: "flex", alignItems: "center" }}>
-                      <FaHtml5 style={icon} className="FaHtml5" />
-                      {course}
-                    </Typography>
-                  </AccordionSummary>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent:'space-between',
-                      // flexWrap: 'wrap', // Wrap accordions to the next line if necessary
-                      gap: '6px', // Spacing between accordions
-                    }}
-                  >
-                    {courseLevel?.map((item, index) => (
-                      <div key={index} style={{ display: 'flex', justifyContent:'space-between' }}>
-                        <Accordion
-                          expanded={subTopicexpanded === item}
-                          sx={{ margin: 0 }}>
-                          <AccordionSummary
-                            sx={{
-                              border: '2px solid #c55c16',
-                              borderRadius: '15px',
-                              display: 'flex',
-                              height:'2px'
-                              // alignItems: 'center',
-                              // margin: 0,
-                            }}
-                            expandIcon={<ExpandMoreIcon sx={{ marginLeft: '10px' }} />}
-                            onClick={() => openStatus(item, index)}
-                          // onClick={() => handleOpenstatus(item, index)}
-                          >
-                            <Typography
-                              sx={{
-                                // backgroundColor: '#c55c16',
-                                borderRadius: '15px',
-                                // padding:'1px',
-                                //  width:'80px'
-                                // p: 1, // Add some padding to the Typography component
-                              }}
-                            >
-                              {item}
-                            </Typography>
-                            <AddCircleIcon onClick={() => handleDialogOpen(item, index)} sx={{ marginLeft: '30px'  }} />
-                          </AccordionSummary>
-                         
-                          <AccordionDetails>
-                            <List >
-                              {getSubTopics.map((item1, index) => (
-                               
-                                <ListItem key={index} component="li">
-                                  {editedIndex === index ? (
-                                    <>
-                                      <TextField
-                                        value={subCourse_edited}
-                                        onChange={handleInputChange1}
-                                        size="small"
-                                      // sx={{width:'70px'}}
-                                      />
+        <Box sx={{ marginTop: '30px' }}>
+          {DomainList.map((course, i) => {
+            return (
+              <Box >
+                <Accordion >
+                  <Accordion
 
-                                      <DoneIcon sx={{ marginLeft: '10px' , fontSize: '15px' }} onClick={() => handleSaveClick1(item1.subTopic_id,index,item)} />
-                                      {console.log('item====>>>>>',item1)}
-                                    </>
-                                  ) : (
-                                    <>
-                                      {/* <ListItemText
+                    expanded={expanded === course}
+                    onChange={handleAccordionChange(course)}
+                    key={i}
+                  >
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <Typography className="level-check" style={{ display: "flex", alignItems: "center" }}>
+                        <FaHtml5 style={icon} className="FaHtml5" />
+                        {course}
+                      </Typography>
+                    </AccordionSummary>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        // flexWrap: 'wrap', // Wrap accordions to the next line if necessary
+                        gap: '6px', // Spacing between accordions
+                      }}
+                    >
+                      {courseLevel?.map((item, index) => (
+                        <div key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <Accordion
+                            expanded={subTopicexpanded === item}
+                            sx={{ margin: 0 }}>
+                            <AccordionSummary
+                              sx={{
+                                border: '2px solid #c55c16',
+                                borderRadius: '15px',
+                                display: 'flex',
+                                height: '2px'
+                                // alignItems: 'center',
+                                // margin: 0,
+                              }}
+                              expandIcon={<ExpandMoreIcon sx={{ marginLeft: '10px' }} />}
+                              onClick={() => openStatus(item, index)}
+                            // onClick={() => handleOpenstatus(item, index)}
+                            >
+                              <Typography
+                                sx={{
+                                  // backgroundColor: '#c55c16',
+                                  borderRadius: '15px',
+                                  // padding:'1px',
+                                  //  width:'80px'
+                                  // p: 1, // Add some padding to the Typography component
+                                }}
+                              >
+                                {item}
+                              </Typography>
+                              <AddCircleIcon onClick={() => handleDialogOpen(item, index)} sx={{ marginLeft: '30px' }} />
+                            </AccordionSummary>
+
+                            <AccordionDetails>
+                              <List >
+                                {getSubTopics.map((item1, index) => (
+
+                                  <ListItem key={index} component="li">
+                                    {editedIndex === index ? (
+                                      <>
+                                        <TextField
+                                          value={subCourse_edited}
+                                          onChange={handleInputChange1}
+                                          size="small"
+                                        // sx={{width:'70px'}}
+                                        />
+
+                                        <DoneIcon sx={{ marginLeft: '10px', fontSize: '15px', color: '#40c463', cursor:'pointer' }} onClick={() => handleSaveClick1(item1.subTopic_id, index, item)} />
+                                        {console.log('item====>>>>>', item1)}  
+                                      </>
+                                    ) : (
+                                      <>
+                                        {/* <ListItemText
                                         sx={{ cursor: 'pointer' , backgroundColor:'red' }}
                                         primary={item.subtopic_name}
                                         onClick={() => handleEditClick1(index, item)}
                                       /> */}
-                                      {/* <h5>hhhh</h5> */}
-                                      <TextField
-                             sx={{ cursor: 'pointer' , fontSize:'3px',   }}
-                             value={item1.subtopic_name}
-                             size="small"
-                            //  onClick={() => handleEditClick1(index, item)}
-                            />
+                                        {/* <h5>hhhh</h5> */}
+                                        <TextField
+                                          sx={{ cursor: 'pointer', fontSize: '3px', }}
+                                          value={item1.subtopic_name}
+                                          size="small"
+                                        //  onClick={() => handleEditClick1(index, item)}
+                                        />
 
-                                      <EditIcon sx={{ fontSize: '15px' , marginLeft: '10px'  }} onClick={() => handleEditClick1(index, item1, item)} />
-                                    </>
-                                  )}
-                                </ListItem>
-                              ))}
-                            </List>
-                          </AccordionDetails>
-                        </Accordion>
-                      </div>
-                    ))}
-                  </Box>
-                </Accordion >
-              </Accordion>
-            </Box>
-          );
-        })}
+                                        <EditIcon sx={{ fontSize: '15px', marginLeft: '10px', color: '#5e1acc', cursor:'pointer' }} onClick={() => handleEditClick1(index, item1, item)} />
+                                      </>
+                                    )}
+                                  </ListItem>
+                                ))}
+                              </List>
+                            </AccordionDetails>
+                          </Accordion>
+                        </div>
+                      ))}
+                    </Box>
+                  </Accordion >
+                </Accordion>
+              </Box>
+            );
+          })}
         </Box>
 
 
