@@ -1,38 +1,38 @@
-.menu-with-sidebar {
+.menu-with-sidebar1 {
     display: flex;
     width: 100%;
   }
   
-  .sidebar {
+  .sidebar1 {
     position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
-    width: 26px; /* Initial width of the sidebar */
+    width: 26px; /* Initial width of the sidebar1 */
     background-color: #5e1acc;
     padding: 20px;
     transition: width 0.3s ease;
-    /* z-index: ; */
+    z-index: 100 ;
   }
   
   .expanded {
-    width: 110px; /* Expanded width of the sidebar */
+    width: 150px; /* Expanded width of the sidebar1 */
   }
   
-  .sidebar-content {
+  .sidebar1-content {
     margin-bottom: 20px;
   }
   
-  .sidebar button {
+  .sidebar1 button {
     cursor: pointer;
   }
   
-  .top-menu {
+  .top-menu1 {
     /* width: 100%;
     display: flex;
     justify-content: space-between; */
     position: fixed;
-    /* z-index: 80; */
+    /* z-index: 100; */
     top: 0;
     left: 0;
     right: 0;
@@ -45,18 +45,18 @@
     transition: padding-left 0.3s ease;
   }
   
-  .top-menu.sidebar-expanded {
-    padding-left: 150px; /* Adjust padding when the sidebar is expanded */
+  .top-menu1.sidebar1-expanded {
+    padding-left: 150px; /* Adjust padding when the sidebar1 is expanded */
   }
   
-  .top-menu ul {
+  .top-menu1 ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
   }
   
-  .top-menu li {
+  .top-menu1 li {
     margin-right: 20px;
     cursor: pointer;
   }
@@ -68,6 +68,7 @@
     padding: 10px;
     color: #fff;
     font-weight: 500;
+    width: 100%;
     /* border: 1px solid #ccc; */
     border-radius: 4px;
     margin-left: 100px;
@@ -81,13 +82,13 @@
   .main-content {
     width: 100% ;
     margin-top: 60px; 
-    margin-left: 100px; 
+    margin-left: 60px; 
     padding: 20px;
     /* transition: margin-left 0.3s ease; */
   }
   /* .main-content .MuiBox-root.css-tz9w5n{width:"100%" !important} */
-  .sidebar-expanded1 {
-    margin-left: 200px;
+  .sidebar1-expanded1 {
+    margin-left: 165px;
     width: 100% ;
     margin-top: 60px; 
     padding: 20px;
@@ -95,10 +96,10 @@
     
   }
 
-  .sidebar-expanded {
+  .sidebar1-expanded {
     top: 0;
     left: 0;
-    right: 0; /* Adjust margin when the sidebar is expanded */
+    right: 0; /* Adjust margin when the sidebar1 is expanded */
   }
 
   .icon-and-name {

@@ -7,13 +7,13 @@ import ListIcon from "@mui/icons-material/List";
 import { useNavigate } from 'react-router-dom';
 
 const Sidepanel = () => {
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+  const [isSidebar1Expanded, setIsSidebar1Expanded] = useState(false);
   const navigate = useNavigate();
 
   const [logout,setlogout] = useState(false);
 
-  const toggleSidebarWidth = () => {
-    setIsSidebarExpanded((prevState) => !prevState);
+  const toggleSidebar1Width = () => {
+    setIsSidebar1Expanded((prevState) => !prevState);
   };
   useEffect(()=>{
     if(!localStorage.getItem('auth'))
@@ -32,67 +32,70 @@ const Sidepanel = () => {
 
   return (
     <div 
-    className={`menu-with-sidebar ${isSidebarExpanded ? "expanded" : ""}`}
+    className={`menu-with-sidebar1 `}
 
     >
-      <div className={`sidebar ${isSidebarExpanded ? "expanded" : ""}`}>
-        <div className="sidebar-content">
-          {/* <button onClick={toggleSidebarWidth}>
-            {isSidebarExpanded ? 'Decrease ' : 'Increase '}
+      <div className={`sidebar1 ${isSidebar1Expanded ? "expanded" : ""}`}>
+        <div className="sidebar1-content">
+          {/* <button onClick={toggleSidebar1Width}>
+            {isSidebar1Expanded ? 'Decrease ' : 'Increase '}
           </button> */}
 
-          <ListIcon className="icon-color" onClick={toggleSidebarWidth} />
+          <ListIcon className="icon-color" onClick={toggleSidebar1Width} />
 
           <div className="icon-and-name">
             <AccountCircleIcon className="icon-color" />
             <span className="icon-content">
-              {isSidebarExpanded ? "Search" : ""}
+              {isSidebar1Expanded ? "Search" : ""}
             </span>
           </div>
           <div className="icon-and-name">
             <AccountCircleIcon className="icon-color" />
             <span className="icon-content">
-              {isSidebarExpanded ? "Search" : ""}
+              {isSidebar1Expanded ? "Search" : ""}
             </span>
           </div>
           <div className="icon-and-name">
             <AccountCircleIcon className="icon-color" />
             <span className="icon-content">
-              {isSidebarExpanded ? "Search" : ""}
+              {isSidebar1Expanded ? "Search" : ""}
             </span>
           </div>
           <div className="icon-and-name">
             <AccountCircleIcon className="icon-color" />
             <span className="icon-content">
-              {isSidebarExpanded ? "Search" : ""}
+              {isSidebar1Expanded ? "Search" : ""}
             </span>
           </div>
 
           <div className="icon-and-name">
             <AccountCircleIcon className="icon-color" />
             <span className="icon-content">
-              {isSidebarExpanded ? "Search" : ""}
+              {isSidebar1Expanded ? "Search" : ""}
             </span>
           </div>
           <div className="icon-and-name">
             <AccountCircleIcon className="icon-color" />
             <span className="icon-content">
-              {isSidebarExpanded ? "Search" : ""}
+              {isSidebar1Expanded ? "Search" : ""}
             </span>
           </div>
         </div>
       </div>
       <div
-        className={`top-menu ${isSidebarExpanded ? "sidebar-expanded" : ""}`}
+        className={`top-menu1 ${isSidebar1Expanded ? "sidebar1-expanded" : ""}`}
 
       >
-        <div className="menu-icon">
+        <div className="menu-icon ">
+          <div style={{display:"flex",justifyContent:"space-between",width:"100%"}}>
           <ul>
             <li>Home</li>
             <li>About</li>
             <li>Contact</li>
-            <button onClick={logoutHandler}>Logout</button>
+            
           </ul>
+          <div><button onClick={logoutHandler}>Logout</button></div>
+          </div>
         </div>
       </div>
       {/* <div className="check">
@@ -100,7 +103,7 @@ const Sidepanel = () => {
         </div> */}
       <div
         className={` ${
-          isSidebarExpanded ? "sidebar-expanded1" : "main-content"
+          isSidebar1Expanded ? "sidebar1-expanded1" : "main-content"
         }`}
       >
         <User />

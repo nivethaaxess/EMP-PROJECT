@@ -415,7 +415,7 @@ function Admin_Dash() {
             series={chartData.series}
             type="bar"
             height={250}
-            width={850}
+            // width={1000}
           />
           {/* <Box sx={{ display: 'flex', marginTop: '-15px' }}>
             <RemoveRedEyeIcon sx={{ marginLeft: '41px', color: 'black' }} />
@@ -477,9 +477,9 @@ function Admin_Dash() {
 
       </Box>
 
-      <Box className='rightGrid'>
+      {/* <Box className='rightGrid'>
         vdkjf jsdvnsdklnvndvksandviodnvaso kasnvkjsduicjksabckj
-      </Box>
+      </Box> */}
 
     </Box>
   );
