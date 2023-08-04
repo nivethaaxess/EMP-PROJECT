@@ -5,7 +5,7 @@ import MenuBar from "./Header/MenuBar";
 import NavBar from "./Header/NavBar";
 import Sidebar from "./side bar/Sidebar";
 // import Login from "./Admin_Dashboard/Login";
-import Sidepanel from "./component/sidepanel";
+import Sidepanel from "./component/Sidepanel";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -14,9 +14,10 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          s<Route path="/" element={<Login />} />
+          {/* <Route path="/" element={<Login />} />
           <Route path="/user" element={<Sidepanel />} />
-          <Route path="/sidebar" element={<Sidebar />} />
+          <Route path="/sidebar" element={<Sidebar />} /> */}
+          <Route path="/" element={<Sidebar /> }/>
         </Routes>
       </BrowserRouter>
 

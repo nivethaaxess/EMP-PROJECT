@@ -783,7 +783,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                         id="outlined-adornment-weight"
                         placeholder="ADD DOMAIN"
                         value={addDomainTab}
-                        endAdornment={<InputAdornment position="end"><DoneIcon onClick={domainInsert} disabled={addDomainTab === ''} sx={{ cursor: 'pointer', color: addDomainTab == '' ? '' : 'green' }} /></InputAdornment>}
+                        endAdornment={<InputAdornment position="end"><DoneIcon  onClick={domainInsert} disabled={addDomainTab === ''} sx={{ cursor: 'pointer', color: addDomainTab == '' ? '' : '#40c463' }} /></InputAdornment>}
                         aria-describedby="outlined-weight-helper-text"
                         inputProps={{
                           'aria-label': 'weight',
@@ -821,13 +821,13 @@ const Admin_User_check = ({ toggleDrawer }) => {
                             // <Button onClick={() => handleSaveClick(domain.domain_id)} variant="contained" color="primary">
                             //   Save
                             // </Button>
-                            <DoneIcon sx={{ marginLeft: '20px', marginTop: '14px', color: '#5e1acc' }} onClick={() => handleSaveClick(domain.domain_id)} />
+                            <DoneIcon sx={{ marginLeft: '20px', marginTop: '14px', color: '#5e1acc', cursor:'pointer',color:'#40c463' }} onClick={() => handleSaveClick(domain.domain_id)} />
                           ) : (
                             // <Button onClick={() => handleEditClick(domain.domain_id)} variant="contained" color="secondary">
                             //   Edit
                             // </Button>
 
-                            <EditIcon sx={{ marginLeft: '20px', marginTop: '14px', color: '#5e1acc' }} onClick={() => handleEditClick(domain.domain_id)} />
+                            <EditIcon sx={{ marginLeft: '20px', marginTop: '14px', color: '#5e1acc' , cursor:'pointer' }} onClick={() => handleEditClick(domain.domain_id)} />
 
                           )}
                         </div>
@@ -870,7 +870,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                         placeholder="ADD COURSE"
                         onChange={addCourse}
                         value={addCourse1}
-                        endAdornment={<InputAdornment position="end"><DoneIcon onClick={InsertChoose} /></InputAdornment>}
+                        endAdornment={<InputAdornment position="end"><DoneIcon sx={{color:'#40c463'}} onClick={InsertChoose} /></InputAdornment>}
                         aria-describedby="outlined-weight-helper-text"
                         inputProps={{
                           'aria-label': 'weight',
@@ -926,7 +926,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                                           value={course_Change}
                                           onChange={changeCourse}
                                         />
-                                        <DoneIcon sx={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => handleSave(item.topic_id)} />
+                                        <DoneIcon sx={{ marginLeft: '10px', cursor: 'pointer',color:'#40c463' }} onClick={() => handleSave(item.topic_id)} />
                                       </Box>
                                     </td>
                                   </Box>
@@ -1134,8 +1134,8 @@ const Admin_User_check = ({ toggleDrawer }) => {
                                         // sx={{width:'70px'}}
                                         />
 
-                                        <DoneIcon sx={{ marginLeft: '10px', fontSize: '15px', color: '#5e1acc' }} onClick={() => handleSaveClick1(item1.subTopic_id, index, item)} />
-                                        {console.log('item====>>>>>', item1)}
+                                        <DoneIcon sx={{ marginLeft: '10px', fontSize: '15px', color: '#40c463', cursor:'pointer' }} onClick={() => handleSaveClick1(item1.subTopic_id, index, item)} />
+                                        {console.log('item====>>>>>', item1)}  
                                       </>
                                     ) : (
                                       <>
@@ -1152,7 +1152,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                                         //  onClick={() => handleEditClick1(index, item)}
                                         />
 
-                                        <EditIcon sx={{ fontSize: '15px', marginLeft: '10px', color: '#5e1acc' }} onClick={() => handleEditClick1(index, item1, item)} />
+                                        <EditIcon sx={{ fontSize: '15px', marginLeft: '10px', color: '#5e1acc', cursor:'pointer' }} onClick={() => handleEditClick1(index, item1, item)} />
                                       </>
                                     )}
                                   </ListItem>

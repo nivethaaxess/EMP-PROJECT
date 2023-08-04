@@ -6,7 +6,7 @@ const connection = mysql.createConnection({
     // password: '', /* MySQL Password */
     // database: 'employeedata' /* MySQL Database */
 
-///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////     
 connectionLimit: 10,
     host: 'srv787.hstgr.io',
     user: 'u842521168_new', /* MySQL User */
@@ -15,7 +15,7 @@ connectionLimit: 10,
     database: 'u842521168_new' ,  /* MySQL Database */
     waitForConnections: true,
   queueLimit: 0
- 
+     
   });
 
 
@@ -28,13 +28,13 @@ connectionLimit: 10,
       } else {
         console.log('Connected to MySQL successfully!'); 
       }
-    });
+    });          
   
     connection.on('error', (err) => {
       if (err.code === 'PROTOCOL_CONNECTION_LOST') {
         console.error('MySQL Connection Lost. Reconnecting...');    
         handleDisconnect();
-      } else {
+      } else {     
         console.error('MySQL Connection Error:', err);
         // For other errors, you might choose to handle them differently
         // or terminate the application gracefully.

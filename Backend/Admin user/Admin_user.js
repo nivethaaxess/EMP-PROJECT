@@ -192,8 +192,8 @@ const courseAdd = async (req, res) => {
     console.log('ERROR===>>>', err);
     return res.status(500).json({ error: 'Internal server error' });
   }
-};                       
-  
+};                             
+      
   
 
    

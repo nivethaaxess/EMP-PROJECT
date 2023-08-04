@@ -70,14 +70,7 @@ const Sidebar = () => {
        
        
       </div>
-      {/* <div className="check">
-            nsdkvn
-        </div> */}
-      {/* <div className={` ${isSidebarExpanded ? 'sidebar-expanded1' : 'main-content'}`}>
-      {
-        selectedItem == 'DASHBOARD' ? '<Admin_Dash/>' : selectedItem == 'ADMIN' ?  <Admin_User_check/> : selectedItem == 'VALUE' ? <User/> : null 
-      }
-      </div>  */}
+     
       {console.log('selectedItem======>>>>>>>>>>>>',selectedItem)}
 
       <div className={` ${isSidebarExpanded ? 'sidebar-expanded1' : 'main-content'}`}>
