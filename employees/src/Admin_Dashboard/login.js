@@ -13,13 +13,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios';
 
 
-
 const useStyles = makeStyles((theme) => ({
   borderedBox: {
     border: '1px solid black',
     padding: theme.spacing(2),
   },
 }));
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -194,13 +194,16 @@ const  [getloginapi ,setLoginApi] = useState([]);
 
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-      <Box sx={{ maxWidth: 300, textAlign: 'center' }} className={classes.borderedBox}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh',backgroundImage:"linear-gradient(to right,#885aa5 ,#2876b9 )"}}>
+      <Box sx={{ maxWidth: 400,display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center',backgroundImage:"linear-gradient(to right,#88caee ,#3499bd )",height:"500px",borderRadius: "150px 0 0 0" }} >
+            <div>
+              <div>
+                <h1 style={{color:"white"}}>Login</h1>
         <FormControl>
           <TextField value ={getusername} onChange={(event) => handleUserChange(event)} sx={{ mt: 3 }} size="small" id="outlined-basic" label="USERNAME" variant="outlined" />
         </FormControl>
         <FormControl>
-          <TextField value = {getpassword} onChange={handlePassChange} sx={{ mt: 3 }} size="small" id="outlined-basic" label="Password" variant="outlined" />
+          <TextField value = {getpassword} onChange={handlePassChange} sx={{ mt: 3 ,borderWidth:"3px",borderColor:"black",borderRadius:"50%"}} size="small" id="outlined-basic" label="Password" variant="outlined" />
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Box sx={{ mt: 3 }}>
               <Button onClick={() => handleLogin('login successfully',)} variant="contained">LOGIN</Button>
@@ -228,8 +231,7 @@ const  [getloginapi ,setLoginApi] = useState([]);
           
             <DialogContent>
               <DialogContentText id="alert-dialog-slide-description">
-               
-                   
+                               
                   <TextField
                     color="warning"
                     label="First Name"
@@ -333,6 +335,8 @@ const  [getloginapi ,setLoginApi] = useState([]);
           </Dialog>
 
         </FormControl>
+        </div>
+        </div>
       </Box>
     </Box>
   )
