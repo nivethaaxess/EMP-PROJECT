@@ -1146,7 +1146,8 @@ const Admin_User_check = ({ toggleDrawer }) => {
                                       /> */}
                                         {/* <h5>hhhh</h5> */}
                                         <TextField
-                                          sx={{ cursor: 'pointer', fontSize: '3px', }}
+                                          // sx={{ cursor: 'pointer', fontSize: '3px', }}
+                                          
                                           value={item1.subtopic_name}
                                           size="small"
                                         //  onClick={() => handleEditClick1(index, item)}
