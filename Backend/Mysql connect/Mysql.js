@@ -4,16 +4,20 @@ const connection = mysql.createConnection({
     // host: 'localhost',
     // user: 'root', /* MySQL User */
     // password: '', /* MySQL Password */
-    // database: 'employeedata' /* MySQL Database */
+    // database: 'employeedata' /* MySQL Database */    
 
 ///////////////////////////////////////////////////////////     
 connectionLimit: 10,
     host: 'srv787.hstgr.io',
+<<<<<<< HEAD
     user: 'u842521168_new', /* MySQL User */  
+=======
+    user: 'u842521168_new', /* MySQL User */ 
+>>>>>>> 33344193e51ac4a6c6ec66b281f9ccf9befd583d
     password: 'Admin@123', /* MySQL Password */
-    // database: 'employeedata'
+    // database: 'employeedata' 
     database: 'u842521168_new' ,  /* MySQL Database */
-    waitForConnections: true,
+    waitForConnections: true,      
   queueLimit: 0
      
   });
@@ -21,11 +25,11 @@ connectionLimit: 10,
 
   function handleDisconnect() {
     connection.connect((err) => {
-      if (err) {
+      if (err) {       
         console.error('Error connecting to MySQL:', err);
         // Retry the connection after a short delay
-        setTimeout(handleDisconnect, 2000);
-      } else {
+        setTimeout(handleDisconnect, 200000);
+      } else {                             
         console.log('Connected to MySQL successfully!'); 
       }
     });          
@@ -38,8 +42,8 @@ connectionLimit: 10,
         console.error('MySQL Connection Error:', err);
         // For other errors, you might choose to handle them differently
         // or terminate the application gracefully.
-      }
-    });
+      }    
+    });  
   }
   
   handleDisconnect();
