@@ -9,11 +9,7 @@ const connection = mysql.createConnection({
 ///////////////////////////////////////////////////////////     
 connectionLimit: 10,
     host: 'srv787.hstgr.io',
-<<<<<<< HEAD
     user: 'u842521168_new', /* MySQL User */  
-=======
-    user: 'u842521168_new', /* MySQL User */ 
->>>>>>> 33344193e51ac4a6c6ec66b281f9ccf9befd583d
     password: 'Admin@123', /* MySQL Password */
     // database: 'employeedata' 
     database: 'u842521168_new' ,  /* MySQL Database */
