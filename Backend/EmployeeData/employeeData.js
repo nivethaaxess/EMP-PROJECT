@@ -77,7 +77,7 @@ const InsertUser = async (req, res) => {
 
     let query1 = `select domain_id from domain where domain_name = (?)`;
     let results = await runQuery(query1, domainName);
-    let   domain_id = results[0].domain_id;
+    let domain_id = results[0].domain_id;
 
     let query = `INSERT INTO user (First_name ,Last_name ,Email,Password,role,domain_id) VALUES (?,?,?,?,?,?)`;
     let values = [firstName, lastName, email, password, role, domain_id];
@@ -107,8 +107,8 @@ const updatestatus = async (req, res) => {
   
   console.log("updatestatus called")
   try {
-    let { subtopic_name, status, userId } = req.body;
 
+    let { subtopic_name, status, userId } = req.body;
     let query1 = `select subTopic_id from sub_topics where subTopic_name = (?)`;
     let query2 = `select TOPIC_ID from sub_topics where subTopic_id = (?)`;
     let query3 = `select domain_id from topics where topic_id = (?)`;
