@@ -108,7 +108,7 @@ const Userdata = () => {
       typeof value === 'string' ? value.split(',') : value,
      )
   }
-
+console.log("use")
   const handleUserChange = (event) => {
     setusername(event.target.value)
     // setadminusername(event.target.value)
@@ -121,6 +121,7 @@ const Userdata = () => {
   }
 
   const handleRegister = (e) => {
+    console.log('Register111111111');
     e.preventDefault();
     console.log('Register');
     const data =
@@ -273,18 +274,15 @@ const Userdata = () => {
       >
         {console.log('getitem', getsignupapi)}
         {getsignupapi.map((item, index) => (
-
           //  console.log('getsignup',getsignupapi)
           <MenuItem key={index} value={item.domain_name} style={getStyles(item.domain_name, getdomainname, theme)}>
             {item.domain_name}
           </MenuItem>
-
         ))}
       </Select>
       <DialogActions>
         <Button type='submit'>Register</Button>
       </DialogActions>
-
     </FormControl>
     
   )

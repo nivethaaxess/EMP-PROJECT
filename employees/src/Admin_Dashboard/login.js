@@ -37,6 +37,8 @@ const Login = () => {
   const [getpassword, setpassword] = useState("");
 
   const [dialogopen, dialogSetOpen] = React.useState(false);
+  const [loginDialog,setLoginDialog] = useState(false)
+
 
   //signup state
 
@@ -80,12 +82,14 @@ const Login = () => {
   };
 
   const handleUserChange = (event) => {
+    setLoginDialog(false)
     setusername(event.target.value);
     // setadminusername(event.target.value)
   };
 
   const handlePassChange = (e) => {
     setpassword(e.target.value);
+    setLoginDialog(false)
     // setAdminPassword(e.target.value)
   };
 
@@ -139,19 +143,16 @@ const Login = () => {
     }
   });
 
-  const handleLogin = (a) => {
+  const handleLogin = async(a) => {
     console.log("login console");
-    axios
+    console.log("login console2")
+    await axios
       .post(`http://localhost:3007/api/logindata`, {
         Email: getusername,
         Password: getpassword,
       })
       .then((response) => {
-        console.log("res", response.data);
-
         const { role, User_Id } = response.data.data;
-        console.log("role", role);
-
         if (role === "user") {
           localStorage.setItem("auth", true);
           localStorage.setItem("userId", User_Id);
@@ -162,9 +163,14 @@ const Login = () => {
         } else {
           alert("No role specified");
         }
-      });
+      })
+      .catch(err =>{       
+        console.log("login err",err)
+        setpassword("")
+        setLoginDialog(true)
+      })
   };
-
+console.log("setLoginDialog",loginDialog)
   return (
     <Box
       sx={{
@@ -188,8 +194,10 @@ const Login = () => {
         }}
       >
         <div>
+         
           <div>
             <h1 style={{ color: "white" }}>Login</h1>
+           
             <FormControl>
               <TextField
                 value={getusername}
@@ -216,144 +224,25 @@ const Login = () => {
                 label="PASSWORD"
                 variant="outlined"
               />
+               </FormControl>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
+
                 <Box sx={{ mt: 3 }}>
+                {loginDialog && <p style={{color:"red",fontSize:"12px",textAlign:"center",marginBottom:"5px"}}>Enter correct email and password</p>}
                   <Button
                     onClick={() => handleLogin("login successfully")}
                     variant="contained"
                   >
                     LOGIN
                   </Button>
+                 
                 </Box>
-                {/* <Box sx={{ mt: 3 }}>
-                  <Button onClick={handleSignup} variant="contained">
-                    SignUp
-                  </Button>
-                </Box> */}
               </Box>
-              <Dialog
-                open={dialogopen}
-                TransitionComponent={Transition}
-                keepMounted
-                onClose={handleClose}
-                aria-describedby="alert-dialog-slide-description"
-              >
-                <form onSubmit={handleRegister}>
-                  <Box
-                    sx={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <DialogTitle>Signup Form</DialogTitle>
-                    <DialogActions>
-                      <Button onClick={handleClose}>
-                        {" "}
-                        <FontAwesomeIcon icon={["fas", "circle-xmark"]} />
-                      </Button>
-                    </DialogActions>
-                  </Box>
-
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-slide-description">
-                      <TextField
-                        color="warning"
-                        label="First Name"
-                        type="text"
-                        value={getfirstname}
-                        onChange={onchangeFirstname}
-                        variant="filled"
-                        fullWidth
-                        margin="normal"
-                        required
-                      />
-                      <TextField
-                        color="warning"
-                        label="Last Name"
-                        type="text"
-                        value={getlastname}
-                        onChange={onchangeLastname}
-                        variant="filled"
-                        fullWidth
-                        margin="normal"
-                        required
-                      />
-                      <TextField
-                        color="warning"
-                        label="Email"
-                        type="Email"
-                        value={getemail}
-                        onChange={onchangeEmail}
-                        variant="filled"
-                        disableUnderline={false}
-                        fullWidth
-                        margin="normal"
-                        required
-                      />
-                      <TextField
-                        color="warning"
-                        label="password"
-                        type="password"
-                        value={getsignupassword}
-                        onChange={onchangePassword}
-                        variant="filled"
-                        disableUnderline={false}
-                        fullWidth
-                        margin="normal"
-                        required
-                      />
-                      <TextField
-                        color="warning"
-                        label="Role"
-                        type="text"
-                        value={getrole}
-                        onChange={onchangeRole}
-                        variant="filled"
-                        disableUnderline={false}
-                        fullWidth
-                        margin="normal"
-                        required
-                        inputProps={{ maxLength: 10 }}
-                      />
-                      {/* <TextField
-                    color="warning"
-                    label="domainName"
-                    type="text"
-                     value = {getdomainname}
-                     onChange={onchangeDomain}
-                    variant="filled"
-                    disableUnderline={false}
-                    fullWidth
-                    margin="normal"
-                    required
-                    inputProps={{ maxLength: 10 }}
-                  /> */}
-                      <Select
-                        value={getdomainname}
-                        onChange={onchangeDomain}
-                        variant="filled"
-                        disableUnderline={false}
-                        fullWidth
-                        margin="normal"
-                        required
-                        inputProps={{ maxLength: 10 }}
-                      >
-                        {console.log("getitem", getsignupapi)}
-                        {getsignupapi.map((item, index) => (
-                          //  console.log('getsignup',getsignupapi)
-                          <MenuItem key={index} value={item.domain_name}>
-                            {item.domain_name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button type="submit">Register</Button>
-                  </DialogActions>
-                </form>
-              </Dialog>
-            </FormControl>
           </div>
         </div>
+ 
       </Box>
+      
     </Box>
   );
 };
