@@ -7,7 +7,7 @@ const Dashboard = require('../Dashboard Data/Dashboard');
 const Adminuser = require('../Admin user/Admin_user');
 const Admin_edit = require('../Admin edit/Admin_edit')
 
-// DashboardData
+// DashboardData 
     router.get('/api/Dashboard',Dashboard.DashboardData);
     router.get('/api/Dashboard_check',Dashboard.DashboardData_check);
     router.post('/api/table/data',Dashboard.tableData);
