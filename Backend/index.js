@@ -5,13 +5,13 @@ const app = express();
 // Enable CORS
 const cors = require("cors");
 app.use(cors());
-
+  
 const routes = require('./route/routes')
 
-app.use(bodyParser.json());
+app.use(bodyParser.json());  
 
 app.use('/', routes);
 
 app.listen(3007, () => {
-    console.log('Server started on port 3007...');
-  });
+    console.log('Server started on port 3007...'); 
+  });     

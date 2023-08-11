@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
 import Admin_Dash from "../Admin_Dashboard/Admin_Dash";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ListIcon from "@mui/icons-material/List";
+import ListIcon from "@mui/icons-material/List"; 
 import Admin_user from "../Admin user/Admin_user";
 import Admin_User_check from "../Admin user/Admin_User_check";
+import Userdata from  "./Userdata"
 import User from "../component/user";
 import Dash_check from "../Admin_Dashboard/Dash_check";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +15,7 @@ const Sidebar = () => {
   const [sideBarName, setSideBarName] = useState([
     "DASHBOARD",
     "ADMIN",
-    "VALUE",
+    "USER DATA",
     "METHOD",
     "DASHBOARD",
     "DASHBOARD",
@@ -107,8 +108,13 @@ const Sidebar = () => {
           <Dash_check />
         ) : selectedItem == "ADMIN" ? (
           <Admin_User_check />
+
         ) : selectedItem == "VALUE" ? (
           '<Dash_check />'
+
+        ) : selectedItem == "USER DATA" ? (
+          <Userdata />
+
         ) : null}
       </div>
     </div>
