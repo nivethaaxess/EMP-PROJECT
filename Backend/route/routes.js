@@ -9,6 +9,7 @@ const Admin_edit = require('../Admin edit/Admin_edit')
 
 // DashboardData
     router.get('/api/Dashboard',Dashboard.DashboardData);
+    router.get('/api/Dashboard_check',Dashboard.DashboardData_check);
     router.post('/api/table/data',Dashboard.tableData);
 
 

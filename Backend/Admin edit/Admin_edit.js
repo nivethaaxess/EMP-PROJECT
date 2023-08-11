@@ -75,47 +75,52 @@ const courseLevel = (req, res) => {
    }
 
    const addSubTopic = (req,res) =>{
-    try{
-     console.log('req.body===>>>>',req.body)
-     const {addSubTopic , addLink , selectcourse , selectLevel} = req.body;
-
-     const getTopicIdQuery = 'SELECT topic_id FROM topics WHERE topic_name = ?';
-
-     // Then, insert data into the topics table with multiple value inserts
-     const insertSubTopicQuery = 'INSERT INTO sub_topics (subTopic_name, LEVEL, LINK , TOPIC_ID) VALUES (?,?,?,?)';
- 
-     connection.query(getTopicIdQuery, [selectcourse], (err, courseResult) => {
-       if (err) {
-         console.log('Error retrieving domain_id:', err);
-       } else {
-         if (courseResult.length === 0) {
-           console.log('course not found for FRONTEND value:', courseResult);
-         } else {
-           const topicId = courseResult[0].topic_id; 
-        //    const topicData = checkBoxValues.map((val) => val); 
- 
-        //    const topicInsertData = [addCourse, domainId, topicData] 
- 
-        //    console.log('addCourse====>>>>>>>', addCourse);    
-           console.log('topicId====>>>>>>>', topicId);  
-        //    console.log('checkBoxValues====>>>>>>>', checkBoxValues);
-        //    const levelValue = JSON.stringify(checkBoxValues);
-           connection.query(insertSubTopicQuery, [addSubTopic, selectLevel, addLink , topicId], (err, result) => {
-             if (err) {
-               console.log('Error inserting data into topics table:', err);
-             } else {
-               console.log('Data inserted into topics table:', result);
-               res.send({
-                data : result,
-                message : 'Value Insert'
-            })
-             }
-           });
-         }
-       }
-     });
-
-
+    try {
+      console.log('req.body===>>>>', req.body);
+      const { addSubTopic, addLink, selectcourse, selectLevel } = req.body;
+  
+      const getTopicIdQuery = 'SELECT topic_id FROM topics WHERE topic_name = ?';
+      const insertSubTopicQuery =
+        'INSERT INTO sub_topics (subTopic_name, LEVEL, LINK, TOPIC_ID) VALUES (?,?,?,?)';
+      const getLevelId = 'SELECT level_id FROM level WHERE LEVEL = ?';
+  
+      connection.query(getTopicIdQuery, [selectcourse], (err, courseResult) => {
+        if (err) {
+          console.log('Error retrieving domain_id:', err);
+          res.status(500).json({ error: 'Error retrieving domain_id' });
+        } else {
+          if (courseResult.length === 0) {
+            console.log('Course not found for FRONTEND value:', courseResult);
+            res.status(404).json({ message: 'Course not found' });
+          } else {
+            const topicId = courseResult[0].topic_id;
+  
+            connection.query(getLevelId, [selectLevel], (err, getLevelIdResult) => {
+              if (err) {
+                console.log('Error getting level ID:', err);
+                res.status(500).json({ error: 'Error getting level ID' });
+              } else {
+                // Assuming you'll perform some checks here based on getLevelIdResult
+                     const levelID = getLevelIdResult.map(val => val.level_id)
+                     console.log('levelID=======>>>>>>:', levelID);
+                connection.query(
+                  insertSubTopicQuery,
+                  [addSubTopic,levelID, addLink, topicId],
+                  (err, result) => { 
+                    if (err) {
+                      console.log('Error inserting data into sub_topics table:', err);
+                      res.status(500).json({ error: 'Error inserting data' });
+                    } else {
+                      console.log('Data inserted into sub_topics table:', result);
+                      res.json({ data: result, message: 'Value Insert' });
+                    }
+                  }
+                );
+              }
+            });
+          }
+        }
+      });
     }
     catch(err){
         console.log('err', err);

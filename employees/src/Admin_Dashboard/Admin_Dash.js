@@ -403,6 +403,7 @@ function Admin_Dash() {
 
   const chartContainerStyle = {
     marginTop: '20px',
+    marginLeft :'10px'
   };
 
   return (
@@ -415,7 +416,7 @@ function Admin_Dash() {
             series={chartData.series}
             type="bar"
             height={250}
-            // width={1000}
+            // width={1100}
           />
           {/* <Box sx={{ display: 'flex', marginTop: '-15px' }}>
             <RemoveRedEyeIcon sx={{ marginLeft: '41px', color: 'black' }} />

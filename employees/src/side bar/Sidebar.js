@@ -104,11 +104,11 @@ const Sidebar = () => {
         }`}
       >
         {selectedItem == "DASHBOARD" ? (
-          <Admin_Dash />
+          <Dash_check />
         ) : selectedItem == "ADMIN" ? (
           <Admin_User_check />
         ) : selectedItem == "VALUE" ? (
-          <Dash_check />
+          '<Dash_check />'
         ) : null}
       </div>
     </div>

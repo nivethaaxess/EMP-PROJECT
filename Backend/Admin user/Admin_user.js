@@ -1,6 +1,6 @@
 const connection = require('../Mysql connect/Mysql');
 
-const Domain = (req, res) => {
+const Domain = (req, res) => {  
   try {        
     console.log('DOMAIN ')
     const getDomain = 'select * from domain';
@@ -13,7 +13,7 @@ const Domain = (req, res) => {
           error: err
         })
       } else {
-        console.log('SUCCESS====>>>',);
+        console.log('SUCCESS====>>>',); 
         console.log('queryRes==>>>', queryRes);
         res.send(queryRes)
       }

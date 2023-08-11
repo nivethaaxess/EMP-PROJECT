@@ -1059,13 +1059,18 @@ const Admin_User_check = ({ toggleDrawer }) => {
 
 
         </AccordionDetails>
-        <Box sx={{ marginTop: '30px' }}>
+       
+
+
+
+      </Box >
+      <Box sx={{ marginTop: '30px' , marginBottom:'10px' }}>
           {DomainList.map((course, i) => {
             return (
-              <Box >
+              <Box sx={{marginBottom:'10px'}}>
                 <Accordion >
                   <Accordion
-
+                    //  sx={{marginBottom:'30px',backgroundColor:'red'}}
                     expanded={expanded === course}
                     onChange={handleAccordionChange(course)}
                     key={i}
@@ -1075,7 +1080,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                       aria-controls="panel1a-content"
                       id="panel1a-header"
                     >
-                      <Typography className="level-check" style={{ display: "flex", alignItems: "center" }}>
+                      <Typography className="level-check" style={{ display: "flex", alignItems: "center",marginBottom:'10px' }}>
                         <FaHtml5 style={icon} className="FaHtml5" />
                         {course}
                       </Typography>
@@ -1084,6 +1089,8 @@ const Admin_User_check = ({ toggleDrawer }) => {
                       sx={{
                         display: 'flex',
                         justifyContent: 'space-between',
+                        // backgroundColor:'red',
+                        // border:'2px solid white',
                         // flexWrap: 'wrap', // Wrap accordions to the next line if necessary
                         gap: '6px', // Spacing between accordions
                       }}
@@ -1170,10 +1177,6 @@ const Admin_User_check = ({ toggleDrawer }) => {
             );
           })}
         </Box>
-
-
-
-      </Box >
     </Box >
   )
 }
