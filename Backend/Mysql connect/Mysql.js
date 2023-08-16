@@ -10,19 +10,7 @@ const connection = mysql.createPool({
   queueLimit: 0,
 });
 
-<<<<<<< HEAD
-///////////////////////////////////////////////////////////     
-connectionLimit: 10,
-    host: 'srv787.hstgr.io',
-    user: 'u842521168_new', /* MySQL User */  
-    password: 'Admin@123', /* MySQL Password */
-    // database: 'employeedata' 
-    database: 'u842521168_new' ,  /* MySQL Database */
-    waitForConnections: true,      
-  queueLimit: 0
-     
-=======
-// Handle MySQL connection errors using an error event listener
+
 function handleConnectionErrors() {
   connection.on("error", (err) => {
     if (err.code === "PROTOCOL_CONNECTION_LOST") {
@@ -38,7 +26,6 @@ function handleConnectionErrors() {
       console.error("MySQL Connection Error:", err);
       // Handle other connection errors gracefully
     }
->>>>>>> b8c94b8e0b36f1a31725927e7f49419c6ab5cab6
   });
 }
 

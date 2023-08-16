@@ -45,7 +45,9 @@ const employeeData = require("../EmployeeData/employeeData")
     router.post('/updatestatus',employeeData.updatestatus) 
     router.post('/insertusers',employeeData.InsertUser)          
     router.post('/api/logindata',employeeData.logindata)
-    router.post('/api/domain',employeeData.domaingetdata)     
+    router.post('/api/domain',employeeData.domaingetdata)
+    router.post('/api/userchange',employeeData.Userchange)
+    router.put('/updateuser/:User_Id',employeeData.Userupdate)     
        
  // employeeData ends ----------- 
 
