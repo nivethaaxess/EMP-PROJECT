@@ -6,7 +6,7 @@ const DashboardData = async (req, res) => {
     // Find a Skill
     const skillQuery = 'SELECT DISTINCT topic_name FROM topics';
     // Find a Level
-    const levelQuery = 'SELECT Level as level from level';   
+    const levelQuery = 'SELECT Level as level from levels';   
     // Find a count and level
     // const countQuery = 'SELECT s.level, s.skill, COUNT(*) as count FROM skills s GROUP BY s.level, s.skill';
 
@@ -57,6 +57,33 @@ const DashboardData = async (req, res) => {
     res.status(500).send('Error executing queries');
   }
 };
+
+
+
+const DashboardData_check = async (req, res) => {
+  try{
+    // const {skill,level} = req.body;
+    // console.log('req.body===>>>>',req.body)
+
+     const sql = 'SELECT t.topic_name, lv.level, COUNT(DISTINCT st.user_id) AS user_count FROM status st JOIN sub_topics sub ON st.subTopic_id = sub.subTopic_id JOIN topics t ON sub.topic_id = t.topic_id JOIN levels lv ON st.level = lv.level_id GROUP BY t.topic_name, lv.level ORDER BY t.topic_name, lv.level'
+      // const value = [skill,level]
+
+      connection.query(sql ,(error,result)=>{
+       if (error) {
+         console.error('Error patching user:', error.message);
+         res.status(500).json({ error: 'Failed to patch user' });
+       } else {
+         console.log('User updated successfully');
+         res.json({ message: 'User patched successfully', val : result });
+       }
+      })
+ } catch (error) {
+    console.error('Error executing queries:', error);
+    res.status(500).send('Error executing queries');
+  }
+};
+
+
 
 
 
@@ -114,6 +141,7 @@ const DashboardData = async (req, res) => {
 
 module.exports = {
   DashboardData,
+  DashboardData_check,
   tableData ,
   GetDashData
 };

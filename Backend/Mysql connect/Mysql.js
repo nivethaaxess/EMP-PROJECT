@@ -2,28 +2,34 @@ const mysql = require("mysql");
 
 const connection = mysql.createPool({
   connectionLimit: 10,
-  host: "srv787.hstgr.io",
-  user: "u842521168_new",
-  password: "Admin@123",
-  database: "u842521168_new",
+
+  host: 'srv787.hstgr.io',
+  user: 'u842521168_new',
+  password: 'Admin@123',
+  database: 'u842521168_new',
+
+
   waitForConnections: true,
   queueLimit: 0,
 });
 
 
 function handleConnectionErrors() {
-  connection.on("error", (err) => {
-    if (err.code === "PROTOCOL_CONNECTION_LOST") {
-      console.error("MySQL Connection Lost. Reconnecting...");
-      connection.query("SELECT 1", (error) => {
+
+  connection.on('error', (err) => {
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+      console.error('MySQL Connection Lost. Reconnecting...');
+      connection.query('SELECT 1', (error) => { 
         if (error) {
-          console.error("Error reconnecting:", error);
+          console.error('Error reconnecting:', error);
         } else {
-          console.log("Reconnected to MySQL successfully!");
+          console.log('Reconnected to MySQL successfully!');
         }
       });
     } else {
-      console.error("MySQL Connection Error:", err);
+      console.error('MySQL Connection Error:', err); 
+
+
       // Handle other connection errors gracefully
     }
   });

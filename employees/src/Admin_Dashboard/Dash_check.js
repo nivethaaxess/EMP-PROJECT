@@ -1,94 +1,121 @@
 import React, { useState, useEffect } from 'react';
-import ReactApexChart from 'react-apexcharts';
+import Box from '@mui/material/Box';
+import { BarChart, Bar, XAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import axios from 'axios';
+import './Dash_check.css';
 
+function Admin_Dash() {
+  const [dataset, setDataset] = useState([]);
 
-class Dash_check extends React.Component {
-  constructor(props) {
-    super(props);
+  useEffect(() => {
+    axios.get('http://localhost:3007/api/Dashboard_check')
+      .then(response => {
+        const data1 = response.data.val;
 
-    this.state = {
-    
-      series: [{
-        name: 'PRODUCT A',
-        data: [44, 55, 41, ]
-      }, {
-        name: 'PRODUCT B',
-        data: [13, 23, 20, 8, 13, 27]
-      }, {
-        name: 'PRODUCT C',
-        data: [11, 17, 15, 15, 21, 14]
-      }, {
-        name: 'PRODUCT D',
-        data: [21, 7, 25,]
-      }],
-      options: {
-        chart: {
-          type: 'bar',
-          height: 350,
-          stacked: true,
-          toolbar: {
-            show: true
-          },
-          zoom: {
-            enabled: true
+        const transformedData = data1.reduce((acc, item) => {
+          const existingTopic = acc.find(topic => topic.topic === item.topic_name);
+
+          if (existingTopic) {
+            existingTopic[item.level.toLowerCase()] = (existingTopic[item.level.toLowerCase()] || 0) + item.user_count;
+          } else {
+            const newTopic = { topic: item.topic_name };
+            newTopic[item.level.toLowerCase()] = item.user_count;
+            acc.push(newTopic);
           }
-        },
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            legend: {
-              position: 'bottom',
-              offsetX: -10,
-              offsetY: 0
-            }
-          }
-        }],
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            borderRadius: 10,
-            dataLabels: {
-              total: {
-                enabled: true,
-                style: {
-                  fontSize: '13px',
-                  fontWeight: 900
-                }
-              }
-            }
-          },
-        },
-        xaxis: {
-          type: 'datetime',
-          categories: ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT',
-            '01/05/2011 GMT', '01/06/2011 GMT'
-          ],
-        },
-        legend: {
-          position: 'right',
-          offsetY: 40
-        },
-        fill: {
-          opacity: 1
-        }
-      },
-    
-    
-    };
-  }
+
+          return acc;
+        }, []);
+
+        setDataset(transformedData);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
 
 
 
-  render() {
-    return (
-      
+  const handleBarClick = (data, index) => {
+    // Access the data associated with the clicked bar
+    console.log('Clicked Data:', data);
+       // This is backend query
+    // SELECT u.email, t.topic_name, lv.level, CONCAT('[', GROUP_CONCAT(DISTINCT st.subTopic_name ORDER BY st.subTopic_name ASC SEPARATOR ', '), ']') AS completed_subtopics FROM status s JOIN sub_topics st ON s.subTopic_id = st.subTopic_id JOIN topics t ON st.topic_id = t.topic_id JOIN levels lv ON s.level = lv.level_id JOIN user u ON s.user_id = u.user_id WHERE t.topic_name = 'HTML' GROUP BY u.email, t.topic_name, lv.level
 
-<div id="chart">
-<ReactApexChart options={this.state.options} series={this.state.series} type="bar" height={350} width={720} />
-</div>
+  };
 
 
-    );
-  }
+  return (
+    <Box className='main_container_2'>
+      <Box className='first_row_grid_2'>
+        <Box className='first_grid_2'>
+          <BarChart
+            width={1050}
+            height={300}
+            data={dataset}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 ,}}
+            onClick={(val)=>handleBarClick(val)}           
+          >
+            <CartesianGrid strokeDasharray='3 3' />
+            <XAxis dataKey='topic' tick={{ fontSize: 12 }} />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey='basic' fill='rgba(64, 246, 168, 1)'>
+              {dataset.map((entry, index) => (
+                <span
+                  key={`label-${index}`}
+                  value={entry.basic}
+                  fontSize={12}
+                  fill='rgba(64, 246, 168, 1)'
+                >
+                  {entry.basic}
+                </span>
+              ))}
+            </Bar>
+            <Bar dataKey='advance' fill='rgb(37, 30, 145)'>
+              {dataset.map((entry, index) => (
+                <span
+                  key={`label-${index}`}
+                  value={entry.advance}
+                  fontSize={12}
+                  fill='rgb(37, 30, 145)'
+                >
+                  {entry.advance}
+                </span>
+              ))}
+            </Bar>
+            <Bar dataKey='intermediate' fill='rgba(227, 46, 230, 1)'>
+              {dataset.map((entry, index) => (
+                <span
+                  key={`label-${index}`}
+                  value={entry.intermediate}
+                  fontSize={12}
+                  fill='rgba(227, 46, 230, 1)'
+                >
+                  {entry.intermediate}
+                </span>
+              ))}
+            </Bar>
+            <Bar dataKey='others' fill='rgb(254, 176, 25)'>
+              {dataset.map((entry, index) => (
+                <span
+                  key={`label-${index}`}
+                  value={entry.others}
+                  fontSize={12}
+                  fill='rgb(254, 176, 25)'
+                >
+                  {entry.others}
+                </span>
+              ))}
+            </Bar>
+           
+          </BarChart>
+          {/* <Box>
+              Dinesh
+            </Box> */}
+        </Box>
+      </Box>
+    </Box>
+  );
 }
-export default Dash_check
+
+export default Admin_Dash;

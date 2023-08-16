@@ -105,6 +105,7 @@ const Sidebar = () => {
           isSidebarExpanded ? "sidebar-expanded1" : "main-content"
         }`}
       >
+<<<<<<< HEAD
         {selectedItem === "DASHBOARD" ? (
           <Admin_Dash />
         ) : selectedItem === "ADMIN" ? (
@@ -113,6 +114,19 @@ const Sidebar = () => {
           <Userdata />
         ) : selectedItem === "Change Password" ? (
             <Userchange />
+=======
+        {selectedItem == "DASHBOARD" ? (
+          <Dash_check />
+        ) : selectedItem == "ADMIN" ? (
+          <Admin_User_check />
+
+        ) : selectedItem == "VALUE" ? (
+          '<Dash_check />'
+
+        ) : selectedItem == "USER DATA" ? (
+          <Userdata />
+
+>>>>>>> 07c280e7db3baa1290c942675b09b722a1dd21e8
         ) : null}
            
       </div>

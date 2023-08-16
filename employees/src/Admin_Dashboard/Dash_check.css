@@ -1,3 +1,105 @@
-.apexcharts-legend .apexcharts-align-center .apx-legend-position-bottom{
-     position: static;
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.main_container_2{
+   /* height: 100vh; */
+   width: 82vw;
+   /* background-color: aqua; */
+   display: flex;
+   
+   /* justify-content: space-between; */
+}
+.first_row_grid_2{
+    display: flex;
+     /* margin-left: 50PX; */
+     width: 100%
+     
+}
+.first_grid_2{
+    width: 100%;
+    /* height: 15%; */
+    word-break: break-all;
+    /* background-color: brown; */
+    /* background-color: blue; */
+    /* margin: 20px 10px 10px 55px; */
+    padding: 10px;
+    padding-top: 50px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 2px rgba(15, 13, 13, 0.3);
+}
+/* .second_grid{
+    width: 30%;
+    height: 20%;
+    word-break: break-all;
+    background-color: rgb(97, 97, 168);
+    margin: 20px 10px 10px 15px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.3);
+} */
+
+.table_box{
+    /* width: 90%; */
+    /* height: 20%; */
+    /* word-break: break-all; */
+    /* background-color: rgb(97, 97, 168); */
+    margin: 20px 10px 10px 15px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.3);
+}
+
+.thired_grid{
+    width: 33%;
+    height: 20%;
+    word-break: break-all;
+    /* background-color: rgb(100, 207, 50); */
+    margin: 20px 10px 10px 15px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.3);
+}
+#typo-Head{
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.rightGrid{
+    /* width: 80%; */
+    /* height: 15%; */
+    word-break: break-all;
+    /* background-color: blue; */
+    /* margin: 20px 10px 10px 10px; */
+    margin-left: 50px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 2px rgba(15, 13, 13, 0.3);
+}
+.css-1cq9zwj-MuiButtonBase-root-MuiAccordionSummary-root.Mui-expanded{
+    min-height: 35px !important;
+}
+
+.css-1cq9zwj-MuiButtonBase-root-MuiAccordionSummary-root{
+    min-height: 35px !important;
+}
+ 
+.css-1bxy6bd-MuiPaper-root-MuiAccordion-root{
+    box-shadow: none !important;
+}
+
+.customTextField {
+    width: 150px; /* Set the desired width */
+    height: 30px; /* Set the desired height */
+    font-size: 14px; /* Set the desired font size */
+    padding: 5px;
+  }
+
+.css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input{
+    padding: 5px !important;
+}
+
+.recharts-default-legend{
+margin-top: -330px !important;
 }
