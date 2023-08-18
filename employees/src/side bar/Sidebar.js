@@ -9,7 +9,11 @@ import Userdata from  "./Userdata"
 import User from "../component/user";
 import Dash_check from "../Admin_Dashboard/Dash_check";
 import { useNavigate } from "react-router-dom";
+
 import Admin_dash_check from "../Admin_Dashboard/Admin_dash_check";
+
+import Userchange from "./Userchange";
+
 
 const Sidebar = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
@@ -17,6 +21,9 @@ const Sidebar = () => {
     "DASHBOARD",
     "ADMIN",
     "USER DATA",
+    "Change Password",
+
+
   ]);
   const [isHovered, setIsHovered] = useState(false);
   const [selectedItem, setSelectedItem] = useState("DASHBOARD");
@@ -102,18 +109,22 @@ const Sidebar = () => {
           isSidebarExpanded ? "sidebar-expanded1" : "main-content"
         }`}
       >
+
+       
+
         {selectedItem == "DASHBOARD" ? (
          <Admin_dash_check/>
         ) : selectedItem == "ADMIN" ? (
           <Admin_User_check />
 
-        ) : selectedItem == "VALUE" ? (
-          <Admin_dash_check/>
-
         ) : selectedItem == "USER DATA" ? (
-          <Userdata />
+          <Userdata/>
+
+        ) : selectedItem ==  "Change Password" ? (
+          <Userchange />
 
         ) : null}
+           
       </div>
     </div>
   );

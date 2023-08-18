@@ -13,7 +13,7 @@ const connection = mysql.createPool({
   queueLimit: 0,
 });
 
-// Handle MySQL connection errors using an error event listener
+
 function handleConnectionErrors() {
 
   connection.on('error', (err) => {

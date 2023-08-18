@@ -175,7 +175,7 @@ console.log("use")
 
 
    
-    <FormControl sx={{width:'40vw',border:'1px',marginLeft  :'317px'}} onSubmit={handleRegister}>
+    <FormControl sx={{width:'40vw',border:'1px',marginLeft  :'317px'}}>
      <TextField
         color="warning"
         label="First Name"
@@ -280,9 +280,10 @@ console.log("use")
           </MenuItem>
         ))}
       </Select>
-      <DialogActions>
-        <Button type='submit'>Register</Button>
-      </DialogActions>
+
+      <Button onClick={handleRegister}>Register</Button>
+
+
     </FormControl>
     
   )

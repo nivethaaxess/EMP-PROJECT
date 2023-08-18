@@ -94,8 +94,9 @@ const Login = () => {
   };
 
   const handleRegister = (e) => {
-    e.preventDefault();
     console.log("Register");
+    e.preventDefault();
+   
     const data = {
       firstName: getfirstname,
       lastName: getlastname,

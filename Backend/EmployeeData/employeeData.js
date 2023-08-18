@@ -235,6 +235,46 @@ const logindata  = async(req,res) =>
       res.status(500).send('Error executing queries');
     }
 }
+
+const Userchange  = async(req,res) =>
+
+{    
+  console.log('data received');
+    const {First_name,Email} = req.body
+    
+    try
+    {
+           // Validate the input parameters (optional but recommended)
+  // if (!Email || !Password) {
+  //   return res.status(400).json({ error: 'Invalid input parameters' });
+  // }
+
+  // Prepare the SQL query with input parameters
+  const sqlQuery = `SELECT * FROM user WHERE First_name = ? AND Email = ?`;
+
+
+  // Execute the query with input parameters
+  connection.query(sqlQuery, [First_name, Email], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Return the user data if found
+    res.status(200).json({ data: results[0] });
+  });
+    }
+    catch (error){
+
+      console.error('Error executing queries:', error);
+      res.status(500).send('Error executing queries');
+    }
+}
+
 const domaingetdata  = (req,res)=>
  {
    try
@@ -260,6 +300,40 @@ const domaingetdata  = (req,res)=>
       
  }
 
+ const Userupdate =(req,res)=>
+      
+          {
+   
+    try
+    {
+      const Userid = req.params.User_Id 
+        console.log('User1===>',Userid)
+      const {User_Id,Password} = req.body;
+      console.log('req.bodyr===>',req.body)
+      console.log('update')
+           const updatequery = `UPDATE user
+           SET Password = ?
+           WHERE User_Id = ?`; 
+            console.log('table')
+        connection.query(updatequery,[Password,User_Id],(error, results) => {
+          console.log('ttt--=>')
+            
+          if (error) {
+            console.error('Error updating user information:', error);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+          }
+          console.log('User information updated successfully');
+          res.json({ message: 'User information updated successfully' });
+        })
+    }
+    catch
+    {
+      console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });  
+    }
+ }
+
 module.exports = {
   userCourseList,
   subTopicCount,
@@ -267,6 +341,9 @@ module.exports = {
   updatestatus,
   getdata,
   logindata,
-  domaingetdata
+  domaingetdata,
+  Userchange,
+  Userupdate
+
 };
  
