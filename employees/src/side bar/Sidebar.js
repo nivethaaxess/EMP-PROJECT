@@ -9,6 +9,7 @@ import Userdata from  "./Userdata"
 import User from "../component/user";
 import Dash_check from "../Admin_Dashboard/Dash_check";
 import { useNavigate } from "react-router-dom";
+import Admin_dash_check from "../Admin_Dashboard/Admin_dash_check";
 
 const Sidebar = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
@@ -16,9 +17,6 @@ const Sidebar = () => {
     "DASHBOARD",
     "ADMIN",
     "USER DATA",
-    "METHOD",
-    "DASHBOARD",
-    "DASHBOARD",
   ]);
   const [isHovered, setIsHovered] = useState(false);
   const [selectedItem, setSelectedItem] = useState("DASHBOARD");
@@ -105,12 +103,12 @@ const Sidebar = () => {
         }`}
       >
         {selectedItem == "DASHBOARD" ? (
-          <Dash_check />
+         <Admin_dash_check/>
         ) : selectedItem == "ADMIN" ? (
           <Admin_User_check />
 
         ) : selectedItem == "VALUE" ? (
-          '<Dash_check />'
+          <Admin_dash_check/>
 
         ) : selectedItem == "USER DATA" ? (
           <Userdata />
