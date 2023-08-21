@@ -37,7 +37,7 @@ const Login = () => {
   const [getpassword, setpassword] = useState("");
 
   const [dialogopen, dialogSetOpen] = React.useState(false);
-  const [loginDialog,setLoginDialog] = useState(false)
+  const [loginDialog, setLoginDialog] = useState(false)
 
 
   //signup state
@@ -96,7 +96,7 @@ const Login = () => {
   const handleRegister = (e) => {
     console.log("Register");
     e.preventDefault();
-   
+
     const data = {
       firstName: getfirstname,
       lastName: getlastname,
@@ -144,34 +144,45 @@ const Login = () => {
     }
   });
 
-  const handleLogin = async(a) => {
+  const handleLogin = async () => {
     console.log("login console");
-    console.log("login console2")
-    await axios
-      .post(`http://localhost:3007/api/logindata`, {
+    console.log("login console2");
+  
+    try {
+      const response = await axios.post(`http://localhost:3007/api/logindata`, {
         Email: getusername,
         Password: getpassword,
-      })
-      .then((response) => {
-        const { role, User_Id } = response.data.data;
-        if (role === "user") {
+      });
+  
+      console.log('response234====>', response.data);
+  
+      const items = response.data // Assuming your response has a "results" array
+  
+      console.log('items', items); // Print the items array to debug
+  
+      items.map((item) => {
+
+        if (item.role === "user") {
+           console.log('role', item.role);
           localStorage.setItem("auth", true);
-          localStorage.setItem("userId", User_Id);
+          localStorage.setItem("userId", item.User_Id);
           navigate("/user");
-        } else if (role === "admin") {
+        } else if (item.role === "admin") {
           localStorage.setItem("admin", true);
           navigate("/sidebar");
-        } else {
-          alert("No role specified");
         }
+        return null;
       })
-      .catch(err =>{       
-        console.log("login err",err)
-        setpassword("")
-        setLoginDialog(true)
-      })
+
+    } 
+    catch (err) {
+      console.log("login err", err);
+      setpassword("");
+      setLoginDialog(true);
+    }
   };
-console.log("setLoginDialog",loginDialog)
+
+  console.log("setLoginDialog", loginDialog)
   return (
     <Box
       sx={{
@@ -195,10 +206,10 @@ console.log("setLoginDialog",loginDialog)
         }}
       >
         <div>
-         
+
           <div>
             <h1 style={{ color: "white" }}>Login</h1>
-           
+
             <FormControl>
               <TextField
                 value={getusername}
@@ -207,7 +218,7 @@ console.log("setLoginDialog",loginDialog)
                 size="small"
                 id="outlined-basic"
                 label="USERNAME"
-                // variant="outlined"
+              // variant="outlined"
               />
             </FormControl>
             <FormControl>
@@ -225,25 +236,25 @@ console.log("setLoginDialog",loginDialog)
                 label="PASSWORD"
                 variant="outlined"
               />
-               </FormControl>
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
+            </FormControl>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
 
-                <Box sx={{ mt: 3 }}>
-                {loginDialog && <p style={{color:"red",fontSize:"12px",textAlign:"center",marginBottom:"5px"}}>Enter correct email and password</p>}
-                  <Button
-                    onClick={() => handleLogin("login successfully")}
-                    variant="contained"
-                  >
-                    LOGIN
-                  </Button>
-                 
-                </Box>
+              <Box sx={{ mt: 3 }}>
+                {loginDialog && <p style={{ color: "red", fontSize: "12px", textAlign: "center", marginBottom: "5px" }}>Enter correct email and password</p>}
+                <Button
+                  onClick={() => handleLogin("login successfully")}
+                  variant="contained"
+                >
+                  LOGIN
+                </Button>
+
               </Box>
+            </Box>
           </div>
         </div>
- 
+
       </Box>
-      
+
     </Box>
   );
 };

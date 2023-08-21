@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl } from '@mui/material';
 import axios from 'axios';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 const Userchange = () => {
 
@@ -69,7 +71,16 @@ const Userchange = () => {
           })
           .catch(err => {
             console.log('error', err);
-             alert('not matching')
+            toast.info('Email and password incorrect!', {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+              });
           })
       }
             
@@ -84,17 +95,28 @@ const Userchange = () => {
          axios.put(`http://localhost:3007/updateuser/:${getuserid}`, user)
            .then(response=>{
               console.log('userupdate',response.data)
-               alert('Updated successfully')
-                 
+              toast.success('Updated successfully!', {
+                width:'200px',
+                height:'80px',
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                });
            })
           
       }
       const isSubmitDisabled = getchangepassword === '' || getconfirmpassword === '' || getchangepassword !== getconfirmpassword;
 
     return (
-        <FormControl sx={{ width: '20vw', border: '1px', marginLeft: '317px' }}>
+        <FormControl sx={{ width: '25vw', border: '1px', marginLeft: '317px' }}>
             <TextField
-                color="warning"
+                 sx={{backgroundColor:'lightgrey'}}
+                 color="primary"
                 label="First Name"
                 type='text'
                 value = {getfirstname}
@@ -105,7 +127,8 @@ const Userchange = () => {
                 required
             />
             <TextField
-                color="warning"
+                sx={{backgroundColor:'lightgrey'}}
+                color="primary"
                 label="Email"
                 type="Email"
                 variant="filled"
@@ -115,8 +138,8 @@ const Userchange = () => {
                 margin="normal"
                 required
             />
-            <Box sx={{ textAlign:"end"}}>
-                <Button onClick={handlerChange} sx={{ boxShadow: 3,width:"100px", color: 'blue',backgroundColor:'whitesmoke'}}>CLICK</Button>
+            <Box style={{boxShadow:2,width:'120px',borderRadius:3,textAlign:'center',display:'flex',justifyContent:'center',alignItems:'center',width:"100%"}}>
+                <Button onClick={handlerChange} style={{backgroundColor:'blue',color:'whitesmoke'}} >CLICK</Button>
             </Box>
             <Dialog
                 open={open}
@@ -128,7 +151,8 @@ const Userchange = () => {
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
                   <TextField
-                color="warning"
+                 sx={{backgroundColor:'lightgrey'}}
+                 color="secondary"
                 label="ChangePassword"
                 value={getchangepassword}
                 onChange={handleChangePassword}
@@ -139,7 +163,8 @@ const Userchange = () => {
                 required
             />
                 <TextField
-                color="warning"
+                  sx={{backgroundColor:'lightgrey'}}
+                  color="secondary"
                 label="Confirm Password"
                 type='password'
                 value={getconfirmpassword}
@@ -152,10 +177,12 @@ const Userchange = () => {
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button sx={{backgroundColor:'white',color:'blue'}} onClick={handleClose} autoFocus>
+                  <Box style={{boxShadow:2,width:'120px',borderRadius:3,textAlign:'center'}} >
+                  <Button style={{ backgroundColor:'blue',color:'whitesmoke'}}onClick={handleClose} >
                     close
                   </Button>
-                   <Button onClick={()=>handleSubmit()} disabled={isSubmitDisabled}>Submit</Button>
+                  </Box>
+                   <Button sx={{ boxShadow: 4, color: 'darkblue',backgroundColor:'whitesmoke'}} onClick={()=>handleSubmit()} disabled={isSubmitDisabled}>Submit</Button>
                 </DialogActions>
               </Dialog>
         </FormControl>
