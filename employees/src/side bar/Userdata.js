@@ -356,6 +356,7 @@ console.log("use")
           </MenuItem>
         ))}
       </Select>
+<<<<<<< HEAD
       </FormControl>
       <Box className={`${classes.button} ${isRegisterDisabled ? classes.disabledButton : (getfirstname && getlastname && getemail && getsignupassword && getrole && getdomainname.length > 0) ? classes.filledButton : classes.outlinedButton}`}>
             <Button style={{color:'whitesmoke'}} onClick={handleRegister} disabled={isRegisterDisabled}>
@@ -363,6 +364,13 @@ console.log("use")
             </Button>
         </Box>
      </FormControl>
+=======
+
+      <Button onClick={handleRegister}>Register</Button>
+
+
+    </FormControl>
+>>>>>>> 53bef5dd2cc1cbdb693ca00d7b78f4cf5da843b4
     
   )   
 }
