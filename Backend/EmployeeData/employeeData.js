@@ -40,13 +40,13 @@ const subTopicCount = async (req, res) => {
 
       console.log("a", a)
       // Execute the first query
-      const query1 = `SELECT COUNT(subTopic_id) AS total FROM sub_topics WHERE  LEVEL = '${a}' AND TOPIC_ID = (SELECT topic_id from topics where topic_name = '${course}')`;
+      const query1 = `SELECT COUNT(subTopic_id) AS total FROM sub_topics WHERE  LEVEL = (SELECT level_id from levels where Level = '${a}') AND TOPIC_ID = (SELECT topic_id from topics where topic_name = '${course}')`;
       const totalResult = await executeQuery(query1);
 
       finalCount[a] = { total: totalResult[0].total };
 
       // Execute the second query
-      const query2 = `SELECT COUNT(subTopic_id) AS completed FROM status WHERE user_id = '${userId}' AND subTopic_id IN (SELECT subTopic_id FROM sub_topics WHERE LEVEL = '${a}' AND TOPIC_ID = (SELECT topic_id FROM topics WHERE topic_name = '${course}'))`;
+      const query2 = `SELECT COUNT(subTopic_id) AS completed FROM status WHERE user_id = '${userId}' AND subTopic_id IN (SELECT subTopic_id FROM sub_topics WHERE LEVEL = (SELECT level_id from levels where Level = '${a}') AND TOPIC_ID = (SELECT topic_id FROM topics WHERE topic_name = '${course}'))`;
       const completedResult = await executeQuery(query2);
 
       finalCount[a].completed = completedResult[0].completed;
@@ -115,14 +115,20 @@ const InsertUser = async (req, res) => {
 
 const updatestatus = async (req, res) => {
 
+
   console.log("updatestatus called")
   try {
 
+
+
     let { subtopic_name, status, userId } = req.body;
-    let query1 = `select subTopic_id from sub_topics where subTopic_name = (?)`;
+
+    console.log("***",subtopic_name, status, userId)
+
+    let query1 = `select subTopic_id, LEVEL from sub_topics where subTopic_name = (?)`;
     let query2 = `select TOPIC_ID from sub_topics where subTopic_id = (?)`;
     let query3 = `select domain_id from topics where topic_id = (?)`;
-
+  
     function runQuery(query, values) {
       return new Promise((resolve, reject) => {
         connection.query(query, values, (err, result) => {
@@ -130,10 +136,13 @@ const updatestatus = async (req, res) => {
           resolve(result);
         });
       });
-    }
-
+    } 
+//
     let subTopicIdResult = await runQuery(query1, subtopic_name);
     let subTopicId = subTopicIdResult[0].subTopic_id;
+    let levelId = subTopicIdResult[0].LEVEL;
+
+console.log( "MMMMM",subTopicIdResult[0],subTopicIdResult[0].LEVEL)
 
     let topicIdResult = await runQuery(query2, subTopicId);
     let topicId = topicIdResult[0].TOPIC_ID;
@@ -141,10 +150,15 @@ const updatestatus = async (req, res) => {
     let domainIdResult = await runQuery(query3, topicId);
     let domainId = domainIdResult[0].domain_id;
 
+
     let query, values;
+
+    
     if (status == "completed") {
-      query = `INSERT INTO status (status, subTopic_id, topic_id, domain_id, user_id) VALUES (?)`;
-      values = ["completed", subTopicId, topicId, domainId, userId];
+      query = `INSERT INTO status (status, subTopic_id, topic_id, domain_id, user_id ,level) VALUES (?)`;
+      values = ["completed", subTopicId, topicId, domainId, userId ,levelId];
+
+       console.log("new values",["completed", subTopicId, topicId, domainId, userId ,levelId])
 
       let insertResult = await runQuery(query, [values]);
 
@@ -172,7 +186,7 @@ const getdata = async (req, res) => {
 
   try {
     // Execute the first query
-    const query1 = `SELECT subTopic_name, LINK FROM sub_topics WHERE subTopic_id NOT IN ( SELECT subTopic_id FROM status WHERE user_id = ${userId} AND topic_id = (select topic_id from topics where topic_name = '${course}') ) and topic_id = (select topic_id from topics where topic_name = '${course}') AND LEVEL = '${level}'`;
+    const query1 = `SELECT subTopic_name, LINK FROM sub_topics WHERE subTopic_id NOT IN ( SELECT subTopic_id FROM status WHERE user_id = ${userId} AND topic_id = (select topic_id from topics where topic_name = '${course}') ) and topic_id = (select topic_id from topics where topic_name = '${course}') AND LEVEL = (SELECT level_id from levels where Level = '${level}')`;
     const inprogress = await executeQuery(query1);
 
 
@@ -182,7 +196,7 @@ const getdata = async (req, res) => {
               JOIN status s ON st.subTopic_id = s.subTopic_id
               WHERE s.status = 'completed'
                 AND s.user_id = ${userId}
-                AND st.LEVEL = '${level}'
+                AND st.LEVEL = (SELECT level_id from levels where Level = '${level}')
                 AND s.topic_id = (select topic_id from topics where topic_name = '${course}') `;
     const completed = await executeQuery(query2);
 
