@@ -186,7 +186,12 @@ console.log("use")
             theme: "dark",
             });
           
-           
+            setFirstName("")
+            setLastName("")
+            setEmail("")
+            setSignupPassword("")
+            setRole("")
+            setDomainname([])
         }
         else{
           console.log("err",response)
