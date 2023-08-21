@@ -6,7 +6,7 @@ const courseLevel = (req, res) => {
 
         const { course } = req.body;
 
-        const Query = 'select t.Level from topics t where t.topic_name = ?'
+        const Query = 'select t.Level  from topics t where t.topic_name = ?'
         connection.query(Query, [course], (err, result) => {
             if (err) {
                 res.send(err)
@@ -31,47 +31,66 @@ const courseLevel = (req, res) => {
 
 
    const getSubTopics = (req,res) =>{
-       try{
-        console.log('req.body====>>>>>', req.body);
-  const { level, course } = req.body;
-
-  const topic_idQuery = 'SELECT t.topic_id FROM topics t WHERE t.topic_name = ?';
-  const subtopic_idQuery = 'SELECT s.subTopic_name , s.subTopic_id FROM sub_topics s WHERE s.LEVEL = ? AND s.TOPIC_ID = ?';
-
-  // Run the first query to get the topic_id
-  connection.query(topic_idQuery, [course], (err, topicResults) => {
-    if (err) throw err;
-
-    // Extract the topic_id from the results
-    const topic_id = topicResults[0].topic_id;
-
-    console.log('topic_id :', topic_id);
-
-    // Run the second query to get the subtopic_name
-    connection.query(subtopic_idQuery, [level, topic_id], (err, subtopicResults) => {
-      if (err) throw err;
-
-      // Extract the subtopic_name from the results
-      const subtopic_name = subtopicResults.map(val=> val.subTopic_name);
-      const subTopic_id = subtopicResults.map(val => val.subTopic_id)
-      console.log('subtopicResults:', subtopicResults); 
-      // Now you have the subtopic_name, you can do whatever you want with it
-      const data = subtopic_name.map((name, index) => ({
-        subTopic_id: subTopic_id[index],
-        subtopic_name: name,
-      }));
-      
-      console.log('Transformed Data:', data);
-      res.send(data);
-
-      // Don't forget to close the connection when you're done with it
-    //   connection.end();
-    });
-  });
-       }
-       catch(err){
-        console.log('err', err);
-       }
+    try {
+      console.log('req.body====>>>>>', req.body);
+      const { level, course } = req.body;
+    
+      const topic_idQuery = 'SELECT t.topic_id FROM topics t WHERE t.topic_name = ?';
+      const level_idQuery = 'SELECT l.level_id from levels l where l.Level = ? ';
+      const subtopic_idQuery = 'SELECT s.subTopic_name , s.subTopic_id FROM sub_topics s WHERE s.LEVEL = ? AND s.TOPIC_ID = ?';
+    
+      // Run the first query to get the topic_id
+      connection.query(topic_idQuery, [course], (err, topicResults) => {
+        if (err) throw err;
+    
+        // Extract the topic_id from the results
+        const topic_id = topicResults[0].topic_id;
+    
+        console.log('topic_id:', topic_id);
+    
+        // Run the query to get the level_id
+        connection.query(level_idQuery, [level], (err, levelResults) => {
+          if (err) throw err;
+    
+          // Extract the level_id from the results
+          const level_id = levelResults[0].level_id;
+    
+          console.log('level_id:', level_id);
+    
+          // Run the query to get the subtopic_name using level_id
+          connection.query(subtopic_idQuery, [level_id, topic_id], (err, subtopicResults) => {
+            if (err) throw err;
+    
+            // Extract the subtopic_name and subTopic_id from the results
+            const subtopic_name = subtopicResults.map(val => val.subTopic_name);
+            const subTopic_id = subtopicResults.map(val => val.subTopic_id);
+    
+            console.log('subtopicResults:', subtopicResults);
+    
+            // Transform the data
+            const data = subtopic_name.map((name, index) => ({
+              subTopic_id: subTopic_id[index],
+              subtopic_name: name,
+            }));
+    
+            console.log('Transformed Data:', data);
+            res.send(data);
+    
+            // Don't forget to close the connection when you're done with it
+            //   connection.end();
+          });
+        });
+      });
+    } catch (err) {
+      console.log('err', err);
+    }
+   
+    
+    
+    
+    
+    
+    
    }
 
    const addSubTopic = (req,res) =>{
@@ -80,9 +99,11 @@ const courseLevel = (req, res) => {
       const { addSubTopic, addLink, selectcourse, selectLevel } = req.body;
   
       const getTopicIdQuery = 'SELECT topic_id FROM topics WHERE topic_name = ?';
+      console.log('getTopicIdQuery===>>>>', getTopicIdQuery);
       const insertSubTopicQuery =
         'INSERT INTO sub_topics (subTopic_name, LEVEL, LINK, TOPIC_ID) VALUES (?,?,?,?)';
-      const getLevelId = 'SELECT level_id FROM level WHERE LEVEL = ?';
+      const getLevelId = 'SELECT level_id FROM levels WHERE Level = ?';
+      console.log('getLevelId===>>>>', getLevelId);
   
       connection.query(getTopicIdQuery, [selectcourse], (err, courseResult) => {
         if (err) {
@@ -94,6 +115,7 @@ const courseLevel = (req, res) => {
             res.status(404).json({ message: 'Course not found' });
           } else {
             const topicId = courseResult[0].topic_id;
+            console.log('topicId===>>>>', topicId);
   
             connection.query(getLevelId, [selectLevel], (err, getLevelIdResult) => {
               if (err) {
