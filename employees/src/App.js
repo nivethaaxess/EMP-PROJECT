@@ -6,6 +6,8 @@ import Sidepanel from "./component/sidepanel";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 library.add(fas);
 
@@ -20,6 +22,7 @@ function App() {
           <Route path="/sidebar" element={<Sidebar />} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer />
 
     </div>
   );
