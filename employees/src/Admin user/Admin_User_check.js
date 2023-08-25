@@ -717,7 +717,26 @@ const Admin_User_check = ({ toggleDrawer }) => {
 //     status: '',
 //   });
 
-const[projectDetails, setProjectDetails] = useState('');
+const[projectDetails, setProjectDetails] = useState({
+    title: "",
+    description: "",
+    link: "",
+    start_Date: "",
+    end_Date: "",
+    status: "",
+    Choose_domain : "",
+    Add_course: ""
+});
+const handleSubmitClick = async (event) => {
+  event.preventDefault();
+
+  try {
+    const response = await axios.post('http://localhost:3007/api/project', projectDetails);
+    console.log('Response:', response.data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
 
   const handleInputChanges = (event) => {
     const { name, value } = event.target;
@@ -732,12 +751,6 @@ const[projectDetails, setProjectDetails] = useState('');
     // Add your logic to handle form submission here
     console.log('Submitted Project Details:', projectDetails);
   };
-
- const handleSubmitClick ={
-  
- }
-
-
 
 
   return (
@@ -1121,7 +1134,7 @@ const[projectDetails, setProjectDetails] = useState('');
                           size="small"
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          value={course_chooseDomain1}
+                          value={projectDetails.Choose_domain}
                           label="Age"
                           onChange={(e) => {
                             course_chooseDomain(e.target.value);
@@ -1265,14 +1278,14 @@ const[projectDetails, setProjectDetails] = useState('');
                   displayEmpty
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={domain}
+                  value={projectDetails.Choose_domain}
                   label="Age"
                   onChange={domainChoose}
                 >
                   {}
                   {autoFill.map((option, index) => (
-                    <MenuItem key={index} value={option.domain_name}>
-                      {option.domain_name}
+                    <MenuItem key={index} value={option.Choose_domain}>
+                      {option.Choose_domain}
                     </MenuItem>
                   ))}
                 </Select>

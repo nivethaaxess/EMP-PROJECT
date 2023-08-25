@@ -179,18 +179,18 @@ const courseLevel = (req, res) => {
      console.log("Inserted project");
 
     try {
-      const { title, description, link, start_date, end_date, status } = req.body;
+      const { title, description, link, start_date, end_date, status ,Choose_domain,Add_course} = req.body;
         console.log('reqbody', req.body);
-      const sqlquery = `INSERT INTO project (title, description, link, start_date, end_date, status) VALUES (?, ?, ?, ?, ?, ?)`;
+      const sqlquery = `INSERT INTO project (title, description, link, start_date, end_date, status,Choose_domain,Add_course) VALUES (?, ?, ?, ?, ?, ?,?,?)`;
   
-      connection.query(sqlquery, [title, description, link, start_date, end_date,status], (err, results) => {
+      connection.query(sqlquery, [title, description, link, start_date, end_date,status,Choose_domain,Add_course], (err, results) => {
         if (err) {
           console.error('Error executing the query:', err);
           res.status(500).json({ error: 'Internal Server Error' });
           return;
         }
-        res.json("project register successfully");
-      });
+        res.json({results})
+             });
     } catch (err) {
       console.error('Error executing the query:', err);
     }
