@@ -39,8 +39,8 @@ router.post('/api/course/level',Admin_edit.courseLevel);
 router.post('/api/get/subTopics',Admin_edit.getSubTopics);
 router.post('/api/subTopics/add',Admin_edit.addSubTopic);
 router.post('/api/subTopics/edit',Admin_edit.editSubTopic);
-router.post('/api/project',Admin_edit.project);
-
+router.post('/api/project/list',Admin_edit.projectlist);
+router.get('/api/project/adds', Admin_edit.addProject);
 
 
 const employeeData = require("../EmployeeData/employeeData")

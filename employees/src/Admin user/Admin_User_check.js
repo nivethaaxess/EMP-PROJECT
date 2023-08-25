@@ -175,6 +175,8 @@ const Admin_User_check = ({ toggleDrawer }) => {
 
   const [getSubTopics, setgetSubTopics] = useState([]);
 
+  const [getTitle, setgetTitle] = useState([]);
+
   const [courseLevel, setCourseLevel] = useState([]);
 
   const [selectLevel, setSelectLevel] = useState("");
@@ -733,11 +735,32 @@ const[projectDetails, setProjectDetails] = useState('');
     console.log('Submitted Project Details:', projectDetails);
   };
 
- const handleSubmitClick ={
-  
- }
+  const formatReverseDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${year}-${month}-${day}`;
+  }
+  useEffect(() => {
+    // When projectDetails.start_date or projectDetails.end_date changes, format them and update the state
+    const formattedStartDate = formatReverseDate(projectDetails.start_date);
+    const formattedEndDate = formatReverseDate(projectDetails.end_date);
+    setProjectDetails({
+      ...projectDetails,
+      start_date: formattedStartDate,
+      end_date: formattedEndDate,
+    });
+  }, [projectDetails.start_date, projectDetails.end_date]);
 
+  const handleInputChanges1 = (event) => {
+    const { name, value } = event.target;
+    setProjectDetails({ ...projectDetails, [name]: value });
+  };
 
+  const handleSubmitClick ={
+
+  };
 
 
   return (
@@ -1184,29 +1207,29 @@ const[projectDetails, setProjectDetails] = useState('');
             margin="normal"
           />
           <TextField
-            fullWidth
-            label="Start Date"
-            type="date"
-            name="startDate"
-            value={projectDetails.start_date}
-            onChange={handleInputChanges}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            margin="normal"
-          />
-          <TextField
-            fullWidth
-            label="End Date"
-            type="date"
-            name="endDate"
-            value={projectDetails.end_date}
-            onChange={handleInputChanges}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            margin="normal"
-          />
+        fullWidth
+        label="Start Date (DD-MM-YYYY)"
+        type="date"
+        name="start_date"
+        value={projectDetails.start_date}
+        onChange={handleInputChanges}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        margin="normal"
+      />
+      <TextField
+        fullWidth
+        label="End Date (DD-MM-YYYY)"
+        type="date"
+        name="end_date"
+        value={projectDetails.end_date}
+        onChange={handleInputChanges}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        margin="normal"
+      />
           <FormControl fullWidth margin="normal">
             <InputLabel>Status</InputLabel>
             <Select
@@ -1483,10 +1506,73 @@ const[projectDetails, setProjectDetails] = useState('');
                               sx={{ marginLeft: "30px" }}
                             />
                           </AccordionSummary>
-
+{/* //names list item basic// */}
                           <AccordionDetails>
                             <List>
                               {getSubTopics.map((item1, index) => (
+                                <ListItem key={index} component="li">
+                                  {editedIndex === index ? (
+                                    <>
+                                      <TextField
+                                        value={subCourse_edited}
+                                        onChange={handleInputChange1}
+                                        size="small"
+                                        // sx={{width:'70px'}}
+                                      />
+
+                                      <DoneIcon
+                                        sx={{
+                                          marginLeft: "10px",
+                                          fontSize: "15px",
+                                          color: "#40c463",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() =>
+                                          handleSaveClick1(
+                                            item1.subTopic_id,
+                                            index,
+                                            item
+                                          )
+                                        }
+                                      />
+                                      {console.log("item====>>>>>", item1)}
+                                    </>
+                                  ) : (
+                                    <>
+                                      {/* <ListItemText
+                                        sx={{ cursor: 'pointer' , backgroundColor:'red' }}
+                                        primary={item.subtopic_name}
+                                        onClick={() => handleEditClick1(index, item)}
+                                      /> */}
+                                      {/* <h5>hhhh</h5> */}
+                                      <TextField
+                                        // sx={{ cursor: 'pointer', fontSize: '3px', }}
+
+                                        value={item1.subtopic_name}
+                                        size="small"
+                                        //  onClick={() => handleEditClick1(index, item)}
+                                      />
+
+                                      <EditIcon
+                                        sx={{
+                                          fontSize: "15px",
+                                          marginLeft: "10px",
+                                          color: "#5e1acc",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() =>
+                                          handleEditClick1(index, item1, item)
+                                        }
+                                      />
+                                    </>
+                                  )}
+                                </ListItem>
+                              ))}
+                            </List>
+                          </AccordionDetails>
+                          <AccordionDetails>
+                            <List>
+                              {getTitle.map((item1, index) => (
                                 <ListItem key={index} component="li">
                                   {editedIndex === index ? (
                                     <>
