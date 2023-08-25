@@ -39,6 +39,8 @@ router.post('/api/course/level',Admin_edit.courseLevel);
 router.post('/api/get/subTopics',Admin_edit.getSubTopics);
 router.post('/api/subTopics/add',Admin_edit.addSubTopic);
 router.post('/api/subTopics/edit',Admin_edit.editSubTopic);
+router.post('/api/project',Admin_edit.project);
+
 
 
 const employeeData = require("../EmployeeData/employeeData")
@@ -53,6 +55,7 @@ const employeeData = require("../EmployeeData/employeeData")
     router.post('/api/domain',employeeData.domaingetdata)
     router.post('/api/userchange',employeeData.Userchange)
     router.put('/updateuser/:User_Id',employeeData.Userupdate)     
+    
        
  // employeeData ends ----------- 
 

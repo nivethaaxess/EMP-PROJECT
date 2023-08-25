@@ -175,7 +175,27 @@ const courseLevel = (req, res) => {
       }
    }
 
+   const project = (req, res) => {
+     console.log("Inserted project");
+
+    try {
+      const { title, description, link, start_date, end_date, status } = req.body;
+        console.log('reqbody', req.body);
+      const sqlquery = `INSERT INTO project (title, description, link, start_date, end_date, status) VALUES (?, ?, ?, ?, ?, ?)`;
+  
+      connection.query(sqlquery, [title, description, link, start_date, end_date,status], (err, results) => {
+        if (err) {
+          console.error('Error executing the query:', err);
+          res.status(500).json({ error: 'Internal Server Error' });
+          return;
+        }
+        res.json("project register successfully");
+      });
+    } catch (err) {
+      console.error('Error executing the query:', err);
+    }
+  };
+  
 
 
-
-module.exports = { courseLevel , getSubTopics , addSubTopic , editSubTopic}
+module.exports = { courseLevel , getSubTopics , addSubTopic , editSubTopic,project}
