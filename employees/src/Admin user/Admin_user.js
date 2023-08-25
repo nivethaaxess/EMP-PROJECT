@@ -578,7 +578,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
         </BootstrapDialogTitle> */}
               <Tabs value={activeTab} onChange={handleTabChange} centered>
                 <Tab label="DOMAIN" />
-                <Tab label="COURSE" />
+                <Tab label="COURSE111" />
 
               </Tabs>
               <Box>
