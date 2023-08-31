@@ -40,7 +40,9 @@ router.post('/api/get/subTopics',Admin_edit.getSubTopics);
 router.post('/api/subTopics/add',Admin_edit.addSubTopic);
 router.post('/api/subTopics/edit',Admin_edit.editSubTopic);
 router.post('/api/project/list',Admin_edit.projectlist);
-router.get('/api/project/adds', Admin_edit.addProject);
+router.post('/api/project/get',Admin_edit.getProject);
+router.post('/api/project/adds',Admin_edit.addProject);
+router.post('/api/project/edits',Admin_edit.editProject);
 
 
 const employeeData = require("../EmployeeData/employeeData")

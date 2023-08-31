@@ -182,54 +182,161 @@ const editSubTopic = (req, res) => {
 const projectlist = (req, res) => {
   console.log("Inserted project");
 
-  try {
-    const { title, description, link, start_date, end_date, status } = req.body;
-    console.log("reqbody", req.body);
-    const sqlquery = `INSERT INTO project (title, description, link, start_date, end_date, status) VALUES (?, ?, ?, ?, ?, ?)`;
 
-    connection.query(
-      sqlquery,
-      [title, description, link, start_date, end_date, status],
-      (err, results) => {
+    try {
+      const { title, description, link, start_date, end_date, status ,Choose_domain,Add_course} = req.body;
+        console.log('reqbody', req.body);
+      const sqlquery = `INSERT INTO project (title, description, link, start_date, end_date, status,Choose_domain,Add_course) VALUES (?, ?, ?, ?, ?, ?,?,?)`;
+  
+      connection.query(sqlquery, [title, description, link, start_date, end_date,status,Choose_domain,Add_course], (err, results) => {
         if (err) {
           console.error("Error executing the query:", err);
           res.status(500).json({ error: "Internal Server Error" });
           return;
         }
-        res.json("project register successfully");
-      }
-    );
-  } catch (err) {
-    console.error("Error executing the query:", err);
-  }
-};
 
-const addProject = (req, res) => {
-  try {
-    console.log("req.body===>>>>", req.body);
-    const { proj_id, title, description, link, start_date, end_date, status } =
-      req.body;
+        res.json({results})
+             });
+    } catch (err) {
+      console.error('Error executing the query:', err);
+    }
+  };
 
-    const insertProjectQuery =
-      "INSERT INTO projects (proj_id, title, description, link, start_date, end_date, status) VALUES (?,?,?,?,?,?,?)";
+  const getProject = (req, res) => {
+    try {
+      console.log("req.body====>>>>>", req.body);
+      const { domain , course } = req.body;
+  
+      const proj_idQuery =
+        "SELECT p.proj_id FROM project p WHERE p.title = ?";
+      const domain_idQuery = "SELECT d.domain_id from domain d where d.domain = ? ";
+      const project_detailsQuery =
+      "SELECT p.proj_id, p.title, p.description, p.start_date, p.end_date, p.status p.Choose_domain, p.Add_course FROM projects p WHERE p.domain_id = ? p.course_id=?";  
+      // Run the first query to get the topic_id
+      connection.query(proj_idQuery, [course], (err, projResults) => {
+        if (err) throw err;
+  
+        // Extract the topic_id from the results
+        const proj_id = projResults[0].proj_id;
+  
+        console.log("proj_id:", proj_id);
+  
+        // Run the query to get the level_id
+        connection.query(proj_idQuery, [course], (err, domainResults) => {
+          if (err) throw err;
+  
+          // Extract the level_id from the results
+          const domain_id = domainResults[0].domain_id;
+  
+          console.log("domain_id:", domain_id);
+  
+          // Run the query to get the subtopic_name using level_id
+          connection.query(
+            project_detailsQuery,
+            [domain_id, proj_id],
+            (err, projdetailsResults) => {
+              if (err) throw err;
+  
+              // Extract the subtopic_name and subTopic_id from the results
+              const project_details = projdetailsResults.map((val) => ({
+                proj_id: val.proj_id,
+                title: val.title,
+                description: val.description,
+                start_date: val.start_date,
+                end_date: val.end_date,
+                status: val.status,
+              })); 
+              // Don't forget to close the connection when you're done with it
+              //   connection.end();
+              console.log("Project Details:", project_details);
+            res.send(project_details);
+            }
+          );
+        });
+      });
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+  
+  const addProject = (req, res) => {
+    try {
+      console.log("req.body===>>>>", req.body);
+      const { proj_id, title, description, link, start_date, end_date, status, Add_course, Choose_domain } = req.body;
+  
+      const getDomainIdQuery = "SELECT domain_id FROM domain WHERE domain_name = ?"; // Assuming you want to get domain_id
+      console.log("getDomainIdQuery===>>>>", getDomainIdQuery);
+      const insertProjectQuery =
+        "INSERT INTO project (proj_id, title, description, link, start_date, end_date, status, Add_course, Choose_domain, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  
+      connection.query(getDomainIdQuery, [Choose_domain], (err, domainResult) => {
+        if (err) {
+          console.log("Error retrieving domain_id:", err);
+          res.status(500).json({ error: "Error retrieving domain_id" });
+        } else {
+          if (domainResult.length === 0) {
+            console.log("Domain not found for FRONTEND value:", domainResult);
+            res.status(404).json({ message: "Domain not found" });
+          } else {
+            const domainId = domainResult[0].domain_id;
+  
+            // You also need to get courseId from the course, but I don't see a getCourseId query, so assuming you have it.
+            const courseId = 1; // Replace with the actual courseId
+  
+            connection.query(
+              insertProjectQuery,
+              [proj_id, title, description, link, start_date, end_date, status, Add_course, Choose_domain, domainId],
+              (err, result) => {
+                if (err) {
+                  console.log("Error inserting data into projects table:", err);
+                  res.status(500).json({ error: "Error inserting data" });
+                } else {
+                  console.log("Data inserted into projects table:", result);
+                  res.json({ data: result, message: "Project Insert" });
+                }
+              }
+            );
+          }
+        }
+      });
+    } catch (err) {
+      console.log("err", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+  
+  
+  const editProject = (req, res) => {
+    try {
+      console.log("req.body=======>>>>>>>", req.body);
+  
+      const projectId = req.body.proj_id;
+    const newTitle = req.body.title;
+    const newDescription = req.body.description;
+    const newStartDate = req.body.start_date;
+    const newEndDate = req.body.end_date;
+    const newStatus = req.body.status;
+    const newAddCourse = req.body.Add_course;
+    const newChoosedomain = req.body.Choose_domain;
+
+    const updateQuery =
+      "UPDATE projects SET title = ?, description = ?, start_date = ?, end_date = ?, status = ?, Add_course =?, Choose_domain =? WHERE proj_id = ?";
 
     connection.query(
-      insertProjectQuery,
-      [proj_id, title, description, link, start_date, end_date, status],
-      (err, result) => {
+      updateQuery,
+      [newTitle,newAddCourse, newChoosedomain,newDescription, newStartDate, newEndDate, newStatus, projectId],
+      (err, result) => {      
         if (err) {
-          console.log("Error inserting data into projects table:", err);
-          res.status(500).json({ error: "Error inserting data" });
-        } else {
-          console.log("Data inserted into projects table:", result);
-          res.json({ data: result, message: "Project Added" });
+          res.send(err);
+          console.error("Error updating project:", err);
+          return;
         }
-      }
-    );
-  } catch (err) {
-    console.log("err", err);
-  }
-};
+        console.log("Data updated successfully!");
+        res.send(result);
+      });
+    } catch {}
+  };
+ 
 
 module.exports = {
   courseLevel,
@@ -237,5 +344,7 @@ module.exports = {
   addSubTopic,
   editSubTopic,
   projectlist,
+  getProject,
   addProject,
+  editProject,  
 };

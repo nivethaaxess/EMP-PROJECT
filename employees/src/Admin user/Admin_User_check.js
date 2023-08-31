@@ -158,9 +158,21 @@ const Admin_User_check = ({ toggleDrawer }) => {
     "BASIC",
     "ADVANCE",
     "INTERMEDIATE",
-    "PROJECT",
-    "OTHERS",
+    //  "PROJECT",
+    //  "OTHERS", 
   ]);
+
+  const [formDatas, setFormDatas] = useState({
+    title: '',
+    description: '',
+    startDate: '',
+    endDate: '',
+  });
+
+
+  const [opened, setOpened] = useState(false);
+  const [checkBox_val2, setCheckBox_Val2] = useState(["PROJECT","OTHERS"]);
+
   const [domainAndCourse, setdomainAndCourse] = useState([]);
 
   const [editedItem, setEditedItem] = useState(null);
@@ -209,9 +221,16 @@ const Admin_User_check = ({ toggleDrawer }) => {
   const [subTopicexpanded, setsubTopicexpanded] = useState(null);
 
   const [popOpen, setpopOpen] = useState(false);
+
+  const [popClose, setpopClose] = useState(true);
+
   const [addSubTopic, setAddSubTopic] = useState("");
 
   const [addLink, setAddLink] = useState("");
+
+  const [sdate, setsdate] = useState("");
+
+  const [edate, setedate] =useState("");
 
   const [reloadStatus, setReloadSatus] = useState("");
 
@@ -247,6 +266,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
   };
 
   const handleCancelClick = () => {
+
     setEditedIndex(-1);
   };
 
@@ -276,7 +296,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
         console.log("data33333333333===>>>>", data);
         setReloadSatus(data);
         openStatus(selectLevel);
-        setAddSubTopic("");
+        setAddSubTopic(""); 
         setAddLink("");
       })
       .catch((err) => console.log("err===>>>", err));
@@ -291,8 +311,23 @@ const Admin_User_check = ({ toggleDrawer }) => {
     console.log("val+>>>>>>>>>>>>>", val);
     console.log("selectcourse+>>>>>>>>>>>>>", selectcourse);
     console.log("selectLevel+>>>>>>>>>>>>>", selectLevel);
-    setpopOpen(true);
+    if(val == 'OTHERS' || val == 'PROJECT'){
+      setOpens(true);
+  
+      // setOpened(true)
+      // handleClickOpen3();
+    }else{
+      console.log("DINESH+++++++++++++++++++222222222222222222222222222")
+      setpopOpen(true);
+    }
+    
   };
+
+  const handleClickOpen3 = () => {
+    setOpened(true);
+    console.log("DINESH+++++++++++++++++++111111111111111111111111")
+  };
+
 
   const handleDialogClose = () => {
     setpopOpen(false);
@@ -687,7 +722,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
       level,
       course,
     };
-
+    
     axios
       .post("http://localhost:3007/api/get/subTopics", data)
       .then((val) => {
@@ -707,7 +742,10 @@ const Admin_User_check = ({ toggleDrawer }) => {
   const add_Link = (e) => {
     setAddLink(e.target.value);
   };
-
+ 
+//  const start_date = (e) = {
+//     setpopClose
+//   }
  
 // const ProjectForm = () => {
 //   const [projectDetails, setProjectDetails] = useState({
@@ -719,7 +757,26 @@ const Admin_User_check = ({ toggleDrawer }) => {
 //     status: '',
 //   });
 
-const[projectDetails, setProjectDetails] = useState('');
+const[projectDetails, setProjectDetails] = useState({
+    title: "",
+    description: "",
+    link: "",
+    start_Date: "",
+    end_Date: "",
+    status: "",
+    Choose_domain : "",
+    Add_course: ""
+}); 
+const handleSubmitClick = async (event) => {
+  event.preventDefault();
+
+  try {
+    const response = await axios.post('http://localhost:3007/api/project', projectDetails);
+    console.log('Response:', response.data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
 
   const handleInputChanges = (event) => {
     const { name, value } = event.target;
@@ -735,34 +792,97 @@ const[projectDetails, setProjectDetails] = useState('');
     console.log('Submitted Project Details:', projectDetails);
   };
 
-  const formatReverseDate = (date) => {
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
-    return `${year}-${month}-${day}`;
+const [ calc , setCalc] = useState({
+  start_date: '',
+  end_date: '',
+});
+
+const formatDate = (date) => {
+  const d = new Date(date);
+  const year = d.getFullYear();
+  let month = '' + (d.getMonth() + 1);
+  let day = '' + d.getDate();
+
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return [year, month, day].join('-');
+};
+
+const handleInputChanges2 = (e) => {
+  const { name, value } = e.target;
+  setCalc({
+    ...calc,
+    [name]: value,
+  });
+};
+
+const [opens, setOpens] = useState(false);
+
+
+const handleClickOpens = () => {
+  setOpens(true);
+};
+
+const handleCloses = () => {
+  setOpens(false);
+};
+
+
+
+const [errors, setErrors] = useState({
+  title :false,
+  description: false,
+  startDate: false,
+  endDate: false,
+})
+const[isSubmitting, setIsSubmitting] = useState(false);
+
+
+
+const handleClose3 = () => {
+  setOpened(false);
+};
+
+const handleInputChange3 = (e) => {
+  const { name, value } = e.target;
+  setFormDatas({
+    ...formDatas,
+    [name]: value,
+  });
+  setErrors({
+    ...errors,
+    [name]: false,
+  });
+};
+
+const handleSubmit3 = () => {
+  if(!formDatas.title || formDatas.description || formDatas.startDate || formDatas.endDate) {
+    setErrors({
+      title:!formDatas.title,
+      description:!formDatas.description,
+      startDate:!formDatas.startDate,
+      endDate:!formDatas.endDate,
+    })  
   }
-  useEffect(() => {
-    // When projectDetails.start_date or projectDetails.end_date changes, format them and update the state
-    const formattedStartDate = formatReverseDate(projectDetails.start_date);
-    const formattedEndDate = formatReverseDate(projectDetails.end_date);
-    setProjectDetails({
-      ...projectDetails,
-      start_date: formattedStartDate,
-      end_date: formattedEndDate,
-    });
-  }, [projectDetails.start_date, projectDetails.end_date]);
+  else {
+  // You can handle form submission here
+  console.log("form datas are not filled",formDatas);
+  handleClose3();
+   }
 
-  const handleInputChanges1 = (event) => {
-    const { name, value } = event.target;
-    setProjectDetails({ ...projectDetails, [name]: value });
-  };
+   setIsSubmitting(true); // Disable the submit button
+    // Simulate an API call or any asynchronous operation
+    // setTimeout(() => {
+    //   console.log('Form data submitted:', formDatas);
+    //   setIsSubmitting(false); // Enable the submit button after the operation is complete
+    //   handleClose();
+    // }, 1000); 
 
-  const handleSubmitClick ={
-
-  };
+};
 
 
+ 
   return (
     <Box
       sx={{
@@ -1144,13 +1264,13 @@ const[projectDetails, setProjectDetails] = useState('');
                           size="small"
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          value={course_chooseDomain1}
+                          value={projectDetails.Choose_domain}
                           label="Age"
                           onChange={(e) => {
                             course_chooseDomain(e.target.value);
                           }}
-                        >
-                          {autoFill.map((option, index) => (
+                        > {console.log("data=========>>>>>>>",data)}
+                          {data.map((option, index) => (
                             <MenuItem key={index} value={option.domain_name}>
                               {option.domain_name}
                             </MenuItem>
@@ -1208,11 +1328,11 @@ const[projectDetails, setProjectDetails] = useState('');
           />
           <TextField
         fullWidth
-        label="Start Date (DD-MM-YYYY)"
+        label="Start Date (YYYY-MM-DD)"
         type="date"
         name="start_date"
-        value={projectDetails.start_date}
-        onChange={handleInputChanges}
+        value={formatDate(calc.start_date)}
+        onChange={handleInputChanges2}
         InputLabelProps={{
           shrink: true,
         }}
@@ -1220,16 +1340,16 @@ const[projectDetails, setProjectDetails] = useState('');
       />
       <TextField
         fullWidth
-        label="End Date (DD-MM-YYYY)"
+        label="End Date (YYYY-MM-DD)"
         type="date"
         name="end_date"
-        value={projectDetails.end_date}
-        onChange={handleInputChanges}
+        value={formatDate(calc.end_date)}
+        onChange={handleInputChanges2}
         InputLabelProps={{
           shrink: true,
         }}
         margin="normal"
-      />
+        />
           <FormControl fullWidth margin="normal">
             <InputLabel>Status</InputLabel>
             <Select
@@ -1237,6 +1357,7 @@ const[projectDetails, setProjectDetails] = useState('');
               value={projectDetails.status}
               onChange={handleInputChanges}
             >
+
               <MenuItem value="Planning">Planning</MenuItem>
               <MenuItem value="In Progress">In Progress</MenuItem>
               <MenuItem value="Completed">Completed</MenuItem>
@@ -1264,6 +1385,7 @@ const[projectDetails, setProjectDetails] = useState('');
               <Box sx={{ marginLeft: "45%" }}>
                 <Button
                   sx={{
+                    
                     backgroundColor: "#5e1acc",
                     color: "white",
                     "&:hover": {
@@ -1275,6 +1397,104 @@ const[projectDetails, setProjectDetails] = useState('');
                 >
                   OPEN POPUP
                 </Button>
+
+                {/* <Button variant="outlined" color="primary" onClick={handleClickOpens}>
+                CLICK 
+              </Button> */}
+              {/* <Dialog open={opens} > */}
+              <Dialog open={opens} onClose={handleCloses}>
+             <DialogTitle>PROJECT</DialogTitle>
+             <DialogContent>
+          <DialogContentText>
+          {/* <Button variant="outlined" color="primary" onClick={handleClickOpen3}>
+           OPEN FORM
+      </Button> */}
+      {/* <Dialog open={opened} onClose={handleClose3}> */}
+      <Dialog open={opens} onClose={handleClose3}>
+        <DialogTitle>Form</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please fill in the form below:
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            name="title"
+            label="Title"
+            type="text"
+            fullWidth
+            
+            onChange={handleInputChange3}
+          />
+          <TextField
+            margin="dense"
+            name="description"
+            label="Description"
+            type="text"
+            fullWidth
+            
+            onChange={handleInputChange3}
+          />
+          <TextField
+            margin="dense"
+            name="link"
+            label="Add Link"
+            type="text"
+            
+            fullWidth
+            
+            onChange={handleInputChange3}
+          />
+
+
+          {/* <TextField
+            margin="dense"
+            name="endDate"
+            label="End Date"
+            type="date"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            fullWidth
+           
+            onChange={handleInputChange3}
+          /> */}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloses} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit3} color="primary" disabled={formDatas.title == ''|| formDatas.description == '' || formDatas.startDate == '' || formDatas.endDate == ''}>
+          {/* {isSubmitting ? 'Submit' : 'Submit'} */}
+          SUBMIT
+          </Button>
+        </DialogActions>
+      </Dialog>
+          </DialogContentText>
+          </DialogContent>
+          {/* <DialogActions>
+          <Button onClick={handleClose3} color="primary">
+            Close
+          </Button>
+        </DialogActions> */}
+      </Dialog>
+                {/* <Button sx={{
+                    
+                    backgroundColor: "#5e1acc",
+                    color: "white",
+                    "&:hover": {
+                      backgroundColor: "#5e1acc",
+                      
+                       // Set the hover background color to the same as the normal background color
+                    },
+                  }}
+                  variant="outlined"
+                  onClick={handleClickOpen}
+                >
+                  CLICK ME
+                </Button> */}
+
+
               </Box>
               <FormControl
                 variant="standard"
@@ -1282,30 +1502,53 @@ const[projectDetails, setProjectDetails] = useState('');
                 sx={{ width: "20%", marginLeft: "20%" }}
               >
                 <InputLabel id="demo-simple-select-standard-label">
-                  CHOOSE DOMAIN
+                  CHOOSE DOMAIN 
                 </InputLabel>
-                <Select
+                {/* <Select
                   displayEmpty
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={domain}
+                  value={projectDetails.Choose_domain}
                   label="Age"
                   onChange={domainChoose}
                 >
-                  {}
-                  {autoFill.map((option, index) => (
-                    <MenuItem key={index} value={option.domain_name}>
-                      {option.domain_name}
+                 
+                  {data.map((option, index) => (
+                    <MenuItem key={index} value={option.Choose_domain}>
+                      {option.Choose_domain}
                     </MenuItem>
                   ))}
-                </Select>
+                </Select> */}
+                 <Select
+                          displayEmpty
+                          size="small"
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={projectDetails.Choose_domain}
+                          // label="Age"
+                          onChange={domainChoose}
+                        >
+                          {data.map((option, index) => (
+                            <MenuItem key={index} value={option.domain_name}>
+                              {option.domain_name}
+                            </MenuItem>
+                          ))}
+                        </Select>
               </FormControl>
+              <Box>
+
+              {data.map((option, index) => (
+                    <MenuItem key={index} value={option.Choose_domain}>
+                      {option.Choose_domain}
+                    </MenuItem>
+                  ))}
+              </Box>
             </Box>
           </Box>
 
           {/* <Button onClick={handleDialogOpen}>Open Dialog</Button> */}
 
-          <Dialog
+          <Dialog 
             maxWidth="sm" // Set the maximum width of the dialog
             PaperProps={{
               style: {
@@ -1423,6 +1666,7 @@ const[projectDetails, setProjectDetails] = useState('');
           <Button onClick={handleDialogClose}>Close</Button>
         </DialogActions> */}
           </Dialog>
+          
         </AccordionDetails>
       </Box>
       <Box sx={{ marginTop: "30px", marginBottom: "10px" }}>
@@ -1644,8 +1888,8 @@ const[projectDetails, setProjectDetails] = useState('');
         })}
       </Box>
     </Box>
-  
-  );
-};
+   )
+} 
+    
 
 export default Admin_User_check;

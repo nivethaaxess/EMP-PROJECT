@@ -260,18 +260,18 @@ const Admin_User_check = ({ toggleDrawer }) => {
     });
   };
 
-  // useEffect(() => {
-  //   axios.get('http://localhost:3007/api/domain')
-  //     .then(val => {
-  //       const getData = val.data
-  //       console.log('getData==>>>', getData);
-  //       setAutoFil(getData);
-  //       setData(getData)
-  //     })
-  //     .catch(err => console.log('err===>>>', err));
+  useEffect(() => {
+    axios.get('http://localhost:3007/api/domain')
+      .then(val => {
+        const getData = val.data
+        console.log('getData==>>>', getData);
+        setAutoFil(getData);
+        setData(getData)
+      })
+      .catch(err => console.log('err===>>>', err));
 
 
-  // }, []);
+  }, []);
 
 
 
@@ -578,8 +578,8 @@ const Admin_User_check = ({ toggleDrawer }) => {
         </BootstrapDialogTitle> */}
               <Tabs value={activeTab} onChange={handleTabChange} centered>
                 <Tab label="DOMAIN" />
-                <Tab label="COURSE111" />
-
+                <Tab label="COURSE" />
+                              
               </Tabs>
               <Box>
                 {/* Content for each tab */}
@@ -805,17 +805,25 @@ const Admin_User_check = ({ toggleDrawer }) => {
 
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={domain}
+                  // value={domain}
                   label="Age"
                   onChange={domainChoose}
                 >
-                  {autoFill.map((option, index) => (
+                  {console.log('data===>>>>',data)}
+                  {data.map((option, index) => (
                     <MenuItem key={index} value={option.domain_name}>
                       {option.domain_name}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
+              <Box>
+              {data.map((option, index) => (
+                    <MenuItem key={index} value={option.domain_name}>
+                      {option.domain_name}
+                    </MenuItem>
+                  ))}
+              </Box>
             </Box>
           </Box>
 
@@ -840,7 +848,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                       {course}
                     </Typography>
                   </AccordionSummary>
-                  {/* <AccordionDetails>
+                  <AccordionDetails>
                     <Grid container direction="row" justifyContent="space-around">
                       <Grid item xs={2}>
                         <Item>
@@ -1092,7 +1100,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                                               course
                                             )
                                           }
-                                          aria-label="basic tabs example"
+                                          aria-label=" tabs example"
                                         >
                                           <Tab
                                             label="INPROGRESS"
@@ -1265,8 +1273,8 @@ const Admin_User_check = ({ toggleDrawer }) => {
                                     <Box
                                       sx={{ width: "100%", textAlign: "center" }}
                                     >
-                                      <h4>Title </h4>
-                                      <p>Describtion</p>
+                                      {/* <h4>Title </h4>
+                                      <p>Description</p> */}
                                     </Box>
                                   </List>
                                 </Box>
@@ -1323,7 +1331,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                         </Item>
                       </Grid>
                     </Grid>
-                  </AccordionDetails> */}
+                  </AccordionDetails>
                 </Accordion>
               </Accordion>
             </>
