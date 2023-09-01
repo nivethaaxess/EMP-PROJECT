@@ -159,19 +159,18 @@ const Admin_User_check = ({ toggleDrawer }) => {
     "ADVANCE",
     "INTERMEDIATE",
     //  "PROJECT",
-    //  "OTHERS", 
+    //  "OTHERS",
   ]);
 
   const [formDatas, setFormDatas] = useState({
-    title: '',
-    description: '',
-    startDate: '',
-    endDate: '',
+    title: "",
+    description: "",
+    startDate: "",
+    endDate: "",
   });
 
-
   const [opened, setOpened] = useState(false);
-  const [checkBox_val2, setCheckBox_Val2] = useState(["PROJECT","OTHERS"]);
+  const [checkBox_val2, setCheckBox_Val2] = useState(["PROJECT", "OTHERS"]);
 
   const [domainAndCourse, setdomainAndCourse] = useState([]);
 
@@ -230,7 +229,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
 
   const [sdate, setsdate] = useState("");
 
-  const [edate, setedate] =useState("");
+  const [edate, setedate] = useState("");
 
   const [reloadStatus, setReloadSatus] = useState("");
 
@@ -266,7 +265,6 @@ const Admin_User_check = ({ toggleDrawer }) => {
   };
 
   const handleCancelClick = () => {
-
     setEditedIndex(-1);
   };
 
@@ -296,7 +294,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
         console.log("data33333333333===>>>>", data);
         setReloadSatus(data);
         openStatus(selectLevel);
-        setAddSubTopic(""); 
+        setAddSubTopic("");
         setAddLink("");
       })
       .catch((err) => console.log("err===>>>", err));
@@ -311,23 +309,21 @@ const Admin_User_check = ({ toggleDrawer }) => {
     console.log("val+>>>>>>>>>>>>>", val);
     console.log("selectcourse+>>>>>>>>>>>>>", selectcourse);
     console.log("selectLevel+>>>>>>>>>>>>>", selectLevel);
-    if(val == 'OTHERS' || val == 'PROJECT'){
+    if (val == "OTHERS" || val == "PROJECT") {
       setOpens(true);
-  
+
       // setOpened(true)
       // handleClickOpen3();
-    }else{
-      console.log("DINESH+++++++++++++++++++222222222222222222222222222")
+    } else {
+      console.log("DINESH+++++++++++++++++++222222222222222222222222222");
       setpopOpen(true);
     }
-    
   };
 
   const handleClickOpen3 = () => {
     setOpened(true);
-    console.log("DINESH+++++++++++++++++++111111111111111111111111")
+    console.log("DINESH+++++++++++++++++++111111111111111111111111");
   };
-
 
   const handleDialogClose = () => {
     setpopOpen(false);
@@ -646,8 +642,6 @@ const Admin_User_check = ({ toggleDrawer }) => {
     // You can update the data in the state or send the updated data to the server here.
   };
 
-  
-
   useEffect(() => {
     // window.location.reload();
     console.log("DINESH");
@@ -676,15 +670,11 @@ const Admin_User_check = ({ toggleDrawer }) => {
 
   // }
 
-   const handleSubmitEvent = ()=>
-   {
-      axios.get('http://localhost:3007/api/project')
-        .then((response)=>
-        {
-           console.log("resssuwuwu====>",response.data);
-        }
-        )
-   }
+  const handleSubmitEvent = () => {
+    axios.get("http://localhost:3007/api/project").then((response) => {
+      console.log("resssuwuwu====>", response.data);
+    });
+  };
 
   const handleAccordionChange = (course) => (event, isExpanded) => {
     console.log("course==>>>>", course);
@@ -722,7 +712,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
       level,
       course,
     };
-    
+
     axios
       .post("http://localhost:3007/api/get/subTopics", data)
       .then((val) => {
@@ -742,41 +732,44 @@ const Admin_User_check = ({ toggleDrawer }) => {
   const add_Link = (e) => {
     setAddLink(e.target.value);
   };
- 
-//  const start_date = (e) = {
-//     setpopClose
-//   }
- 
-// const ProjectForm = () => {
-//   const [projectDetails, setProjectDetails] = useState({
-//     title: '',
-//     description: '',
-//     link: '',
-//     startDate: '',
-//     endDate: '',
-//     status: '',
-//   });
 
-const[projectDetails, setProjectDetails] = useState({
+  //  const start_date = (e) = {
+  //     setpopClose
+  //   }
+
+  // const ProjectForm = () => {
+  //   const [projectDetails, setProjectDetails] = useState({
+  //     title: '',
+  //     description: '',
+  //     link: '',
+  //     startDate: '',
+  //     endDate: '',
+  //     status: '',
+  //   });
+
+  const [projectDetails, setProjectDetails] = useState({
     title: "",
     description: "",
     link: "",
     start_Date: "",
     end_Date: "",
-    status: "",
-    Choose_domain : "",
-    Add_course: ""
-}); 
-const handleSubmitClick = async (event) => {
-  event.preventDefault();
+    status: "", 
+    Choose_domain: "",
+    Add_course: "",
+  });
+  const handleSubmitClick = async (event) => {
+    event.preventDefault();
 
-  try {
-    const response = await axios.post('http://localhost:3007/api/project', projectDetails);
-    console.log('Response:', response.data);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
+    try {
+      const response = await axios.post(
+        "http://localhost:3007/api/project",
+        projectDetails
+      );
+      console.log("Response:", response.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const handleInputChanges = (event) => {
     const { name, value } = event.target;
@@ -789,100 +782,127 @@ const handleSubmitClick = async (event) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Add your logic to handle form submission here
-    console.log('Submitted Project Details:', projectDetails);
+    console.log("Submitted Project Details:", projectDetails);
   };
 
-const [ calc , setCalc] = useState({
-  start_date: '',
-  end_date: '',
-});
-
-const formatDate = (date) => {
-  const d = new Date(date);
-  const year = d.getFullYear();
-  let month = '' + (d.getMonth() + 1);
-  let day = '' + d.getDate();
-
-  if (month.length < 2) month = '0' + month;
-  if (day.length < 2) day = '0' + day;
-
-  return [year, month, day].join('-');
-};
-
-const handleInputChanges2 = (e) => {
-  const { name, value } = e.target;
-  setCalc({
-    ...calc,
-    [name]: value,
+  const [calc, setCalc] = useState({
+    start_date: "",
+    end_date: "",
   });
-};
 
-const [opens, setOpens] = useState(false);
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    let month = "" + (d.getMonth() + 1);
+    let day = "" + d.getDate();
 
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
 
-const handleClickOpens = () => {
-  setOpens(true);
-};
+    return [year, month, day].join("-");
+  };
 
-const handleCloses = () => {
-  setOpens(false);
-};
+  const handleInputChanges2 = (e) => {
+    const { name, value } = e.target;
+    setCalc({
+      ...calc,
+      [name]: value,
+    });
+  };
 
+  const [opens, setOpens] = useState(false);
 
+  const handleClickOpens = () => {
+    setOpens(true);
+  };
 
-const [errors, setErrors] = useState({
-  title :false,
-  description: false,
-  startDate: false,
-  endDate: false,
-})
-const[isSubmitting, setIsSubmitting] = useState(false);
+  const handleCloses = () => {
+    setOpens(false);
+  };
 
-
-
-const handleClose3 = () => {
-  setOpened(false);
-};
-
-const handleInputChange3 = (e) => {
-  const { name, value } = e.target;
-  setFormDatas({
-    ...formDatas,
-    [name]: value,
+  const [errors, setErrors] = useState({
+    project_name: false,
+    description: false,
+    add_link: false,
+    
   });
-  setErrors({
-    ...errors,
-    [name]: false,
-  });
-};
+  
 
-const handleSubmit3 = () => {
-  if(!formDatas.title || formDatas.description || formDatas.startDate || formDatas.endDate) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleClose3 = () => {
+    setOpened(false);
+  };
+
+  const handleInputChange3 = (event) => {
+    
+    const { name, value } = event.target;
+    setProjectForm((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+
+    // const { name, value } = event.target;
+    // setFormDatas({
+    //   ...formDatas,
+    //   [name]: value,
+    // });
     setErrors({
-      title:!formDatas.title,
-      description:!formDatas.description,
-      startDate:!formDatas.startDate,
-      endDate:!formDatas.endDate,
-    })  
-  }
-  else {
-  // You can handle form submission here
-  console.log("form datas are not filled",formDatas);
-  handleClose3();
-   }
+      ...errors,
+      [name]: false,
+    });
+  };
+  
+  const handleSubmit3 = async (event) => {
+    event.preventDefault();
 
-   setIsSubmitting(true); // Disable the submit button
+    console.log("Submitted Project Details:", projectForm);
+
+    
+    try {
+      const response = await axios.post(
+        "http://localhost:3007/api/getform/forms",
+        projectForm
+      );
+      console.log("Response:", response.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
+
+
+    if (
+      !formDatas.project_name ||
+      formDatas.description ||
+      formDatas.add_link
+    ) {
+      setErrors({
+        title: !formDatas.project_name,
+        description: !formDatas.description,
+        startDate: !formDatas.add_link,
+      });
+    } else {
+      // You can handle form submission here
+      console.log("form datas are not filled", formDatas);
+      handleClose3();
+    }
+
+    setIsSubmitting(true); // Disable the submit button
     // Simulate an API call or any asynchronous operation
     // setTimeout(() => {
     //   console.log('Form data submitted:', formDatas);
     //   setIsSubmitting(false); // Enable the submit button after the operation is complete
     //   handleClose();
-    // }, 1000); 
+    // }, 1000);
+  };
 
-};
+  const [projectForm, setProjectForm] =useState({
+    project_name:"",
+    description:"",
+    add_link:"",
+  });
 
 
- 
   return (
     <Box
       sx={{
@@ -1245,14 +1265,15 @@ const handleSubmit3 = () => {
                     <Box></Box>
                   </Box>
                 )}
-                {activeTab === 2 && 
-                
+                {activeTab === 2 && (
                   <Container maxWidth="sm">
-      <Box mt={3}>
-                        <FormControl
-                        sx={{ width: "62ch",
+                    <Box mt={3}>
+                      <FormControl
+                        sx={{
+                          width: "62ch",
                           marginLeft: "0px",
-                          marginRright: "36px", }}
+                          marginRright: "36px",
+                        }}
                         variant="standard"
                         size="small"
                       >
@@ -1269,7 +1290,9 @@ const handleSubmit3 = () => {
                           onChange={(e) => {
                             course_chooseDomain(e.target.value);
                           }}
-                        > {console.log("data=========>>>>>>>",data)}
+                        >
+                          {" "}
+                          {console.log("data=========>>>>>>>", data)}
                           {data.map((option, index) => (
                             <MenuItem key={index} value={option.domain_name}>
                               {option.domain_name}
@@ -1278,7 +1301,7 @@ const handleSubmit3 = () => {
                         </Select>
 
                         <OutlinedInput
-                          sx={{ marginTop:"20px", cursor: "pointer" }}
+                          sx={{ marginTop: "20px", cursor: "pointer" }}
                           size="small"
                           id="outlined-adornment-weight"
                           placeholder="ADD COURSE"
@@ -1297,85 +1320,86 @@ const handleSubmit3 = () => {
                             "aria-label": "weight",
                           }}
                         />
+                      </FormControl>
+                      <form onSubmit={handleSubmit}>
+                        <TextField
+                          fullWidth
+                          label="Title"
+                          name="title"
+                          value={projectDetails.title}
+                          onChange={handleInputChanges}
+                          required
+                          margin="normal"
+                        />
+                        <TextField
+                          fullWidth
+                          label="Description"
+                          name="description"
+                          value={projectDetails.description}
+                          onChange={handleInputChanges}
+                          multiline
+                          rows={4}
+                          margin="normal"
+                        />
+                        <TextField
+                          fullWidth
+                          label="Link"
+                          name="link"
+                          value={projectDetails.link}
+                          onChange={handleInputChanges}
+                          margin="normal"
+                        />
+                        <TextField
+                          fullWidth
+                          label="Start Date (YYYY-MM-DD)"
+                          type="date"
+                          name="start_date"
+                          value={formatDate(calc.start_date)}
+                          onChange={handleInputChanges2}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          margin="normal"
+                        />
+                        <TextField
+                          fullWidth
+                          label="End Date (YYYY-MM-DD)"
+                          type="date"
+                          name="end_date"
+                          value={formatDate(calc.end_date)}
+                          onChange={handleInputChanges2}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          margin="normal"
+                        />
+                        <FormControl fullWidth margin="normal">
+                          <InputLabel>Status</InputLabel>
+                          <Select
+                            name="status"
+                            value={projectDetails.status}
+                            onChange={handleInputChanges}
+                          >
+                            <MenuItem value="Planning">Planning</MenuItem>
+                            <MenuItem value="In Progress">In Progress</MenuItem>
+                            <MenuItem value="Completed">Completed</MenuItem>
+                          </Select>
                         </FormControl>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            fullWidth
-            label="Title"
-            name="title"
-            value={projectDetails.title}
-            onChange={handleInputChanges}
-            required
-            margin="normal"
-          />
-          <TextField
-            fullWidth
-            label="Description"
-            name="description"
-            value={projectDetails.description}
-            onChange={handleInputChanges}
-            multiline
-            rows={4}
-            margin="normal"
-          />
-          <TextField
-            fullWidth
-            label="Link"
-            name="link"
-            value={projectDetails.link}
-            onChange={handleInputChanges}
-            margin="normal"
-          />
-          <TextField
-        fullWidth
-        label="Start Date (YYYY-MM-DD)"
-        type="date"
-        name="start_date"
-        value={formatDate(calc.start_date)}
-        onChange={handleInputChanges2}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        margin="normal"
-      />
-      <TextField
-        fullWidth
-        label="End Date (YYYY-MM-DD)"
-        type="date"
-        name="end_date"
-        value={formatDate(calc.end_date)}
-        onChange={handleInputChanges2}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        margin="normal"
-        />
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Status</InputLabel>
-            <Select
-              name="status"
-              value={projectDetails.status}
-              onChange={handleInputChanges}
-            >
+                        <Button
+                          onClick={handleSubmitClick}
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                        >
+                          Create Project
+                        </Button>
+                      </form>
+                    </Box>
+                  </Container>
+                )}
+                ;
+              </Box>
 
-              <MenuItem value="Planning">Planning</MenuItem>
-              <MenuItem value="In Progress">In Progress</MenuItem>
-              <MenuItem value="Completed">Completed</MenuItem>
-            </Select>
-          </FormControl>
-          <Button onClick ={handleSubmitClick} variant="contained" color="primary" fullWidth>
-            Create Project
-          </Button>
-        </form>
-      </Box>
-    </Container>
-
-    
-
-};
-                  </Box> 
-                 
-              
               {/* <Button id="customized-dialog-title" onClose={handleClose}>
                 SAVE
               </Button> */}
@@ -1385,7 +1409,6 @@ const handleSubmit3 = () => {
               <Box sx={{ marginLeft: "45%" }}>
                 <Button
                   sx={{
-                    
                     backgroundColor: "#5e1acc",
                     color: "white",
                     "&:hover": {
@@ -1401,57 +1424,52 @@ const handleSubmit3 = () => {
                 {/* <Button variant="outlined" color="primary" onClick={handleClickOpens}>
                 CLICK 
               </Button> */}
-              {/* <Dialog open={opens} > */}
-              <Dialog open={opens} onClose={handleCloses}>
-             <DialogTitle>PROJECT</DialogTitle>
-             <DialogContent>
-          <DialogContentText>
-          {/* <Button variant="outlined" color="primary" onClick={handleClickOpen3}>
+                {/* <Dialog open={opens} > */}
+                <Dialog open={opens} onClose={handleCloses}>
+                  <DialogTitle>PROJECT</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText>
+                      {/* <Button variant="outlined" color="primary" onClick={handleClickOpen3}>
            OPEN FORM
       </Button> */}
-      {/* <Dialog open={opened} onClose={handleClose3}> */}
-      <Dialog open={opens} onClose={handleClose3}>
-        <DialogTitle>Form</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please fill in the form below:
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            name="title"
-            label="Title"
-            type="text"
-            fullWidth
-            
-            onChange={handleInputChange3}
-          />
-          <TextField
-            margin="dense"
-            name="description"
-            label="Description"
-            type="text"
-            fullWidth
-            
-            onChange={handleInputChange3}
-          />
-          <TextField
-            margin="dense"
-            name="link"
-            label="Add Link"
-            type="text"
-            
-            fullWidth
-            
-            onChange={handleInputChange3}
-          />
+                      {/* <Dialog open={opened} onClose={handleClose3}> */}
+                      <Dialog open={opens} onClose={handleClose3}>
+                        <DialogTitle>Form</DialogTitle>
+                        <DialogContent>
+                          <DialogContentText>
+                            Please fill in the form below:
+                          </DialogContentText>
+                          <TextField
+                            autoFocus
+                            margin="dense"
+                            name="project_name"
+                            label="Project Name"
+                            type="text"
+                            fullWidth
+                            onChange={handleInputChange3}
+                          />
+                          <TextField
+                            margin="dense"
+                            name="description"
+                            label="Description"
+                            type="text"
+                            fullWidth
+                            onChange={handleInputChange3}
+                          />
+                          <TextField
+                            margin="dense"
+                            name="add_link"
+                            label="Add Link"
+                            type="text"
+                            fullWidth
+                            onChange={handleInputChange3}
+                          />
 
-
-          {/* <TextField
+                          {/* <TextField
             margin="dense"
             name="endDate"
             label="End Date"
-            type="date"
+            type="date" 
             InputLabelProps={{
               shrink: true,
             }}
@@ -1459,25 +1477,33 @@ const handleSubmit3 = () => {
            
             onChange={handleInputChange3}
           /> */}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloses} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit3} color="primary" disabled={formDatas.title == ''|| formDatas.description == '' || formDatas.startDate == '' || formDatas.endDate == ''}>
-          {/* {isSubmitting ? 'Submit' : 'Submit'} */}
-          SUBMIT
-          </Button>
-        </DialogActions>
-      </Dialog>
-          </DialogContentText>
-          </DialogContent>
-          {/* <DialogActions>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleCloses} color="primary">
+                            Cancel
+                          </Button>
+                          <Button
+                            onClick={handleSubmit3}
+                            color="primary"
+                            disabled={
+                              projectForm.project_name == "" ||
+                              projectForm.description == "" ||
+                              projectForm.add_link == ""
+                            }
+                          >
+                            {/* {isSubmitting ? 'Submit' : 'Submit'} */}
+                            SUBMIT
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                    </DialogContentText>
+                  </DialogContent>
+                  {/* <DialogActions>
           <Button onClick={handleClose3} color="primary">
             Close
           </Button>
         </DialogActions> */}
-      </Dialog>
+                </Dialog>
                 {/* <Button sx={{
                     
                     backgroundColor: "#5e1acc",
@@ -1493,8 +1519,6 @@ const handleSubmit3 = () => {
                 >
                   CLICK ME
                 </Button> */}
-
-
               </Box>
               <FormControl
                 variant="standard"
@@ -1502,7 +1526,7 @@ const handleSubmit3 = () => {
                 sx={{ width: "20%", marginLeft: "20%" }}
               >
                 <InputLabel id="demo-simple-select-standard-label">
-                  CHOOSE DOMAIN 
+                  CHOOSE DOMAIN
                 </InputLabel>
                 {/* <Select
                   displayEmpty
@@ -1519,36 +1543,35 @@ const handleSubmit3 = () => {
                     </MenuItem>
                   ))}
                 </Select> */}
-                 <Select
-                          displayEmpty
-                          size="small"
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={projectDetails.Choose_domain}
-                          // label="Age"
-                          onChange={domainChoose}
-                        >
-                          {data.map((option, index) => (
-                            <MenuItem key={index} value={option.domain_name}>
-                              {option.domain_name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-              </FormControl>
-              <Box>
-
-              {data.map((option, index) => (
-                    <MenuItem key={index} value={option.Choose_domain}>
-                      {option.Choose_domain}
+                <Select
+                  displayEmpty
+                  size="small"
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={projectDetails.Choose_domain}
+                  // label="Age"
+                  onChange={domainChoose}
+                >
+                  {data.map((option, index) => (
+                    <MenuItem key={index} value={option.domain_name}>
+                      {option.domain_name}
                     </MenuItem>
                   ))}
+                </Select>
+              </FormControl>
+              <Box>
+                {data.map((option, index) => (
+                  <MenuItem key={index} value={option.Choose_domain}>
+                    {option.Choose_domain}
+                  </MenuItem>
+                ))}
               </Box>
             </Box>
           </Box>
 
           {/* <Button onClick={handleDialogOpen}>Open Dialog</Button> */}
 
-          <Dialog 
+          <Dialog
             maxWidth="sm" // Set the maximum width of the dialog
             PaperProps={{
               style: {
@@ -1666,7 +1689,6 @@ const handleSubmit3 = () => {
           <Button onClick={handleDialogClose}>Close</Button>
         </DialogActions> */}
           </Dialog>
-          
         </AccordionDetails>
       </Box>
       <Box sx={{ marginTop: "30px", marginBottom: "10px" }}>
@@ -1750,7 +1772,7 @@ const handleSubmit3 = () => {
                               sx={{ marginLeft: "30px" }}
                             />
                           </AccordionSummary>
-{/* //names list item basic// */}
+                          {/* //names list item basic// */}
                           <AccordionDetails>
                             <List>
                               {getSubTopics.map((item1, index) => (
@@ -1888,8 +1910,7 @@ const handleSubmit3 = () => {
         })}
       </Box>
     </Box>
-   )
-} 
-    
+  );
+};
 
 export default Admin_User_check;
