@@ -50,6 +50,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import { width } from "@mui/system";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import axios from "axios";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import CardActions from '@mui/material/CardActions';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -158,8 +162,8 @@ const Admin_User_check = ({ toggleDrawer }) => {
     "BASIC",
     "ADVANCE",
     "INTERMEDIATE",
-    //  "PROJECT",
-    //  "OTHERS",
+     "PROJECT",
+     "OTHERS",
   ]);
 
   const [formDatas, setFormDatas] = useState({
@@ -192,6 +196,8 @@ const Admin_User_check = ({ toggleDrawer }) => {
 
   const [selectLevel, setSelectLevel] = useState("");
   const [selectcourse, setSelectcourse] = useState("");
+
+  const [getProject,setProject] = useState([]);
 
   const [Htmltopics, setHtmltopics] = useState([
     { topic: "Htmlelement", status: false },
@@ -852,8 +858,11 @@ const Admin_User_check = ({ toggleDrawer }) => {
       [name]: false,
     });
   };
+
+  
   
   const handleSubmit3 = async (event) => {
+    
     event.preventDefault();
 
     console.log("Submitted Project Details:", projectForm);
@@ -869,7 +878,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
       console.error("Error:", error);
     }
 
-
+   
 
     if (
       !formDatas.project_name ||
@@ -894,15 +903,40 @@ const Admin_User_check = ({ toggleDrawer }) => {
     //   setIsSubmitting(false); // Enable the submit button after the operation is complete
     //   handleClose();
     // }, 1000);
-  };
+    
+      
+    };
+    
+    
+    useEffect(() => {
+            console.log('Form data submitted');
+      axios.get("http://localhost:3007/api/projectnew/edits")
+        .then((response) => { 
+          console.log("Responsedata===>", response.data);
+          setProject(response.data)
+          // Update the state with the data received from the API
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }, []);
+  
 
   const [projectForm, setProjectForm] =useState({
     project_name:"",
     description:"",
     add_link:"",
+    
   });
 
-
+  const bull = (
+    <Box
+      component="span"
+      sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
+    >
+      •
+    </Box>
+  );
   return (
     <Box
       sx={{
@@ -925,7 +959,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
               <Tabs value={activeTab} onChange={handleTabChange} centered>
                 <Tab label="DOMAIN" />
                 <Tab label="COURSE" />
-                <Tab label="PROJECT" />
+               {/*  <Tab label="PROJECT" /> */}
               </Tabs>
               <Box>
                 {/* Content for each tab */}
@@ -1730,12 +1764,14 @@ const Admin_User_check = ({ toggleDrawer }) => {
                     }}
                   >
                     {courseLevel?.map((item, index) => (
+                  
                       <div
                         key={index}
                         style={{
                           display: "flex",
                           justifyContent: "space-between",
                         }}
+
                       >
                         <Accordion
                           expanded={subTopicexpanded === item}
@@ -1774,67 +1810,123 @@ const Admin_User_check = ({ toggleDrawer }) => {
                           </AccordionSummary>
                           {/* //names list item basic// */}
                           <AccordionDetails>
-                            <List>
-                              {getSubTopics.map((item1, index) => (
-                                <ListItem key={index} component="li">
-                                  {editedIndex === index ? (
-                                    <>
-                                      <TextField
-                                        value={subCourse_edited}
-                                        onChange={handleInputChange1}
-                                        size="small"
-                                        // sx={{width:'70px'}}
-                                      />
+                          {(item == "PROJECT") ? <>
+                          {getProject.map((item, index) => (
+                           <CardContent key={index}
+                           >
+                           
 
-                                      <DoneIcon
-                                        sx={{
-                                          marginLeft: "10px",
-                                          fontSize: "15px",
-                                          color: "#40c463",
-                                          cursor: "pointer",
-                                        }}
-                                        onClick={() =>
-                                          handleSaveClick1(
-                                            item1.subTopic_id,
-                                            index,
-                                            item
-                                          )
-                                        }
-                                      />
-                                      {console.log("item====>>>>>", item1)}
-                                    </>
-                                  ) : (
-                                    <>
-                                      {/* <ListItemText
-                                        sx={{ cursor: 'pointer' , backgroundColor:'red' }}
-                                        primary={item.subtopic_name}
-                                        onClick={() => handleEditClick1(index, item)}
-                                      /> */}
-                                      {/* <h5>hhhh</h5> */}
-                                      <TextField
-                                        // sx={{ cursor: 'pointer', fontSize: '3px', }}
+                          <Card sx={{ minWidth: 275 }}>
+      <CardContent elevation={3} variant="outlined">
+        <Typography   sx={{ fontSize: 20 }} color="text.secondary" gutterBottom>
+        <i class="ri-eye-line" mx="100%"></i>
+        <p>{item. project_name}</p>
+                          <p>{item.description}</p>
+                          <p>{item.add_link }</p>
+        </Typography>
+        <Typography variant="h5" component="div">
+        
+        </Typography>
+        <Typography sx={{ }} color="text.secondary">
+          
+        </Typography>
+        <Typography variant="body2">
+          
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button size="small"></Button>
+      </CardActions>
+    </Card>
 
-                                        value={item1.subtopic_name}
-                                        size="small"
-                                        //  onClick={() => handleEditClick1(index, item)}
-                                      />
+                          </CardContent>
+                      ))}
+                          
+                          {/* <Card sx={{ minWidth: 275 }}>
+      <CardContent elevation={3} variant="outlined">
+        <Typography   sx={{ fontSize: 15 }} color="text.secondary" gutterBottom>
+        <i class="ri-eye-line"></i>
+        </Typography>
+        <Typography variant="h5" component="div">
+        <br></br>
+        </Typography>
+        <Typography sx={{ mb: 3}} color="text.secondary">
+          <br></br>
+        </Typography>
+        <Typography variant="body2">
+          <br />
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button size="small"></Button>
+      </CardActions>
+    </Card> */}
+    
+                          </>
+                               : <List>
+                               {getSubTopics.map((item1, index) => (
+                                 <ListItem key={index} component="li">
+                                   {editedIndex === index ? (
+                                     <>
+                                       <TextField
+                                         value={subCourse_edited}
+                                         onChange={handleInputChange1}
+                                         size="small"
+                                         // sx={{width:'70px'}}
+                                       />
+ 
+                                       <DoneIcon
+                                         sx={{
+                                           marginLeft: "10px",
+                                           fontSize: "15px",
+                                           color: "#40c463",
+                                           cursor: "pointer",
+                                         }}
+                                         onClick={() =>
+                                           handleSaveClick1(
+                                             item1.subTopic_id,
+                                             index,
+                                             item
+                                           )
+                                         }
+                                       />
+                                       {console.log("item====>>>>>", item1)}
+                                     </>
+                                   ) : (
+                                     <>
+                                       {/* <ListItemText
+                                         sx={{ cursor: 'pointer' , backgroundColor:'red' }}
+                                         primary={item.subtopic_name}
+                                         onClick={() => handleEditClick1(index, item)}
+                                       /> */}
+                                       {/* <h5>hhhh</h5> */}
+                                       <TextField
+                                         // sx={{ cursor: 'pointer', fontSize: '3px', }}
+ 
+                                         value={item1.subtopic_name}
+                                         size="small"
+                                         //  onClick={() => handleEditClick1(index, item)}
+                                       />
+ 
+                                       <EditIcon
+                                         sx={{
+                                           fontSize: "15px",
+                                           marginLeft: "10px",
+                                           color: "#5e1acc",
+                                           cursor: "pointer",
+                                         }}
+                                         onClick={() =>
+                                           handleEditClick1(index, item1, item)
+                                         }
+                                       />
+                                     </>
+                                   )}
+                                 </ListItem>
+                               ))}
+                             </List> }
+                          
 
-                                      <EditIcon
-                                        sx={{
-                                          fontSize: "15px",
-                                          marginLeft: "10px",
-                                          color: "#5e1acc",
-                                          cursor: "pointer",
-                                        }}
-                                        onClick={() =>
-                                          handleEditClick1(index, item1, item)
-                                        }
-                                      />
-                                    </>
-                                  )}
-                                </ListItem>
-                              ))}
-                            </List>
+                            
                           </AccordionDetails>
                           <AccordionDetails>
                             <List>
@@ -1899,6 +1991,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                               ))}
                             </List>
                           </AccordionDetails>
+                         
                         </Accordion>
                       </div>
                     ))}
