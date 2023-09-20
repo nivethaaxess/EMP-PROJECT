@@ -22,6 +22,20 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
 import axios from "axios";
 import { FaBook } from 'react-icons/fa';
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import CardActions from "@mui/material/CardActions";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import DoneIcon from "@mui/icons-material/Done";
+import EditIcon from "@mui/icons-material/Edit";
+import TextField from "@mui/material/TextField";
+import Button from '@mui/material/Button';
 
 
 function CustomTabPanel(props) {
@@ -67,9 +81,19 @@ function a11yProps(index, topic_name, level) {
   const [courseCount, setCourseCount] = useState({});
 
   const courseCountRender = Object.keys(courseCount).length > 0;
+  const[getProject,setProject] = useState({});
+  const [editedIndex, setEditedIndex] = useState(-1);
+  const [EditOPened,setEditOpened]=useState(false);
+      const [editChangeData, setEditChangeData] = useState({
+        project_id: '',
+       project_name: '',
+       description: '', 
+       add_link: '',
+       topic_id: '', });
+       const [editOpen,setEditOpen]= useState(false)
 
-
-
+ const[subCourse_edited,setSubCourse_edited]= useState();
+ const[getSubTopics,setSubTopics]= useState();
 console.log("userId",userId)
 
 
@@ -214,6 +238,154 @@ console.log("tab valyes",tabValues)
     fontSize: "30px",
   };
 
+
+  const handleClosesEdit = () => {
+    setEditOpen(false);
+  };
+
+  const handleClose3Edit = () => {
+    setEditOpened(false);
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditChangeData({ ...editChangeData, [name]: value }); 
+  }; 
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    console.log("editChangeData", editChangeData) ;
+    try {
+      const response = await axios.post(
+        "http://localhost:3007/api/update/projectnew",
+        editChangeData
+        
+      );
+    
+      // Check the HTTP status code to determine the response type
+      if (response.status === 200) {
+        // Success response (status code 200)
+        setEditOpen(false)
+        console.log("Success: Project updated successfully");
+        console.log("Response data:", response.data);
+      } else {
+        // Handle other status codes (e.g., 404 for not found)
+        console.error(`Error: Unexpected status code - ${response.status}`);
+      }
+    } catch (error) {
+      // Handle network errors or exceptions
+      console.error("Error:", error.message);
+    }
+    
+
+     // Send a POST request with formData to update the project 
+        /* onEdit(editChangeData);  */
+      };
+
+      const handleEditProject =(project_id)=>{
+        setEditOpen(true)
+        const projectIdToFind = project_id; // Replace with the project_id you want to find
+
+const foundProject = getProject.find((project) => project.project_id === projectIdToFind);
+
+if (foundProject) {
+// The project with the specified project_id was found
+console.log(foundProject);
+setEditChangeData({ project_id: foundProject.project_id,
+project_name: foundProject.project_name,
+description: foundProject.description, 
+add_link: foundProject.add_link,
+topic_id: foundProject.topic_id, });} else {
+// No project with the specified project_id was found
+console.log('Project not found');
+}
+}
+
+const onDelete = async (id) => {
+  try {
+    console.log("id===>>>>", id);
+    const dataToDelete = { project_id: id }; 
+    // Make a DELETE request to your API endpoint
+    const response = await axios.post(
+      "http://localhost:3007/api/delete/project",
+      dataToDelete
+    );
+
+    // Handle success (e.g., update UI or state)
+    console.log("Item deleted:", response.data);
+
+    // Clear the dataToDelete state
+    // setDataToDelete(null);
+
+    // You can also update any other relevant state here
+  } catch (error) {
+    // Handle errors (e.g., show an error message)
+    console.error("Error deleting item:", error);
+  }
+}; 
+
+// const handleInputChange1 = (event) => {
+//   console.log("event.target.value===>>", event.target.value);
+//   setsubCourse_edited(event.target.value);
+// };
+
+// const handleSaveClick1 = (value, index, level) => {
+//   const updatedSubTopics = [...getSubTopics];
+//   updatedSubTopics[index] = subCourse_edited;
+//   setgetSubTopics(updatedSubTopics);
+//   setEditedIndex(-1);
+//   console.log("subCourse_edited===>>>>", subCourse_edited);
+//   console.log("value===>>>>", value);
+//   console.log("level===>>>>", level);
+//   const data = {
+//     SubTopic: subCourse_edited,
+//     Id: value,
+//   };
+//   axios
+//     .post("http://localhost:3007/api/subTopics/edit", data)
+//     .then((val) => {
+//       console.log("VAL===>>>", val);
+//       openStates(level);
+//     })
+//     .catch((err) => console.log("err===>>>", err));
+//   setsubCourse_edited("");
+// };
+
+
+// const handleEditClick1 = (index, value) => {
+//   setEditedIndex(index);
+//   // setsubCourse_edited(value);
+// };
+
+useEffect(() => {
+  console.log("Form data submitted");
+  axios
+    .get("http://localhost:3007/api/projectnew/edits")
+    .then((response) => {
+      console.log("Responsedata===>", response.data);
+      setProject(response.data);
+      // Update the state with the data received from the API
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+}, []);
+  
+
+const ProjectCard = ({ title1, description1 }) => {
+  const projects = [
+    {
+      title1: 'Project 1',
+      description1: 'Description of Project 1',
+    },
+    {
+      title1: 'Project 2',
+      description1: 'Description of Project 2',
+    },
+    // Add more projects as needed
+  ];
+
+}
   return (
     <>
       <Box
@@ -358,17 +530,182 @@ console.log("tab valyes",tabValues)
                                     >
                                       <Box sx={{}}>
                                         <List component="div" disablePadding>
-                                          {level == "others" ?(
+                                          {console.log("hello",level)}
+                                          {level == "OTHERS" ?(
                                              
                                               <p style={{textAlign:"center"}}>Others</p>
-                                            ):level == "project"? (<p style={{textAlign:"center"}}>Project</p>):(<Box sx={{ width: "100%" }}>
+                                            ):level == "PROJECT"? (<>
+                                             {getProject.map((item, index) => (
+                                  <CardContent key={index}>
+                                    <Card sx={{ minWidth: 100 }}>
+                                      <CardContent
+                                        elevation={6}
+                                        variant="outlined"
+                                      >
+                                        <Typography
+                                          sx={{ fontSize: "15px" }}
+                                          color="text.secondary"
+                                          gutterBottom
+                                        >
+                                          {/*    <Form onSubmit={handleEditSubmit}>
+          <TextField
+            label="Project Name"
+            variant="outlined"
+            name="project_name"
+            value={editChangeData.project_name}
+            onChange={handleEditChange}
+            fullWidth
+            margin="normal"
+          />   
+          </Form> */}
+                                          <Dialog
+                                            open={editOpen}
+                                            onClose={handleClosesEdit}
+                                          >
+                                            <DialogTitle>PROJECT</DialogTitle>
+                                            <DialogContent>
+                                              <DialogContentText>
+                                                {/* <Button variant="outlined" color="primary" onClick={handleClickOpen3}>
+           OPEN FORM
+      </Button> */}
+                                                {/* <Dialog open={opened} onClose={handleClose3}> */}
+                                                <Dialog
+                                                  open={editOpen}
+                                                  onClose={handleClose3Edit}
+                                                >
+                                                  <DialogTitle>
+                                                    Form
+                                                  </DialogTitle>
+                                                  <DialogContent>
+                                                    <DialogContentText>
+                                                      Please fill in the form
+                                                      below:
+                                                    </DialogContentText>
+                                                    <TextField
+                                                      autoFocus
+                                                      margin="dense"
+                                                      name="project_name"
+                                                      label=" "
+                                                      value={
+                                                        editChangeData.project_name
+                                                      }
+                                                      type="text"
+                                                      fullWidth
+                                                      onChange={
+                                                        handleEditChange
+                                                      }
+                                                    />
+                                                    <TextField
+                                                      margin="dense"
+                                                      name="description"
+                                                      label=" "
+                                                      value={
+                                                        editChangeData.description
+                                                      }
+                                                      type="text"
+                                                      fullWidth
+                                                      onChange={
+                                                        handleEditChange
+                                                      }
+                                                    />
+                                                    <TextField
+                                                      margin="dense"
+                                                      name="add_link"
+                                                      label=""
+                                                      value={
+                                                        editChangeData.add_link
+                                                      }
+                                                      type="text"
+                                                      fullWidth
+                                                      onChange={
+                                                        handleEditChange
+                                                      }
+                                                    />
+                                                  </DialogContent>
+                                                  <DialogActions>
+                                                    <Button
+                                                      onClick={handleEditSubmit}
+                                                      color="primary"
+                                                    > 
+                                                      Edit
+                                                    </Button>
+                                                    <Button
+                                                      onClick={handleEditSubmit}
+                                                      color="primary"
+                                                      enabled="true"
+                                                    >
+                                                      {/* {isSubmitting ? 'Submit' : 'Submit'} */}
+                                                      SUBMIT
+                                                    </Button>
+                                                  </DialogActions>
+                                                </Dialog>
+                                              </DialogContentText>
+                                            </DialogContent>
+                                            {/* <DialogActions>
+          <Button onClick={handleClose3} color="primary">
+            Close
+          </Button>
+        </DialogActions> */}
+                                          </Dialog>
+
+                                          <IconButton
+                                            color="secondary"
+                                            aria-label="Edit"
+                                            onClick={() =>
+                                              handleEditProject(item.project_id)
+                                            }
+                                          >
+                                            <i class="ri-pencil-fill"></i>
+                                          </IconButton>
+                                          <IconButton
+                                            color="secondary"
+                                            aria-label="Delete"
+                                            onClick={(id) =>
+                                              onDelete(item.project_id)
+                                            }
+                                          >
+                                            <i class="ri-delete-bin-fill"></i>{" "}
+                                          </IconButton>
+
+                                          <p>{item.project_name}</p>
+                                          <p>{item.description}</p>
+                                          <p>{item.add_link}</p>
+                                        </Typography>
+                                        <Typography
+                                          variant="h5"
+                                          component="div"
+                                        ></Typography>
+                                        <Typography
+                                          sx={{}}
+                                          color="text.secondary"
+                                        ></Typography>
+                                        <Typography variant="body2"></Typography>
+                                      </CardContent>
+                                      <CardActions>
+                                        <Button size="small"></Button>
+                                      </CardActions>
+                                    </Card>
+                                  </CardContent>
+                                ))}</>):(<Box sx={{ width: "100%" }}>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
                                             <Box
                                               sx={{
-                                                borderBottom: 1,
+                                                borderBottom: 1,       
                                                 borderColor: "divider",
                                                
                                               }}
                                             >
+
+
                                               <Tabs
                                                 value={
                                                   tabValues[
@@ -415,7 +752,7 @@ console.log("tab valyes",tabValues)
                                                 />
                                               </Tabs>
                                             </Box>
-
+                                            
                                             <CustomTabPanel
                                               value={
                                                 tabValues[course.topic_name]?.[

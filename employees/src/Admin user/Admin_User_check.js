@@ -54,6 +54,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import CardActions from "@mui/material/CardActions";
+import { Form } from "react-router-dom";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -174,6 +175,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
   });
 
   const [opened, setOpened] = useState(false);
+  const [EditOPened, setEditOpened] = useState(false);
   const [checkBox_val2, setCheckBox_Val2] = useState(["PROJECT", "OTHERS"]);
 
   const [domainAndCourse, setdomainAndCourse] = useState([]);
@@ -211,6 +213,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
     { topic: "responsive", status: false },
   ]);
 
+  const [topic_id,setTopicid] = useEffect([])
   const [autoFill, setAutoFil] = useState([]);
 
   const [tabValues, setTabValues] = useState({});
@@ -284,7 +287,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
     console.log("addLink+>>>>>>>>>>>>>", addLink);
     console.log("selectcourse+>>>>>>>>>>>>>", selectcourse);
     console.log("selectLevel+>>>>>>>>>>>>>", selectLevel);
-
+    // topic
     const data = {
       addSubTopic,
       addLink,
@@ -331,6 +334,10 @@ const Admin_User_check = ({ toggleDrawer }) => {
     console.log("DINESH+++++++++++++++++++111111111111111111111111");
   };
 
+  const handleClickOpen3Edit = () => {
+    setEditOpened(true);
+    console.log("LAla+++++++++++++++++++111111111111111111111111");
+  };
   const handleDialogClose = () => {
     setpopOpen(false);
   };
@@ -541,7 +548,6 @@ const Admin_User_check = ({ toggleDrawer }) => {
 
     setEditDomain(true);
   };
-
   const handleSaveClick = (domainId) => {
     try {
       console.log("domainId=>>>>>", domainId);
@@ -698,14 +704,14 @@ const Admin_User_check = ({ toggleDrawer }) => {
         .post("http://localhost:3007/api/course/level", data)
         .then((val) => {
           console.log("val====>>>>", val);
-          const data = val.data;
+          const data = val.data; 
           console.log("data===>>>>", data);
           setCourseLevel(data);
         })
         .catch((err) => console.log("err===>>>", err));
     }
   };
-
+  console.log("expanded", expanded);
   const openStatus = (level) => {
     const course = expanded;
     console.log("level==>>>>", level);
@@ -788,7 +794,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Add your logic to handle form submission here
-    console.log("Submitted Project Details:", projectDetails);
+    console.log("Submitted Project Details:", projectDetails);  
   };
 
   const [calc, setCalc] = useState({
@@ -817,13 +823,19 @@ const Admin_User_check = ({ toggleDrawer }) => {
   };
 
   const [opens, setOpens] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
 
   const handleClickOpens = () => {
     setOpens(true);
+    setEditOpen(true);
   };
 
   const handleCloses = () => {
     setOpens(false);
+  };
+
+  const handleClosesEdit = () => {
+    setEditOpen(false);
   };
 
   const [errors, setErrors] = useState({
@@ -836,6 +848,10 @@ const Admin_User_check = ({ toggleDrawer }) => {
 
   const handleClose3 = () => {
     setOpened(false);
+  };
+
+  const handleClose3Edit = () => {
+    setEditOpened(false);
   };
 
   const handleInputChange3 = (event) => {
@@ -860,11 +876,11 @@ const Admin_User_check = ({ toggleDrawer }) => {
     event.preventDefault();
 
     console.log("Submitted Project Details:", projectForm);
-
+    console.log("expanded", expanded);
     try {
       const response = await axios.post(
         "http://localhost:3007/api/getform/forms",
-        projectForm
+        { ...projectForm, topic_id: expanded }
       );
       console.log("Response:", response.data);
     } catch (error) {
@@ -898,24 +914,30 @@ const Admin_User_check = ({ toggleDrawer }) => {
 
   useEffect(() => {
     console.log("Form data submitted");
+    const queryParams = {
+      topic_name:""
+    };
     axios
-      .get("http://localhost:3007/api/projectnew/edits")
+      .get("http://localhost:3007/api/projectnew/edits/",queryParams
+      )
       .then((response) => {
         console.log("Responsedata===>", response.data);
-        setProject(response.data);
+        setProject(response.data); 
         // Update the state with the data received from the API
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-      });
+      });  
   }, []);
 
   const [projectForm, setProjectForm] = useState({
     project_name: "",
     description: "",
     add_link: "",
+    topic_id: "", 
   });
-
+  console.log("expanded", expanded);
+  
   const bull = (
     <Box
       component="span"
@@ -949,6 +971,71 @@ const Admin_User_check = ({ toggleDrawer }) => {
       // Handle errors (e.g., show an error message)
       console.error("Error deleting item:", error);
     }
+  };
+
+  const handleEditProject = (project_id) => {
+    setEditOpen(true);
+    const projectIdToFind = project_id; // Replace with the project_id you want to find
+
+    const foundProject = getProject.find(
+      (project) => project.project_id === projectIdToFind
+    );
+
+    if (foundProject) {
+      // The project with the specified project_id was found
+      console.log(foundProject);
+      setEditChangeData({
+        project_id: foundProject.project_id,
+        project_name: foundProject.project_name,
+        description: foundProject.description,
+        add_link: foundProject.add_link,
+        topic_id: foundProject.topic_id,
+      });
+    } else {
+      // No project with the specified project_id was found
+      console.log("Project not found");
+    }
+  };
+
+  const [editChangeData, setEditChangeData] = useState({
+    project_id: "",
+    project_name: "",
+    description: "",
+    add_link: "",
+    topic_id: "",
+  });
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditChangeData({ ...editChangeData, [name]: value });
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    console.log("editChangeData", editChangeData);
+    try {
+      const response = await axios.post(
+        "http://localhost:3007/api/update/projectnew",
+        editChangeData
+      );
+
+      // Check the HTTP status code to determine the response type
+      if (response.status === 200) {
+        // Success response (status code 200)
+        setEditOpen(false);
+        console.log("Success: Project updated successfully");
+        console.log("Response data:", response.data);
+      } else {
+        // Handle other status codes (e.g., 404 for not found)
+        console.error(`Error: Unexpected status code - ${response.status}`);
+      }
+    } catch (error) {
+      // Handle network errors or exceptions
+      console.error("Error:", error.message);
+    }
+
+    // Send a POST request with formData to update the project
+    /* onEdit(editChangeData);  */
   };
 
   return (
@@ -1824,6 +1911,7 @@ const Admin_User_check = ({ toggleDrawer }) => {
                           <AccordionDetails>
                             {item == "PROJECT" ? (
                               <>
+                                {console.log(getProject, "lav+++")}
                                 {getProject.map((item, index) => (
                                   <CardContent key={index}>
                                     <Card sx={{ minWidth: 100 }}>
@@ -1836,25 +1924,126 @@ const Admin_User_check = ({ toggleDrawer }) => {
                                           color="text.secondary"
                                           gutterBottom
                                         >
-                                          
-                                            <IconButton
-                                              color="secondary"
-                                              aria-label="Edit"
-                                            >
-                                              
-                                              <i class="ri-pencil-fill"></i>
-                                            </IconButton>
-                                            <IconButton
-                                              color="secondary"
-                                              aria-label="Delete"
-                                              onClick={(id) =>
-                                                onDelete(item.project_id)
-                                              }
-                                            >
-                                              <i class="ri-delete-bin-fill"></i>{" "}
-                                              
-                                            </IconButton>
-                                          
+                                          {/*    <Form onSubmit={handleEditSubmit}>
+          <TextField
+            label="Project Name"
+            variant="outlined"
+            name="project_name"
+            value={editChangeData.project_name}
+            onChange={handleEditChange}
+            fullWidth
+            margin="normal"
+          />   
+          </Form> */}
+                                          <Dialog
+                                            open={editOpen}
+                                            onClose={handleClosesEdit}
+                                          >
+                                            <DialogTitle>PROJECT</DialogTitle>
+                                            <DialogContent>
+                                              <DialogContentText>
+                                                {/* <Button variant="outlined" color="primary" onClick={handleClickOpen3}>
+           OPEN FORM
+      </Button> */}
+                                                {/* <Dialog open={opened} onClose={handleClose3}> */}
+                                                <Dialog
+                                                  open={editOpen}
+                                                  onClose={handleClose3Edit}
+                                                >
+                                                  <DialogTitle>
+                                                    Form
+                                                  </DialogTitle>
+                                                  <DialogContent>
+                                                    <DialogContentText>
+                                                      Please fill in the form
+                                                      below:
+                                                    </DialogContentText>
+                                                    <TextField
+                                                      autoFocus
+                                                      margin="dense"
+                                                      name="project_name"
+                                                      label=" "
+                                                      value={
+                                                        editChangeData.project_name
+                                                      }
+                                                      type="text"
+                                                      fullWidth
+                                                      onChange={
+                                                        handleEditChange
+                                                      }
+                                                    />
+                                                    <TextField
+                                                      margin="dense"
+                                                      name="description"
+                                                      label=" "
+                                                      value={
+                                                        editChangeData.description
+                                                      }
+                                                      type="text"
+                                                      fullWidth
+                                                      onChange={
+                                                        handleEditChange
+                                                      }
+                                                    />
+                                                    <TextField
+                                                      margin="dense"
+                                                      name="add_link"
+                                                      label=""
+                                                      value={
+                                                        editChangeData.add_link
+                                                      }
+                                                      type="text"
+                                                      fullWidth
+                                                      onChange={
+                                                        handleEditChange
+                                                      }
+                                                    />
+                                                  </DialogContent>
+                                                  <DialogActions>
+                                                    <Button
+                                                      onClick={handleEditSubmit}
+                                                      color="primary"
+                                                    >
+                                                      Edit
+                                                    </Button>
+                                                    <Button
+                                                      onClick={handleEditSubmit}
+                                                      color="primary"
+                                                      enabled="true"
+                                                    >
+                                                      {/* {isSubmitting ? 'Submit' : 'Submit'} */}
+                                                      SUBMIT
+                                                    </Button>
+                                                  </DialogActions>
+                                                </Dialog>
+                                              </DialogContentText>
+                                            </DialogContent>
+                                            {/* <DialogActions>
+          <Button onClick={handleClose3} color="primary">
+            Close
+          </Button>
+        </DialogActions> */}
+                                          </Dialog>
+
+                                          <IconButton
+                                            color="secondary"
+                                            aria-label="Edit"
+                                            onClick={() =>
+                                              handleEditProject(item.project_id)
+                                            }
+                                          >
+                                            <i class="ri-pencil-fill"></i>
+                                          </IconButton>
+                                          <IconButton
+                                            color="secondary"
+                                            aria-label="Delete"
+                                            onClick={(id) =>
+                                              onDelete(item.project_id)
+                                            }
+                                          >
+                                            <i class="ri-delete-bin-fill"></i>{" "}
+                                          </IconButton>
+
                                           <p>{item.project_name}</p>
                                           <p>{item.description}</p>
                                           <p>{item.add_link}</p>
@@ -1875,26 +2064,6 @@ const Admin_User_check = ({ toggleDrawer }) => {
                                     </Card>
                                   </CardContent>
                                 ))}
-
-                                {/* <Card sx={{ minWidth: 275 }}>
-      <CardContent elevation={3} variant="outlined">
-        <Typography   sx={{ fontSize: 15 }} color="text.secondary" gutterBottom>
-        <i class="ri-eye-line"></i>
-        </Typography>
-        <Typography variant="h5" component="div">
-        <br></br>
-        </Typography>
-        <Typography sx={{ mb: 3}} color="text.secondary">
-          <br></br>
-        </Typography>
-        <Typography variant="body2">
-          <br />
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small"></Button>
-      </CardActions>
-    </Card> */}
                               </>
                             ) : (
                               <List>

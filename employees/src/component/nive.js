@@ -54,7 +54,7 @@ function a11yProps(index, topic_name, level) {
   return {
     id: `simple-tab-${topic_name}-${level}-${index}`,
     "aria-controls": `simple-tabpanel-${topic_name}-${level}-${index}`,
-  };
+  };  
 }
 
   const User = () => {
