@@ -32,10 +32,9 @@ const subTopicCount = async (req, res) => {
     const level = JSON.parse(courseLevel[0].LEVEL)
     console.log("le", level)
     console.log("courseLevel", Array.isArray(level))
-
+    
 
     let finalCount = {};
-
     for (const a of level) {
 
       console.log("a", a)
@@ -152,7 +151,7 @@ console.log( "MMMMM",subTopicIdResult[0],subTopicIdResult[0].LEVEL)
 
 
     let query, values;
-
+    
     
     if (status == "completed") {
       query = `INSERT INTO status (status, subTopic_id, topic_id, domain_id, user_id ,level) VALUES (?)`;
